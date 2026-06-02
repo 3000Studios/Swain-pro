@@ -167,6 +167,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
             </svg>
           </button>
+          <div id="form-status" role="status" aria-live="polite"></div>
         </form>
       </div>
     </div>
@@ -175,19 +176,49 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
 <script>
   const form = document.getElementById('contact-form') as HTMLFormElement
-  form.addEventListener('submit', (e) => {
+  const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement
+  const statusEl = document.getElementById('form-status')!
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const name = (document.getElementById('name') as HTMLInputElement).value.trim()
     const email = (document.getElementById('email') as HTMLInputElement).value.trim()
     const type = (document.getElementById('project-type') as HTMLSelectElement).value
     const message = (document.getElementById('message') as HTMLTextAreaElement).value.trim()
 
-    if (!name || !email || !message) return
+    if (!name || !email || !message) {
+      statusEl.textContent = 'Please fill in all required fields.'
+      statusEl.className = 'mt-3 text-sm text-[var(--color-rose)]'
+      return
+    }
 
-    const subject = encodeURIComponent(`Portfolio Inquiry — ${type || 'Project'} from ${name}`)
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\nType: ${type || 'Not specified'}\n\n${message}`
-    )
-    window.location.href = `mailto:Mr.Jwswain@gmail.com?subject=${subject}&body=${body}`
+    submitBtn.disabled = true
+    submitBtn.textContent = 'Sending...'
+    statusEl.textContent = ''
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, type, message }),
+      })
+      const json = await res.json() as { ok: boolean; message?: string; error?: string }
+
+      if (json.ok) {
+        statusEl.textContent = "Message sent — I'll be in touch soon."
+        statusEl.className = 'mt-3 text-sm text-[var(--color-emerald)]'
+        form.reset()
+      } else {
+        throw new Error(json.error || 'Send failed')
+      }
+    } catch {
+      // Graceful fallback to mailto
+      const subject = encodeURIComponent(`Portfolio Inquiry — ${type || 'Project'} from ${name}`)
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`)
+      window.location.href = `mailto:Mr.Jwswain@gmail.com?subject=${subject}&body=${body}`
+    } finally {
+      submitBtn.disabled = false
+      submitBtn.textContent = 'Send Message'
+    }
   })
 </script>
