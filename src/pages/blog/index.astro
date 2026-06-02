@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { blogPosts } from '../../data/blog'
+
+const categories = Array.from(new Set(blogPosts.map(p => p.category)))
+---
+
+<BaseLayout
+  title="Blog & Insights — Jeremy Swain AI Developer"
+  description="Practical articles on AI automation, LLM integration, Python for business, and workflow automation by Jeremy Swain."
+>
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+    <div class="max-w-2xl mb-16">
+      <p class="section-label">Writing</p>
+      <h1 class="text-4xl sm:text-5xl font-black mb-5">
+        Blog &amp;<br /><span class="gradient-text">Insights</span>
+      </h1>
+      <p class="text-[var(--color-dim)] text-lg leading-relaxed">
+        Practical writing on AI automation, LLM systems, Python for business, and workflow engineering.
+        No hype. No fluff. Just what actually works.
+      </p>
+    </div>
+
+    <!-- Categories -->
+    <div class="flex flex-wrap gap-2 mb-12" role="list" aria-label="Blog categories">
+      {['All', ...categories].map(cat => (
+        <button
+          data-filter={cat}
+          class={`px-3 py-1.5 rounded-full text-xs font-semibold font-mono uppercase tracking-wider transition-all duration-200 filter-btn border ${cat === 'All' ? 'bg-[var(--color-cyan-dim)] text-[var(--color-cyan)] border-[rgba(0,212,255,0.3)]' : 'bg-[var(--color-card)] text-[var(--color-muted)] border-[var(--color-border)]'}`}
+          aria-label={`Filter by ${cat}`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Posts grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
+      {blogPosts.map(post => (
+        <article
+          class="reveal card p-6 flex flex-col"
+          data-category={post.category}
+        >
+          <div class="flex items-center gap-2 mb-4">
+            <span class="badge badge-purple">{post.category}</span>
+            <span class="text-xs text-[var(--color-muted)]">{post.readTime}</span>
+          </div>
+          <h2 class="font-semibold text-[var(--color-text)] leading-tight mb-3 flex-1">
+            <a href={`/blog/${post.slug}`} class="hover:text-[var(--color-cyan)] transition-colors">
+              {post.title}
+            </a>
+          </h2>
+          <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-5">{post.description}</p>
+          <div class="flex flex-wrap gap-1 mb-5">
+            {post.tags.slice(0, 3).map(tag => (
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/5 border border-[var(--color-border)]">
+                #{tag}
+              </span>
+            ))}
+          </div>
+          <div class="flex items-center justify-between mt-auto pt-4 border-t border-[var(--color-border)]">
+            <time class="text-xs font-mono text-[var(--color-muted)]" datetime={post.date}>
+              {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </time>
+            <a href={`/blog/${post.slug}`} class="text-xs text-[var(--color-cyan)] hover:underline flex items-center gap-1">
+              Read Article
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn')
+  const posts = document.querySelectorAll('[data-category]')
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter')
+      btns.forEach(b => {
+        b.classList.remove('bg-[var(--color-cyan-dim)]', 'text-[var(--color-cyan)]', 'border-[rgba(0,212,255,0.3)]')
+        b.classList.add('bg-[var(--color-card)]', 'text-[var(--color-muted)]', 'border-[var(--color-border)]')
+      })
+      btn.classList.add('bg-[var(--color-cyan-dim)]', 'text-[var(--color-cyan)]', 'border-[rgba(0,212,255,0.3)]')
+      btn.classList.remove('bg-[var(--color-card)]', 'text-[var(--color-muted)]', 'border-[var(--color-border)]')
+
+      posts.forEach(post => {
+        if (filter === 'All' || post.getAttribute('data-category') === filter) {
+          (post as HTMLElement).style.display = ''
+        } else {
+          (post as HTMLElement).style.display = 'none'
+        }
+      })
+    })
+  })
+</script>

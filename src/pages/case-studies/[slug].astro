@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { caseStudies } from '../../data/caseStudies'
+
+export function getStaticPaths() {
+  return caseStudies.map(cs => ({ params: { slug: cs.slug }, props: { cs } }))
+}
+
+const { cs } = Astro.props
+---
+
+<BaseLayout
+  title={`${cs.title} — Case Study | Jeremy Swain`}
+  description={cs.subtitle}
+>
+  <!-- Breadcrumb -->
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-2" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+      <li><a href="/" class="hover:text-[var(--color-cyan)] transition-colors">Home</a></li>
+      <li aria-hidden="true">›</li>
+      <li><a href="/case-studies" class="hover:text-[var(--color-cyan)] transition-colors">Case Studies</a></li>
+      <li aria-hidden="true">›</li>
+      <li class="text-[var(--color-dim)]" aria-current="page">{cs.title}</li>
+    </ol>
+  </nav>
+
+  <article class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="flex flex-wrap gap-2 mb-5">
+        <span class="badge badge-cyan">{cs.icon} {cs.category}</span>
+        <span class="badge badge-purple font-mono">{cs.year}</span>
+        <span class="text-xs text-[var(--color-muted)] self-center">{cs.client}</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+        {cs.title}
+      </h1>
+      <p class="text-xl text-[var(--color-cyan)] font-medium">{cs.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main content -->
+      <div class="lg:col-span-2 space-y-12">
+
+        <!-- Problem -->
+        <section>
+          <h2 class="text-xl font-black text-[var(--color-text)] mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-[var(--color-rose)] bg-opacity-20 text-[var(--color-rose)] flex items-center justify-center text-xs font-mono">01</span>
+            The Problem
+          </h2>
+          <p class="text-[var(--color-dim)] leading-relaxed">{cs.problem}</p>
+        </section>
+
+        <!-- Solution -->
+        <section>
+          <h2 class="text-xl font-black text-[var(--color-text)] mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-[var(--color-cyan)] bg-opacity-20 text-[var(--color-cyan)] flex items-center justify-center text-xs font-mono">02</span>
+            The Solution
+          </h2>
+          <p class="text-[var(--color-dim)] leading-relaxed">{cs.solution}</p>
+        </section>
+
+        <!-- What I Built -->
+        <section>
+          <h2 class="text-xl font-black text-[var(--color-text)] mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-[var(--color-purple)] bg-opacity-20 text-[var(--color-purple)] flex items-center justify-center text-xs font-mono">03</span>
+            What I Built
+          </h2>
+          <ul class="space-y-3">
+            {cs.what_i_built.map(item => (
+              <li class="flex items-start gap-3 card p-4">
+                <span class="text-[var(--color-cyan)] shrink-0 mt-0.5">▸</span>
+                <span class="text-sm text-[var(--color-dim)]">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Business Value -->
+        <section>
+          <h2 class="text-xl font-black text-[var(--color-text)] mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-[var(--color-emerald)] bg-opacity-20 text-[var(--color-emerald)] flex items-center justify-center text-xs font-mono">04</span>
+            Business Value
+          </h2>
+          <div class="card p-6 border-[var(--color-border-glow)]">
+            <p class="text-[var(--color-dim)] leading-relaxed italic">{cs.businessValue}</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Outcomes -->
+        <div class="card p-6">
+          <h3 class="font-bold text-[var(--color-text)] text-sm mb-4">Measured Outcomes</h3>
+          <ul class="space-y-3">
+            {cs.outcome.map(o => (
+              <li class="flex items-start gap-2 text-sm text-[var(--color-dim)]">
+                <span class="text-[var(--color-emerald)] shrink-0 mt-0.5">✓</span>
+                {o}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Tech stack -->
+        <div class="card p-6">
+          <h3 class="font-bold text-[var(--color-text)] text-sm mb-4">Technology Stack</h3>
+          <div class="flex flex-wrap gap-1.5">
+            {cs.tech.map(t => (
+              <span class="px-2 py-1 rounded text-xs font-mono text-[var(--color-muted)] bg-white/5 border border-[var(--color-border)]">
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="card p-6 border-[var(--color-border-glow)]">
+          <h3 class="font-bold text-[var(--color-text)] text-sm mb-2">Need something similar?</h3>
+          <p class="text-xs text-[var(--color-muted)] mb-4">
+            Let's talk about your workflow automation or AI integration project.
+          </p>
+          <a href="/contact" class="btn-primary text-xs w-full justify-center">Start a Conversation</a>
+        </div>
+
+        <!-- Nav between case studies -->
+        <div class="flex gap-2">
+          <a href="/case-studies" class="btn-outline text-xs flex-1 justify-center">All Case Studies</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

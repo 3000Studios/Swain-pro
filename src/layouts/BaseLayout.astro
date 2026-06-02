@@ -1,0 +1,61 @@
+---
+import SEO from '../components/SEO.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  type?: 'website' | 'article' | 'profile'
+  publishDate?: string
+  tags?: string[]
+  canonical?: string
+}
+
+const seoProps = Astro.props
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <SEO {...seoProps} />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Intersection Observer for reveal animations
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible')
+              // Animate skill bars
+              entry.target.querySelectorAll('.skill-bar-fill').forEach((bar) => {
+                bar.classList.add('animate')
+              })
+            }
+          })
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      )
+
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+
+      // Active nav link
+      const currentPath = window.location.pathname
+      document.querySelectorAll('[data-nav-link]').forEach((link) => {
+        const href = link.getAttribute('href')
+        if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+          link.classList.add('active')
+        }
+      })
+    </script>
+  </body>
+</html>

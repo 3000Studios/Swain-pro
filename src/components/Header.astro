@@ -1,0 +1,143 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/case-studies', label: 'Case Studies' },
+  { href: '/services', label: 'Services' },
+  { href: '/domains', label: 'Domains' },
+  { href: '/resume', label: 'Resume' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'Contact' },
+]
+---
+
+<header class="header-blur fixed top-0 left-0 right-0 z-50" role="banner">
+  <nav
+    class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between"
+    aria-label="Main navigation"
+  >
+    <!-- Logo -->
+    <a
+      href="/"
+      class="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cyan)] rounded-lg p-1"
+      aria-label="Jeremy Swain — Home"
+    >
+      <div
+        class="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--color-cyan)] to-[var(--color-purple)] flex items-center justify-center font-mono font-bold text-black text-sm select-none transition-transform group-hover:scale-105"
+        aria-hidden="true"
+      >
+        JS
+      </div>
+      <span class="hidden sm:block font-semibold text-[var(--color-text)] text-sm tracking-tight">
+        Jeremy Swain
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="hidden lg:flex items-center gap-1" role="list">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            data-nav-link
+            class="px-3 py-2 rounded-lg text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-all duration-200 [&.active]:text-[var(--color-cyan)] [&.active]:bg-[var(--color-cyan-dim)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cyan)]"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA + Mobile toggle -->
+    <div class="flex items-center gap-3">
+      <a
+        href="/contact"
+        class="btn-primary text-xs px-4 py-2 hidden sm:inline-flex"
+      >
+        Hire Jeremy
+      </a>
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden p-2 rounded-lg text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-colors"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="w-5 h-5 menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg class="w-5 h-5 close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden hidden border-t border-[var(--color-border)]"
+    role="navigation"
+    aria-label="Mobile navigation"
+  >
+    <ul class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1" role="list">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            data-nav-link
+            class="block px-4 py-3 rounded-lg text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-text)] hover:bg-white/5 transition-all duration-200 [&.active]:text-[var(--color-cyan)] [&.active]:bg-[var(--color-cyan-dim)]"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-2 border-t border-[var(--color-border)] mt-2">
+        <a href="/contact" class="btn-primary w-full justify-center">
+          Hire Jeremy
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<!-- Spacer for fixed header -->
+<div class="h-16" aria-hidden="true"></div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn')!
+  const menu = document.getElementById('mobile-menu')!
+  const menuIcon = btn.querySelector('.menu-icon')!
+  const closeIcon = btn.querySelector('.close-icon')!
+
+  btn.addEventListener('click', () => {
+    const isOpen = !menu.classList.contains('hidden')
+    menu.classList.toggle('hidden')
+    menuIcon.classList.toggle('hidden', !isOpen)
+    closeIcon.classList.toggle('hidden', isOpen)
+    btn.setAttribute('aria-expanded', String(!isOpen))
+  })
+
+  // Close on nav link click
+  menu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden')
+      menuIcon.classList.remove('hidden')
+      closeIcon.classList.add('hidden')
+      btn.setAttribute('aria-expanded', 'false')
+    })
+  })
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!btn.contains(e.target as Node) && !menu.contains(e.target as Node)) {
+      menu.classList.add('hidden')
+      menuIcon.classList.remove('hidden')
+      closeIcon.classList.add('hidden')
+      btn.setAttribute('aria-expanded', 'false')
+    }
+  })
+</script>

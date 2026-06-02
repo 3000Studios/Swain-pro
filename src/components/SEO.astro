@@ -1,0 +1,107 @@
+---
+interface Props {
+  title?: string
+  description?: string
+  image?: string
+  type?: 'website' | 'article' | 'profile'
+  publishDate?: string
+  tags?: string[]
+  canonical?: string
+}
+
+const {
+  title = 'Jeremy Swain — AI Developer & Automation Engineer | swain.pro',
+  description = 'Jeremy Swain builds scalable AI systems, automation workflows, LLM integrations, and intelligent tools. AI Developer, Automation Engineer, Python & LangChain Expert based in Atlanta, GA.',
+  image = '/og-image.png',
+  type = 'website',
+  publishDate,
+  tags = [],
+  canonical,
+} = Astro.props
+
+const siteUrl = 'https://swain.pro'
+const resolvedCanonical = canonical || new URL(Astro.url.pathname, siteUrl).href
+const resolvedImage = image.startsWith('http') ? image : `${siteUrl}${image}`
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jeremy Swain',
+  url: siteUrl,
+  image: `${siteUrl}/jeremy-swain.jpg`,
+  jobTitle: 'AI Developer & Automation Engineer',
+  description: 'AI Developer, Automation Engineer, LLM Integration Specialist, Python & LangChain Expert, Business Analyst, Intelligent Systems Builder based in Atlanta, GA.',
+  address: { '@type': 'PostalAddress', addressLocality: 'Atlanta', addressRegion: 'GA', addressCountry: 'US' },
+  email: 'Mr.Jwswain@gmail.com',
+  telephone: '+14046407734',
+  sameAs: ['https://www.linkedin.com/in/mrjwswain/', 'https://github.com/3000Studios'],
+  knowsAbout: ['AI Development', 'LLM Integration', 'Automation Engineering', 'Python', 'LangChain', 'Business Analysis', 'Salesforce', 'Cloudflare Workers', 'TypeScript'],
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Jeremy Swain — AI Developer Portfolio',
+  url: siteUrl,
+  description,
+  author: { '@type': 'Person', name: 'Jeremy Swain' },
+}
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Jeremy Swain AI & Automation Services',
+  url: siteUrl,
+  description: 'AI development, automation engineering, LLM integration, and business workflow automation services.',
+  provider: { '@type': 'Person', name: 'Jeremy Swain' },
+  areaServed: { '@type': 'City', name: 'Atlanta', containedInPlace: { '@type': 'State', name: 'Georgia' } },
+  serviceType: ['AI Development', 'Automation Engineering', 'LLM Integration', 'Business Analysis'],
+}
+---
+
+<!-- Primary Meta -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Jeremy Swain" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={resolvedCanonical} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={resolvedCanonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={resolvedImage} />
+<meta property="og:site_name" content="Jeremy Swain — swain.pro" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={resolvedImage} />
+
+{publishDate && <meta property="article:published_time" content={publishDate} />}
+{tags.length > 0 && tags.map(tag => <meta property="article:tag" content={tag} />)}
+
+<!-- Keywords -->
+<meta name="keywords" content="AI Developer Atlanta, Automation Engineer Atlanta, LLM Integration Specialist, Python Automation Developer, LangChain Developer, AI Workflow Automation, AI Agent Developer, Business Analyst Automation, Salesforce Automation, Full Stack AI Developer, GPT Integration Developer, AI Consultant Georgia, Workflow Automation Consultant, Intelligent Systems Developer, Jeremy Swain AI Developer, Jeremy Swain Portfolio, swain.pro" />
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+
+<!-- Theme color -->
+<meta name="theme-color" content="#050508" />

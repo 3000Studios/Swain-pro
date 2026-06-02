@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { blogPosts } from '../../data/blog'
+
+export function getStaticPaths() {
+  return blogPosts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+
+// Convert simple markdown-like content to HTML
+function renderContent(content: string): string {
+  return content
+    .trim()
+    .split('\n\n')
+    .map(block => {
+      const trimmed = block.trim()
+      if (trimmed.startsWith('## ')) {
+        return `<h2>${trimmed.slice(3)}</h2>`
+      }
+      if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
+        return `<p><strong>${trimmed.slice(2, -2)}</strong></p>`
+      }
+      // Handle bold within paragraphs
+      const withBold = trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      return `<p>${withBold}</p>`
+    })
+    .join('\n')
+}
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: post.title,
+  description: post.description,
+  author: { '@type': 'Person', name: 'Jeremy Swain', url: 'https://swain.pro' },
+  datePublished: post.date,
+  publisher: { '@type': 'Person', name: 'Jeremy Swain' },
+  keywords: post.tags.join(', '),
+}
+---
+
+<BaseLayout
+  title={`${post.title} — Jeremy Swain`}
+  description={post.description}
+  type="article"
+  publishDate={post.date}
+  tags={post.tags}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(articleSchema)} />
+
+  <!-- Breadcrumb -->
+  <nav class="max-w-4xl mx-auto px-4 sm:px-6 pt-8 pb-2" aria-label="Breadcrumb">
+    <ol class="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+      <li><a href="/" class="hover:text-[var(--color-cyan)] transition-colors">Home</a></li>
+      <li aria-hidden="true">›</li>
+      <li><a href="/blog" class="hover:text-[var(--color-cyan)] transition-colors">Blog</a></li>
+      <li aria-hidden="true">›</li>
+      <li class="text-[var(--color-dim)] truncate max-w-xs" aria-current="page">{post.title}</li>
+    </ol>
+  </nav>
+
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Header -->
+    <header class="mb-12">
+      <div class="flex flex-wrap items-center gap-3 mb-5">
+        <span class="badge badge-purple">{post.category}</span>
+        <span class="text-xs text-[var(--color-muted)]">{post.readTime}</span>
+        <time class="text-xs font-mono text-[var(--color-muted)]" datetime={post.date}>
+          {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        </time>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 leading-tight">
+        {post.title}
+      </h1>
+      <p class="text-xl text-[var(--color-dim)] leading-relaxed">{post.description}</p>
+      <div class="flex flex-wrap gap-1.5 mt-5">
+        {post.tags.map(tag => (
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono text-[var(--color-muted)] bg-white/5 border border-[var(--color-border)]">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <hr class="divider mb-12" aria-hidden="true" />
+
+    <!-- Article body -->
+    <div
+      class="prose prose-invert prose-lg max-w-none
+        prose-headings:font-black prose-headings:text-[var(--color-text)]
+        prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+        prose-p:text-[var(--color-dim)] prose-p:leading-relaxed
+        prose-strong:text-[var(--color-text)] prose-strong:font-bold
+        prose-a:text-[var(--color-cyan)] prose-a:no-underline hover:prose-a:underline
+        prose-code:text-[var(--color-emerald)] prose-code:font-mono prose-code:text-sm
+        prose-pre:bg-[var(--color-card)] prose-pre:border prose-pre:border-[var(--color-border)]"
+      set:html={renderContent(post.content)}
+    />
+
+    <hr class="divider my-12" aria-hidden="true" />
+
+    <!-- Author & CTA -->
+    <footer>
+      <div class="card p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-cyan)] to-[var(--color-purple)] flex items-center justify-center font-mono font-bold text-black text-sm shrink-0">
+          JS
+        </div>
+        <div class="flex-1">
+          <p class="font-semibold text-[var(--color-text)]">Jeremy Swain</p>
+          <p class="text-sm text-[var(--color-muted)]">AI Developer &amp; Automation Engineer — Atlanta, GA</p>
+        </div>
+        <div class="flex gap-3">
+          <a href="/blog" class="btn-outline text-xs">More Articles</a>
+          <a href="/contact" class="btn-primary text-xs">Work Together</a>
+        </div>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
