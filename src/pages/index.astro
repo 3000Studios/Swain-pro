@@ -278,39 +278,41 @@ const recentPosts = blogPosts.slice(0, 3)
             title: 'Voice to Website — AI Demo',
             desc: 'Full demo of VoiceToWebsite: speak a brief and watch AI generate a complete site in under 60 seconds.',
             tag: 'Product Demo',
-            videoId: 'dQw4w9WgXcQ',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-10 h-10"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg>`,
           },
           {
             title: 'AI Automation Walkthrough',
             desc: 'End-to-end walkthrough of a Python LangChain automation pipeline processing business documents autonomously.',
             tag: 'Automation',
-            videoId: 'aircAruvnKk',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-10 h-10"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"/>`,
           },
           {
             title: 'LLM Integration Deep Dive',
             desc: 'Technical breakdown of a production multi-agent LLM system: architecture, prompt engineering, and monitoring.',
             tag: 'Technical',
-            videoId: 'ZXsQAXx_ao0',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-10 h-10"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.7-1.41 2.7H4.21c-1.44 0-2.41-1.7-1.41-2.7L4.2 15.3"/>`,
           },
         ].map((video, i) => (
           <div
-            class="reveal-scale card-light rounded-[var(--radius-card)] overflow-hidden"
+            class="reveal-scale card-light rounded-[var(--radius-card)] overflow-hidden flex flex-col"
             style={`--delay:${i * 110}ms`}
             data-stagger
           >
-            <div class="video-wrapper">
-              <iframe
-                src={`https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1`}
-                title={video.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
+            <div class="relative bg-[var(--color-onyx)] aspect-video flex flex-col items-center justify-center gap-4">
+              <div class="w-16 h-16 rounded-full border border-[var(--color-gold)]/30 bg-[var(--color-gold)]/10 flex items-center justify-center text-[var(--color-gold)]" set:html={video.icon}></div>
+              <span class="font-mono text-[0.6rem] tracking-[0.2em] text-[var(--color-muted)] uppercase">Recording in Production</span>
+              <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-gold)]/[0.03] to-transparent pointer-events-none"></div>
             </div>
-            <div class="p-5">
-              <span class="badge badge-gold mb-3">{video.tag}</span>
+            <div class="p-5 flex-1 flex flex-col">
+              <span class="badge badge-gold mb-3 self-start">{video.tag}</span>
               <h3 class="font-bold text-[var(--color-onyx)] text-base leading-tight mb-2">{video.title}</h3>
-              <p class="text-sm text-[var(--color-onyx)]/55 leading-relaxed">{video.desc}</p>
+              <p class="text-sm text-[var(--color-onyx)]/55 leading-relaxed flex-1">{video.desc}</p>
+              <a href="/contact" class="mt-4 text-xs text-[var(--color-gold-dark)] hover:text-[var(--color-gold)] font-semibold flex items-center gap-1.5 transition-colors self-start">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                Request a live demo
+              </a>
             </div>
           </div>
         ))}
