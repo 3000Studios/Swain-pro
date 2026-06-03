@@ -4,82 +4,114 @@ import { domains } from '../data/domains'
 ---
 
 <BaseLayout
-  title="Domains & Ventures — Jeremy Swain"
-  description="Active domains and digital ventures built and owned by Jeremy Swain — VoiceToWebsite, PlayStoreWizard, FindMeRates, GetNexa, 3000Studios, and more."
+  title="Domains & Ventures — Mr. Swain"
+  description="Active domains and digital ventures built and owned by Mr. Swain — VoiceToWebsite, PlayStoreWizard, FindMeRates, GetNexa, 3000Studios, and more."
 >
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-    <div class="max-w-2xl mb-16">
-      <p class="section-label">Ventures</p>
-      <h1 class="text-4xl sm:text-5xl font-black mb-5">
-        Domains &amp;<br /><span class="gradient-text">Ventures</span>
-      </h1>
-      <p class="text-[var(--color-dim)] text-lg leading-relaxed">
-        Live properties, products, and digital ventures built and operated by Jeremy Swain.
-        Each one is a production deployment on Cloudflare infrastructure.
-      </p>
-    </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {domains.map((domain, i) => (
-        <article class={`reveal card p-6 flex flex-col ${i === 0 ? 'sm:col-span-2 lg:col-span-1 border-[var(--color-border-glow)]' : ''}`}>
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <div class="text-3xl" aria-hidden="true">{domain.icon}</div>
-            <span class={`badge ${domain.status === 'live' ? 'badge-emerald' : domain.status === 'in-dev' ? 'badge-amber' : 'badge-purple'}`}>
-              {domain.status === 'live' ? '● Live' : domain.status === 'in-dev' ? '⟳ In Dev' : 'Owned'}
-            </span>
-          </div>
-
-          <h2 class="font-bold text-[var(--color-text)] text-lg mb-1">{domain.name}</h2>
-          <p class="text-xs font-mono text-[var(--color-cyan)] mb-3">{domain.url}</p>
-          <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-4 flex-1">{domain.description}</p>
-
-          <div class="mb-4">
-            <span class="badge badge-purple">{domain.category}</span>
-          </div>
-
-          {domain.tech && (
-            <div class="flex flex-wrap gap-1 mb-5">
-              {domain.tech.map(t => (
-                <span class="px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/5 border border-[var(--color-border)]">
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {domain.status === 'live' && (
-            <a
-              href={domain.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-outline text-xs w-full justify-center"
-              aria-label={`Visit ${domain.name}`}
-            >
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-              </svg>
-              Visit Site
-            </a>
-          )}
-        </article>
-      ))}
-    </div>
-
-    <!-- Stats -->
-    <div class="reveal mt-16 card p-8">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-        {[
-          { value: '9', label: 'Active Domains' },
-          { value: '7', label: 'Live Sites' },
-          { value: '100%', label: 'On Cloudflare' },
-          { value: '2025–26', label: 'Portfolio Built' },
-        ].map(stat => (
-          <div>
-            <div class="text-3xl font-black gradient-text mb-1">{stat.value}</div>
-            <div class="text-xs text-[var(--color-muted)]">{stat.label}</div>
-          </div>
-        ))}
+  <!-- Hero (dark) -->
+  <section class="section-dark">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
+      <div class="max-w-2xl">
+        <p class="section-label">Ventures</p>
+        <h1 class="text-5xl sm:text-6xl font-black mb-6 text-[var(--color-text)]">
+          Domains &amp;<br /><span class="gradient-text">Ventures</span>
+        </h1>
+        <p class="text-[var(--color-dim)] text-xl leading-relaxed">
+          Live properties, products, and digital ventures built and operated by Mr. Swain.
+          Every deployment runs on Cloudflare infrastructure.
+        </p>
       </div>
     </div>
   </section>
+
+  <!-- Domain grid (light) -->
+  <section class="section-light">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-stagger-parent>
+        {domains.map((domain, i) => (
+          <article
+            class={`reveal-scale card-light rounded-[var(--radius-card)] p-6 flex flex-col ${i === 0 ? 'sm:col-span-2 lg:col-span-1 ring-1 ring-[var(--color-gold)] ring-opacity-30' : ''}`}
+            style={`--delay:${i * 70}ms`}
+            data-stagger
+          >
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <!-- Domain initial icon instead of emoji -->
+              <div class="w-10 h-10 rounded-lg bg-[var(--color-onyx)] text-[var(--color-gold)] font-mono font-bold text-sm flex items-center justify-center shrink-0">
+                {domain.name.slice(0, 2).toUpperCase()}
+              </div>
+              <span class={`badge ${domain.status === 'live' ? 'badge-emerald' : domain.status === 'in-dev' ? 'badge-amber' : 'badge-purple'}`}>
+                {domain.status === 'live' ? '● Live' : domain.status === 'in-dev' ? '⟳ In Dev' : 'Owned'}
+              </span>
+            </div>
+
+            <h2 class="font-bold text-[var(--color-onyx)] text-lg mb-1">{domain.name}</h2>
+            <p class="text-xs font-mono text-[var(--color-gold-dark)] mb-3">{domain.url}</p>
+            <p class="text-sm text-[var(--color-onyx)]/60 leading-relaxed mb-4 flex-1">{domain.description}</p>
+
+            <div class="mb-4">
+              <span class="badge badge-purple">{domain.category}</span>
+            </div>
+
+            {domain.tech && (
+              <div class="flex flex-wrap gap-1 mb-5">
+                {domain.tech.map(t => (
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--color-onyx)]/50 bg-[var(--color-onyx)]/[0.06] border border-[var(--color-border-light)]">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {domain.status === 'live' && (
+              <a
+                href={domain.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary text-xs w-full justify-center py-2.5"
+                aria-label={`Visit ${domain.name}`}
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                Visit Site
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <!-- Stats -->
+      <div class="reveal-up mt-14">
+        <div class="card-light p-8 sm:p-10 rounded-[var(--radius-card)]">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+            {[
+              { value: '9',      label: 'Active Domains' },
+              { value: '7',      label: 'Live Sites' },
+              { value: '100%',   label: 'On Cloudflare' },
+              { value: '2025–26',label: 'Portfolio Built' },
+            ].map(stat => (
+              <div>
+                <div class="text-3xl font-black gradient-text mb-2">{stat.value}</div>
+                <div class="text-xs text-[var(--color-onyx)]/50 font-mono uppercase tracking-widest">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA (dark) -->
+  <section class="section-dark">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+      <div class="reveal-up max-w-xl">
+        <h2 class="text-3xl font-black mb-5 text-[var(--color-text)]">Interested in a venture?</h2>
+        <p class="text-[var(--color-dim)] mb-10 text-lg leading-relaxed">
+          Exploring licensing, partnerships, or white-label opportunities on any of these properties? Let's talk.
+        </p>
+        <a href="/contact" class="btn-primary">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>

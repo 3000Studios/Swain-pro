@@ -36,15 +36,15 @@ const articleSchema = {
   '@type': 'Article',
   headline: post.title,
   description: post.description,
-  author: { '@type': 'Person', name: 'Jeremy Swain', url: 'https://swain.pro' },
+  author: { '@type': 'Person', name: 'Mr. Swain', url: 'https://swain.pro' },
   datePublished: post.date,
-  publisher: { '@type': 'Person', name: 'Jeremy Swain' },
+  publisher: { '@type': 'Person', name: 'Mr. Swain' },
   keywords: post.tags.join(', '),
 }
 ---
 
 <BaseLayout
-  title={`${post.title} — Jeremy Swain`}
+  title={`${post.title} — Mr. Swain`}
   description={post.description}
   type="article"
   publishDate={post.date}
@@ -110,7 +110,7 @@ const articleSchema = {
           JS
         </div>
         <div class="flex-1">
-          <p class="font-semibold text-[var(--color-text)]">Jeremy Swain</p>
+          <p class="font-semibold text-[var(--color-text)]">Mr. Swain</p>
           <p class="text-sm text-[var(--color-muted)]">AI Developer &amp; Automation Engineer — Atlanta, GA</p>
         </div>
         <div class="flex gap-3">

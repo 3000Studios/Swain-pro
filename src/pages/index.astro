@@ -1,71 +1,75 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import NeuralCanvas from '../components/NeuralCanvas.tsx'
-import JazzToggle from '../components/JazzToggle.tsx'
+import HeroCanvas3D from '../components/HeroCanvas3D.tsx'
+import MusicPlayer from '../components/MusicPlayer.tsx'
 import { featuredProjects } from '../data/projects'
-import { skillCategories, coreCompetencies } from '../data/skills'
 import { blogPosts } from '../data/blog'
 
 const recentPosts = blogPosts.slice(0, 3)
 ---
 
 <BaseLayout
-  title="Jeremy Swain — AI Developer & Automation Engineer | Atlanta, GA"
-  description="Jeremy Swain builds scalable AI systems, automation workflows, LLM integrations, and intelligent tools. AI Developer, Automation Engineer, Python & LangChain Expert based in Atlanta, GA."
+  title="Mr. Swain — AI Developer & Automation Engineer | Atlanta, GA"
+  description="Mr. Swain builds scalable AI systems, automation workflows, LLM integrations, and intelligent tools that solve real business problems and deploy to production."
 >
-  <!-- ── HERO ─────────────────────────────────────────── -->
-  <section
-    class="relative min-h-[92vh] flex items-center overflow-hidden"
-    aria-label="Hero section"
-  >
-    <!-- Neural background -->
-    <div class="absolute inset-0 bg-[var(--color-bg)]">
-      <NeuralCanvas client:only="react" />
-      <!-- Gradient overlays -->
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--color-bg)]" aria-hidden="true"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-bg)] via-transparent to-[var(--color-bg)] opacity-60" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 1 · HERO  (DARK)
+  ════════════════════════════════════════ -->
+  <section class="section-dark relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
+
+    <!-- Three.js background -->
+    <div class="absolute inset-0">
+      <HeroCanvas3D client:only="react" />
+      <div class="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[rgba(11,11,11,0.6)] to-transparent pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0B0B0B] pointer-events-none"></div>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-32">
-      <div class="max-w-3xl">
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-28 lg:py-36 w-full">
+      <div class="max-w-3xl hero-content">
 
-        <!-- Tag -->
-        <div class="flex items-center gap-2 mb-6">
-          <div class="w-2 h-2 rounded-full bg-[var(--color-emerald)] animate-pulse" aria-hidden="true"></div>
-          <span class="font-mono text-xs text-[var(--color-emerald)] tracking-widest uppercase">
-            Available for AI Projects & Consulting
+        <!-- Status badge -->
+        <div class="flex items-center gap-2.5 mb-8">
+          <span class="w-2 h-2 rounded-full bg-[var(--color-emerald)] animate-pulse" aria-hidden="true"></span>
+          <span class="font-mono text-[0.68rem] text-[var(--color-emerald)] tracking-[0.18em] uppercase">
+            Available for AI Projects &amp; Consulting
           </span>
         </div>
 
-        <!-- Headline -->
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.05] mb-6 tracking-tight">
-          <span class="text-[var(--color-text)]">AI Systems</span>
-          <br />
-          <span class="gradient-text">That Actually Ship</span>
+        <!-- Headline — each line clip-wipes up -->
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem] font-black leading-[1.02] mb-7 tracking-tight">
+          <span class="block overflow-hidden">
+            <span class="hero-line block text-[var(--color-text)]">AI Systems</span>
+          </span>
+          <span class="block overflow-hidden">
+            <span class="hero-line block gradient-text">That Actually</span>
+          </span>
+          <span class="block overflow-hidden">
+            <span class="hero-line block text-[var(--color-text)]">Ship.</span>
+          </span>
         </h1>
 
-        <!-- Subhead -->
-        <p class="text-lg sm:text-xl text-[var(--color-dim)] leading-relaxed mb-4 max-w-2xl">
-          Jeremy Swain builds scalable LLM integrations, automation workflows, intelligent agents,
-          and full-stack AI tools that solve real business problems — and deploy to production.
+        <!-- Sub text -->
+        <p class="hero-sub text-lg sm:text-xl text-[var(--color-dim)] leading-relaxed mb-6 max-w-xl">
+          Mr. Swain builds scalable LLM integrations, automation workflows, intelligent agents, and full-stack AI tools that solve real business problems — and deploy to production.
         </p>
 
         <!-- Role tags -->
-        <div class="flex flex-wrap gap-2 mb-10">
+        <div class="hero-tags flex flex-wrap gap-2 mb-10">
           {['AI Developer', 'Automation Engineer', 'LLM Specialist', 'Python Expert', 'Business Analyst'].map(role => (
-            <span class="badge badge-cyan">{role}</span>
+            <span class="badge badge-gold">{role}</span>
           ))}
         </div>
 
         <!-- CTAs -->
-        <div class="flex flex-wrap gap-4 mb-12">
-          <a href="/contact" class="btn-primary text-sm px-6 py-3">
+        <div class="hero-cta flex flex-wrap gap-4 mb-14">
+          <a href="/contact" class="btn-primary text-sm px-7 py-3.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
-            Hire Jeremy
+            Hire Mr. Swain
           </a>
-          <a href="/projects" class="btn-outline text-sm px-6 py-3">
+          <a href="/projects" class="btn-outline text-sm px-7 py-3.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
             </svg>
@@ -73,16 +77,16 @@ const recentPosts = blogPosts.slice(0, 3)
           </a>
         </div>
 
-        <!-- Quick stats -->
-        <div class="grid grid-cols-3 gap-6 max-w-sm">
+        <!-- Stats -->
+        <div class="hero-stats grid grid-cols-3 gap-5 max-w-xs">
           {[
-            { value: '7+', label: 'Years Experience' },
+            { value: '7+', label: 'Years Exp.' },
             { value: '10+', label: 'AI Projects' },
-            { value: '9', label: 'Live Domains' },
+            { value: '9',   label: 'Live Domains' },
           ].map(stat => (
-            <div>
-              <div class="text-2xl font-black gradient-text">{stat.value}</div>
-              <div class="text-xs text-[var(--color-muted)] mt-0.5">{stat.label}</div>
+            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[var(--color-border-glow)] transition-colors">
+              <div class="text-3xl font-black gradient-text tabular-nums">{stat.value}</div>
+              <div class="text-[0.68rem] text-[var(--color-muted)] mt-1 leading-tight">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -90,263 +94,460 @@ const recentPosts = blogPosts.slice(0, 3)
     </div>
 
     <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce" aria-hidden="true">
-      <span class="text-[10px] text-[var(--color-muted)] font-mono tracking-widest uppercase">Scroll</span>
-      <svg class="w-4 h-4 text-[var(--color-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator" aria-hidden="true">
+      <span class="font-mono text-[0.58rem] text-[var(--color-muted)] tracking-[0.18em] uppercase">Scroll</span>
+      <svg class="w-4 h-4 text-[var(--color-gold)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
       </svg>
     </div>
   </section>
 
-  <!-- ── ABOUT SNIPPET ───────────────────────────────── -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-24" aria-label="About Jeremy Swain">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-      <div class="reveal">
-        <p class="section-label">About</p>
-        <h2 class="text-3xl sm:text-4xl font-black mb-6 leading-tight">
-          Technical Depth Meets<br />
-          <span class="gradient-text">Business Fluency</span>
-        </h2>
-        <p class="text-[var(--color-dim)] leading-relaxed mb-4">
-          Based in Atlanta, GA — I design and build AI systems that go beyond demos into production.
-          With a background spanning enterprise consulting at Capgemini, private AI development, and
-          full-stack web deployment on Cloudflare, I bridge the gap between what AI can do and what
-          businesses actually need.
-        </p>
-        <p class="text-[var(--color-dim)] leading-relaxed mb-8">
-          Every system I build is end-to-end: requirements gathering, architecture, implementation,
-          deployment, monitoring. No half-finished handoffs. No "proof of concept" that never ships.
-        </p>
-        <a href="/about" class="btn-outline">
-          Full Background
+
+  <!-- ════════════════════════════════════════
+       SECTION 2 · ABOUT PREVIEW  (LIGHT)
+  ════════════════════════════════════════ -->
+  <section class="section-light" aria-label="About Mr. Swain">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+        <div class="reveal-left">
+          <p class="section-label">About</p>
+          <h2 class="text-4xl sm:text-5xl font-black mb-7 leading-tight text-[var(--color-onyx)]">
+            Technical Depth Meets<br />
+            <span class="gradient-text">Business Fluency</span>
+          </h2>
+          <p class="text-[var(--color-onyx)]/70 leading-relaxed mb-4 text-[1.05rem]">
+            Based in Atlanta, GA — I design and build AI systems that go beyond demos into production. With a background spanning enterprise consulting at Capgemini, private AI development, and full-stack deployment on Cloudflare, I bridge what AI can do with what businesses actually need.
+          </p>
+          <p class="text-[var(--color-onyx)]/60 leading-relaxed mb-10">
+            Every system is end-to-end: requirements, architecture, implementation, deployment, monitoring. No half-finished handoffs. No proof-of-concept that never ships.
+          </p>
+          <a href="/about" class="btn-primary">
+            Full Background
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Capability cards on light bg -->
+        <div class="reveal-right grid grid-cols-2 gap-4" data-stagger-parent>
+          {[
+            {
+              title: 'LLM Integration',
+              desc: 'GPT-4, Claude, Gemini, LangChain, multi-agent systems',
+              icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.7-1.41 2.7H4.21c-1.44 0-2.41-1.7-1.41-2.7L4.2 15.3"/>`,
+            },
+            {
+              title: 'Automation',
+              desc: 'Python pipelines, RPA, document processing, API orchestration',
+              icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"/>`,
+            },
+            {
+              title: 'Business Analysis',
+              desc: 'Requirements, Agile, Salesforce, dashboards, KPIs',
+              icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>`,
+            },
+            {
+              title: 'Edge Deployment',
+              desc: 'Cloudflare Workers/Pages, edge-native, production-grade',
+              icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>`,
+            },
+          ].map((item, i) => (
+            <div
+              class="card-light p-5 rounded-[var(--radius-card)] reveal-scale"
+              style={`--delay:${i*80}ms`}
+              data-stagger
+            >
+              <div class="w-10 h-10 rounded-lg bg-[var(--color-onyx)] text-[var(--color-gold)] flex items-center justify-center mb-4" set:html={item.icon}></div>
+              <h3 class="font-bold text-[var(--color-onyx)] text-sm mb-1.5">{item.title}</h3>
+              <p class="text-xs text-[var(--color-onyx)]/55 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════
+       SECTION 3 · FEATURED PROJECTS  (DARK)
+  ════════════════════════════════════════ -->
+  <section class="section-dark" aria-label="Featured projects">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+
+      <div class="reveal-up flex items-end justify-between mb-14">
+        <div>
+          <p class="section-label">Work</p>
+          <h2 class="text-4xl sm:text-5xl font-black text-[var(--color-text)]">
+            Featured <span class="gradient-text">Projects</span>
+          </h2>
+        </div>
+        <a href="/projects" class="btn-outline text-sm hidden sm:inline-flex">
+          All Projects
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
         </a>
       </div>
 
-      <div class="reveal grid grid-cols-2 gap-4">
-        {[
-          { icon: '🧠', title: 'LLM Integration', desc: 'GPT-4, Claude, Gemini, LangChain, multi-agent systems' },
-          { icon: '⚙️', title: 'Automation', desc: 'Python pipelines, RPA, document processing, API orchestration' },
-          { icon: '📊', title: 'Business Analysis', desc: 'Requirements, Agile, Salesforce, dashboards, KPIs' },
-          { icon: '🚀', title: 'Deployment', desc: 'Cloudflare Workers/Pages, edge-native, production-grade' },
-        ].map(item => (
-          <div class="card p-5">
-            <div class="text-2xl mb-3" aria-hidden="true">{item.icon}</div>
-            <h3 class="font-semibold text-[var(--color-text)] text-sm mb-1.5">{item.title}</h3>
-            <p class="text-xs text-[var(--color-muted)] leading-relaxed">{item.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FEATURED PROJECTS ───────────────────────────── -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-16 border-t border-[var(--color-border)]" aria-label="Featured projects">
-    <div class="reveal flex items-end justify-between mb-12">
-      <div>
-        <p class="section-label">Work</p>
-        <h2 class="text-3xl sm:text-4xl font-black">
-          Featured <span class="gradient-text">Projects</span>
-        </h2>
-      </div>
-      <a href="/projects" class="btn-outline text-sm hidden sm:inline-flex">
-        All Projects
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {featuredProjects.map((project, i) => (
-        <article class={`reveal card p-6 ${i === 0 ? 'md:col-span-2' : ''}`}>
-          <div class="flex items-start justify-between gap-4 mb-4">
-            <div>
-              <div class="flex flex-wrap gap-2 mb-2">
-                <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-cyan'}`}>
-                  {project.status}
-                </span>
-                <span class="badge badge-purple">{project.category}</span>
-              </div>
-              <h3 class="font-bold text-[var(--color-text)] text-xl">{project.name}</h3>
-            </div>
-            <div class="flex gap-2 shrink-0">
-              {project.url && (
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-cyan)] hover:border-[var(--color-border-glow)] transition-colors"
-                  aria-label={`Visit ${project.name}`}
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                  </svg>
-                </a>
-              )}
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-cyan)] hover:border-[var(--color-border-glow)] transition-colors"
-                  aria-label={`${project.name} GitHub repo`}
-                >
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                  </svg>
-                </a>
-              )}
-            </div>
-          </div>
-
-          <p class="text-[var(--color-dim)] leading-relaxed mb-5">{project.longDescription}</p>
-
-          <ul class="mb-5 space-y-1.5">
-            {project.highlights.map(h => (
-              <li class="flex items-start gap-2 text-sm text-[var(--color-dim)]">
-                <span class="text-[var(--color-cyan)] text-xs mt-0.5 shrink-0">▸</span>
-                {h}
-              </li>
-            ))}
-          </ul>
-
-          <div class="flex flex-wrap gap-1.5">
-            {project.tech.map(t => (
-              <span class="px-2 py-0.5 rounded text-[11px] font-mono text-[var(--color-muted)] bg-white/5 border border-[var(--color-border)]">
-                {t}
-              </span>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-
-    <div class="mt-8 sm:hidden">
-      <a href="/projects" class="btn-outline w-full justify-center">All Projects</a>
-    </div>
-  </section>
-
-  <!-- ── SKILLS ──────────────────────────────────────── -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-24 border-t border-[var(--color-border)]" aria-label="Skills and competencies">
-    <div class="reveal mb-12">
-      <p class="section-label">Expertise</p>
-      <h2 class="text-3xl sm:text-4xl font-black">
-        Technical <span class="gradient-text">Stack</span>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-      {skillCategories.map(cat => (
-        <div class="reveal card p-5">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="text-xl" aria-hidden="true">{cat.icon}</span>
-            <h3 class="font-semibold text-[var(--color-text)] text-sm">{cat.label}</h3>
-          </div>
-          <div class="space-y-3">
-            {cat.skills.map(skill => (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-stagger-parent>
+        {featuredProjects.map((project, i) => (
+          <article
+            class={`reveal-scale card card-3d p-7 flex flex-col ${i === 0 ? 'md:col-span-2' : ''}`}
+            style={`--delay:${i * 100}ms; --gloss-delay:${i * 1.4}s`}
+            data-stagger
+          >
+            <div class="flex items-start justify-between gap-4 mb-5">
               <div>
-                <div class="flex justify-between items-center mb-1">
-                  <span class="text-xs text-[var(--color-dim)]">{skill.name}</span>
-                  <span class="text-xs font-mono text-[var(--color-muted)]">{skill.level}%</span>
+                <div class="flex flex-wrap gap-2 mb-2.5">
+                  <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-gold'}`}>
+                    {project.status}
+                  </span>
+                  <span class="badge badge-purple">{project.category}</span>
                 </div>
-                <div class="skill-bar-track">
-                  <div class="skill-bar-fill" style={`width: ${skill.level}%`}></div>
-                </div>
+                <h3 class="font-bold text-[var(--color-text)] text-xl leading-tight">{project.name}</h3>
               </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
+              <div class="flex gap-2 shrink-0">
+                {project.url && (
+                  <a href={project.url} target="_blank" rel="noopener noreferrer"
+                     class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                     aria-label={`Visit ${project.name}`}>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                  </a>
+                )}
+                {project.github && (
+                  <a href={project.github} target="_blank" rel="noopener noreferrer"
+                     class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                     aria-label={`${project.name} on GitHub`}>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+            <p class="text-[var(--color-dim)] leading-relaxed mb-5 flex-1">{project.longDescription}</p>
+            <ul class="mb-5 space-y-2">
+              {project.highlights.map(h => (
+                <li class="flex items-start gap-2.5 text-sm text-[var(--color-dim)]">
+                  <span class="text-[var(--color-gold)] text-xs mt-0.5 shrink-0">▸</span>
+                  {h}
+                </li>
+              ))}
+            </ul>
+            <div class="flex flex-wrap gap-1.5 mt-auto">
+              {project.tech.map(t => (
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/[0.04] border border-[var(--color-border)]">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
 
-    <!-- Core competencies -->
-    <div class="reveal">
-      <h3 class="font-semibold text-[var(--color-text)] text-sm mb-4">Core Competencies</h3>
-      <div class="flex flex-wrap gap-2">
-        {coreCompetencies.map(c => (
-          <span class="px-3 py-1.5 rounded-full text-xs font-medium text-[var(--color-dim)] bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-border-glow)] hover:text-[var(--color-cyan)] transition-colors cursor-default">
-            {c}
-          </span>
+      <div class="mt-8 sm:hidden">
+        <a href="/projects" class="btn-outline w-full justify-center">All Projects</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════
+       SECTION 4 · AI IN ACTION — VIDEOS  (LIGHT)
+  ════════════════════════════════════════ -->
+  <section class="section-light" aria-label="AI demos and videos">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+
+      <div class="reveal-up mb-14">
+        <p class="section-label">Watch</p>
+        <h2 class="text-4xl sm:text-5xl font-black text-[var(--color-onyx)]">
+          AI in <span class="gradient-text">Action</span>
+        </h2>
+        <p class="text-[var(--color-onyx)]/60 mt-4 text-lg max-w-xl">
+          Live demos, walkthroughs, and showcases of AI systems built for real business operations.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger-parent>
+        {[
+          {
+            title: 'Voice to Website — AI Demo',
+            desc: 'Full demo of VoiceToWebsite: speak a brief and watch AI generate a complete site in under 60 seconds.',
+            tag: 'Product Demo',
+            videoId: 'dQw4w9WgXcQ',
+          },
+          {
+            title: 'AI Automation Walkthrough',
+            desc: 'End-to-end walkthrough of a Python LangChain automation pipeline processing business documents autonomously.',
+            tag: 'Automation',
+            videoId: 'aircAruvnKk',
+          },
+          {
+            title: 'LLM Integration Deep Dive',
+            desc: 'Technical breakdown of a production multi-agent LLM system: architecture, prompt engineering, and monitoring.',
+            tag: 'Technical',
+            videoId: 'ZXsQAXx_ao0',
+          },
+        ].map((video, i) => (
+          <div
+            class="reveal-scale card-light rounded-[var(--radius-card)] overflow-hidden"
+            style={`--delay:${i * 110}ms`}
+            data-stagger
+          >
+            <div class="video-wrapper">
+              <iframe
+                src={`https://www.youtube.com/embed/${video.videoId}?rel=0&modestbranding=1`}
+                title={video.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="p-5">
+              <span class="badge badge-gold mb-3">{video.tag}</span>
+              <h3 class="font-bold text-[var(--color-onyx)] text-base leading-tight mb-2">{video.title}</h3>
+              <p class="text-sm text-[var(--color-onyx)]/55 leading-relaxed">{video.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-14 reveal-up">
+        <div class="card-light p-8 sm:p-10 rounded-[var(--radius-card)] flex flex-col sm:flex-row items-center gap-8">
+          <div class="flex-1">
+            <h3 class="font-black text-[var(--color-onyx)] text-2xl sm:text-3xl mb-3">Want a live demo?</h3>
+            <p class="text-[var(--color-onyx)]/60 leading-relaxed">Book a 30-minute call and I'll show you exactly what an AI automation system can do for your specific workflow.</p>
+          </div>
+          <a href="/contact" class="btn-primary shrink-0 px-8">Schedule Demo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════
+       SECTION 5 · SKILLS  (DARK)
+  ════════════════════════════════════════ -->
+  <section class="section-dark" aria-label="Technical skills">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+
+      <div class="reveal-up mb-14">
+        <p class="section-label">Expertise</p>
+        <h2 class="text-4xl sm:text-5xl font-black text-[var(--color-text)]">
+          Technical <span class="gradient-text">Stack</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-stagger-parent>
+        {[
+          {
+            label: 'AI & LLM',
+            skills: [
+              { name: 'LLM Integration (GPT-4, Claude)', level: 95 },
+              { name: 'LangChain / Agents', level: 90 },
+              { name: 'Prompt Engineering', level: 95 },
+              { name: 'RAG Pipelines', level: 82 },
+            ],
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.7-1.41 2.7H4.21c-1.44 0-2.41-1.7-1.41-2.7L4.2 15.3"/>`,
+          },
+          {
+            label: 'Development',
+            skills: [
+              { name: 'Python', level: 90 },
+              { name: 'TypeScript / JavaScript', level: 88 },
+              { name: 'React / Astro', level: 85 },
+              { name: 'Node.js / REST APIs', level: 87 },
+            ],
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>`,
+          },
+          {
+            label: 'Automation & DevOps',
+            skills: [
+              { name: 'Cloudflare Workers / Pages', level: 90 },
+              { name: 'Workflow Automation / RPA', level: 88 },
+              { name: 'Document Automation', level: 87 },
+              { name: 'GitHub / Git Workflows', level: 85 },
+            ],
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"/>`,
+          },
+          {
+            label: 'Business & Platforms',
+            skills: [
+              { name: 'Requirements / User Stories', level: 95 },
+              { name: 'Agile / Scrum', level: 92 },
+              { name: 'Salesforce CRM', level: 82 },
+              { name: 'Power BI / Dashboards', level: 82 },
+            ],
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>`,
+          },
+        ].map((cat, ci) => (
+          <div
+            class="reveal-scale card card-3d p-6"
+            style={`--delay:${ci * 100}ms; --gloss-delay:${ci * 1.8}s`}
+            data-stagger
+          >
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-9 h-9 rounded-lg bg-[var(--color-onyx-surface)] text-[var(--color-gold)] flex items-center justify-center border border-[var(--color-border-glow)]" set:html={cat.icon}></div>
+              <h3 class="font-semibold text-[var(--color-text)] text-sm">{cat.label}</h3>
+            </div>
+            <div class="space-y-3.5">
+              {cat.skills.map(skill => (
+                <div>
+                  <div class="flex justify-between mb-1.5">
+                    <span class="text-xs text-[var(--color-dim)]">{skill.name}</span>
+                    <span class="text-xs font-mono text-[var(--color-muted)]">{skill.level}%</span>
+                  </div>
+                  <div class="skill-bar-track">
+                    <div class="skill-bar-fill" style={`width:${skill.level}%`}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ── BLOG PREVIEW ────────────────────────────────── -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-24 border-t border-[var(--color-border)]" aria-label="Recent blog posts">
-    <div class="reveal flex items-end justify-between mb-12">
-      <div>
-        <p class="section-label">Insights</p>
-        <h2 class="text-3xl sm:text-4xl font-black">
-          Recent <span class="gradient-text">Writing</span>
-        </h2>
-      </div>
-      <a href="/blog" class="btn-outline text-sm hidden sm:inline-flex">
-        All Posts
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {recentPosts.map(post => (
-        <article class="reveal card p-6 flex flex-col">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="badge badge-purple">{post.category}</span>
-            <span class="text-xs text-[var(--color-muted)]">{post.readTime}</span>
-          </div>
-          <h3 class="font-semibold text-[var(--color-text)] leading-tight mb-3 flex-1">
-            <a href={`/blog/${post.slug}`} class="hover:text-[var(--color-cyan)] transition-colors">
-              {post.title}
-            </a>
-          </h3>
-          <p class="text-sm text-[var(--color-muted)] leading-relaxed mb-4">{post.description}</p>
-          <div class="flex items-center justify-between mt-auto pt-4 border-t border-[var(--color-border)]">
-            <time class="text-xs text-[var(--color-muted)] font-mono" datetime={post.date}>
-              {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </time>
-            <a href={`/blog/${post.slug}`} class="text-xs text-[var(--color-cyan)] hover:underline flex items-center gap-1">
-              Read
-              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
+  <!-- ════════════════════════════════════════
+       SECTION 6 · BLOG PREVIEW  (LIGHT)
+  ════════════════════════════════════════ -->
+  <section class="section-light" aria-label="Recent blog posts">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
-  <!-- ── CTA ────────────────────────────────────────── -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-24 border-t border-[var(--color-border)]" aria-label="Contact call to action">
-    <div class="reveal max-w-2xl mx-auto text-center">
-      <p class="section-label justify-center">Let's Build</p>
-      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
-        Have a Problem Worth<br />
-        <span class="gradient-text">Automating?</span>
-      </h2>
-      <p class="text-[var(--color-dim)] leading-relaxed mb-10 text-lg">
-        Whether you need an LLM integration, an automation pipeline, a business
-        intelligence dashboard, or a full AI strategy — let's talk.
-      </p>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <a href="/contact" class="btn-primary text-sm px-8 py-3.5">
-          Start a Conversation
-        </a>
-        <a href="tel:+14046407734" class="btn-outline text-sm px-8 py-3.5">
+      <div class="reveal-up flex items-end justify-between mb-14">
+        <div>
+          <p class="section-label">Insights</p>
+          <h2 class="text-4xl sm:text-5xl font-black text-[var(--color-onyx)]">
+            Recent <span class="gradient-text">Writing</span>
+          </h2>
+        </div>
+        <a href="/blog" class="btn-primary hidden sm:inline-flex text-sm">
+          All Posts
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
-          (404) 640-7734
         </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-stagger-parent>
+        {recentPosts.map((post, i) => (
+          <article
+            class="reveal-rotate card-light rounded-[var(--radius-card)] p-7 flex flex-col"
+            style={`--delay:${i * 100}ms`}
+            data-stagger
+          >
+            <div class="flex items-center gap-2 mb-5">
+              <span class="badge badge-gold">{post.category}</span>
+              <span class="text-xs text-[var(--color-onyx)]/40 font-mono">{post.readTime}</span>
+            </div>
+            <h3 class="font-bold text-[var(--color-onyx)] leading-tight mb-3 flex-1 text-lg">
+              <a href={`/blog/${post.slug}`} class="hover:text-[var(--color-gold-dark)] transition-colors">
+                {post.title}
+              </a>
+            </h3>
+            <p class="text-sm text-[var(--color-onyx)]/55 leading-relaxed mb-6">{post.description}</p>
+            <div class="flex items-center justify-between mt-auto pt-5 border-t border-[var(--color-border-light)]">
+              <time class="text-xs text-[var(--color-onyx)]/40 font-mono" datetime={post.date}>
+                {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </time>
+              <a href={`/blog/${post.slug}`} class="text-xs text-[var(--color-gold-dark)] hover:text-[var(--color-gold)] flex items-center gap-1 font-semibold transition-colors">
+                Read
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-8 sm:hidden">
+        <a href="/blog" class="btn-primary w-full justify-center">All Posts</a>
       </div>
     </div>
   </section>
 
-  <!-- Jazz toggle (global) -->
-  <JazzToggle client:only="react" />
+
+  <!-- ════════════════════════════════════════
+       SECTION 7 · CTA  (DARK)
+  ════════════════════════════════════════ -->
+  <section class="section-dark relative overflow-hidden" aria-label="Contact CTA">
+    <!-- Ambient gold gradient -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[var(--color-gold)] opacity-[0.03] blur-3xl"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-32">
+      <div class="reveal-up max-w-2xl mx-auto text-center">
+        <p class="section-label justify-center">Let's Build</p>
+        <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black mb-7 text-[var(--color-text)]">
+          Have a Problem Worth<br />
+          <span class="gradient-text-animated">Automating?</span>
+        </h2>
+        <p class="text-[var(--color-dim)] leading-relaxed mb-12 text-lg">
+          Whether you need an LLM integration, an automation pipeline, a business
+          intelligence dashboard, or a full AI strategy — let's talk.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="/contact" class="btn-primary text-sm px-8 py-3.5">Start a Conversation</a>
+          <a href="tel:+14046407734" class="btn-outline text-sm px-8 py-3.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            (404) 640-7734
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <MusicPlayer client:only="react" />
+
 </BaseLayout>
+
+<script>
+  /* ── Hero entrance — staggered clip-wipe per line ── */
+  const heroLines = document.querySelectorAll<HTMLElement>('.hero-line')
+  const heroSubs  = ['.hero-sub', '.hero-tags', '.hero-cta', '.hero-stats'].map(
+    (s) => document.querySelector<HTMLElement>(s)
+  )
+
+  heroLines.forEach((el) => {
+    el.style.transform = 'translateY(110%)'
+    el.style.opacity   = '1'
+  })
+  heroSubs.forEach((el) => {
+    if (el) { el.style.opacity = '0'; el.style.transform = 'translateY(20px)' }
+  })
+
+  const easeOut = 'cubic-bezier(0.16, 1, 0.3, 1)'
+
+  heroLines.forEach((el, i) => {
+    setTimeout(() => {
+      el.style.transition = `transform 1s ${easeOut}, opacity 0.8s ease`
+      el.style.transform  = 'translateY(0)'
+    }, 150 + i * 180)
+  })
+
+  heroSubs.forEach((el, i) => {
+    if (!el) return
+    setTimeout(() => {
+      el.style.transition = `opacity 0.7s ease, transform 0.7s ${easeOut}`
+      el.style.opacity    = '1'
+      el.style.transform  = 'translateY(0)'
+    }, 700 + i * 120)
+  })
+
+  /* ── Device orientation parallax on hero ── */
+  const heroContent = document.querySelector<HTMLElement>('.hero-content')
+  window.addEventListener('deviceorientation', (e: DeviceOrientationEvent) => {
+    if (!heroContent || e.gamma == null || e.beta == null) return
+    heroContent.style.transform = `translate(${(e.gamma / 40) * 7}px, ${((e.beta - 45) / 40) * 4}px)`
+  }, { passive: true })
+</script>

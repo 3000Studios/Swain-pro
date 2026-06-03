@@ -10,8 +10,8 @@ interface Props {
 }
 
 const {
-  title = 'Jeremy Swain — AI Developer & Automation Engineer | swain.pro',
-  description = 'Jeremy Swain builds scalable AI systems, automation workflows, LLM integrations, and intelligent tools. AI Developer, Automation Engineer, Python & LangChain Expert based in Atlanta, GA.',
+  title = 'Mr. Swain — AI Developer & Automation Engineer | swain.pro',
+  description = 'Mr. Swain builds scalable AI systems, automation workflows, LLM integrations, and intelligent tools. AI Developer, Automation Engineer, Python & LangChain Expert based in Atlanta, GA.',
   image = '/og-image.png',
   type = 'website',
   publishDate,
@@ -26,9 +26,9 @@ const resolvedImage = image.startsWith('http') ? image : `${siteUrl}${image}`
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Jeremy Swain',
+  name: 'Mr. Swain',
   url: siteUrl,
-  image: `${siteUrl}/jeremy-swain.jpg`,
+  image: `${siteUrl}/Mr. Swain-swain.jpg`,
   jobTitle: 'AI Developer & Automation Engineer',
   description: 'AI Developer, Automation Engineer, LLM Integration Specialist, Python & LangChain Expert, Business Analyst, Intelligent Systems Builder based in Atlanta, GA.',
   address: { '@type': 'PostalAddress', addressLocality: 'Atlanta', addressRegion: 'GA', addressCountry: 'US' },
@@ -41,19 +41,19 @@ const personSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Jeremy Swain — AI Developer Portfolio',
+  name: 'Mr. Swain — AI Developer Portfolio',
   url: siteUrl,
   description,
-  author: { '@type': 'Person', name: 'Jeremy Swain' },
+  author: { '@type': 'Person', name: 'Mr. Swain' },
 }
 
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: 'Jeremy Swain AI & Automation Services',
+  name: 'Mr. Swain AI & Automation Services',
   url: siteUrl,
   description: 'AI development, automation engineering, LLM integration, and business workflow automation services.',
-  provider: { '@type': 'Person', name: 'Jeremy Swain' },
+  provider: { '@type': 'Person', name: 'Mr. Swain' },
   areaServed: { '@type': 'City', name: 'Atlanta', containedInPlace: { '@type': 'State', name: 'Georgia' } },
   serviceType: ['AI Development', 'Automation Engineering', 'LLM Integration', 'Business Analysis'],
 }
@@ -63,7 +63,7 @@ const serviceSchema = {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="author" content="Jeremy Swain" />
+<meta name="author" content="Mr. Swain" />
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={resolvedCanonical} />
@@ -83,7 +83,7 @@ const serviceSchema = {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={resolvedImage} />
-<meta property="og:site_name" content="Jeremy Swain — swain.pro" />
+<meta property="og:site_name" content="Mr. Swain — swain.pro" />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter / X -->
@@ -96,7 +96,7 @@ const serviceSchema = {
 {tags.length > 0 && tags.map(tag => <meta property="article:tag" content={tag} />)}
 
 <!-- Keywords -->
-<meta name="keywords" content="AI Developer Atlanta, Automation Engineer Atlanta, LLM Integration Specialist, Python Automation Developer, LangChain Developer, AI Workflow Automation, AI Agent Developer, Business Analyst Automation, Salesforce Automation, Full Stack AI Developer, GPT Integration Developer, AI Consultant Georgia, Workflow Automation Consultant, Intelligent Systems Developer, Jeremy Swain AI Developer, Jeremy Swain Portfolio, swain.pro" />
+<meta name="keywords" content="AI Developer Atlanta, Automation Engineer Atlanta, LLM Integration Specialist, Python Automation Developer, LangChain Developer, AI Workflow Automation, AI Agent Developer, Business Analyst Automation, Salesforce Automation, Full Stack AI Developer, GPT Integration Developer, AI Consultant Georgia, Workflow Automation Consultant, Intelligent Systems Developer, Mr. Swain AI Developer, Mr. Swain Portfolio, swain.pro" />
 
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />

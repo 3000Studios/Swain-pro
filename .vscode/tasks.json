@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "panel": "shared", "reveal": "always" },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "astro",
+        "pattern": { "regexp": "^(.*):(\\d+):(\\d+):\\s+(error|warning):\\s+(.*)$", "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5 },
+        "background": { "activeOnStart": true, "beginsPattern": "astro", "endsPattern": "Local" }
+      }
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": "build",
+      "presentation": { "panel": "shared", "reveal": "always" }
+    },
+    {
+      "label": "check",
+      "type": "shell",
+      "command": "npm run check",
+      "group": "test",
+      "presentation": { "panel": "shared", "reveal": "always" }
+    },
+    {
+      "label": "deploy",
+      "type": "shell",
+      "command": "npm run build && npx wrangler pages deploy dist",
+      "group": "build",
+      "presentation": { "panel": "shared", "reveal": "always" }
+    }
+  ]
+}

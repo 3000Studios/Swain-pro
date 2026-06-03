@@ -12,12 +12,14 @@ export interface Project {
   featured: boolean
   year: string
   highlights: string[]
+  screenshot?: string
 }
 
 export const projects: Project[] = [
   {
     slug: 'voicetowebsite',
     name: 'VoiceToWebsite',
+    screenshot: '/images/projects/voicetowebsite.jpg',
     description: 'Voice-activated website generator — speak your vision, ship a site.',
     longDescription: 'Full-stack AI platform that converts voice commands and natural language into complete, deployed websites. Built on Cloudflare Workers with a TypeScript/React frontend, integrating GPT-4 for code generation and Wrangler for zero-friction deployment.',
     tech: ['TypeScript', 'React', 'Cloudflare Workers', 'GPT-4', 'Vite', 'Wrangler'],
@@ -37,6 +39,7 @@ export const projects: Project[] = [
   {
     slug: 'myappai',
     name: 'MyAppAI',
+    screenshot: '/images/projects/myappai.jpg',
     description: 'AI-powered SaaS platform for rapid app ideation and deployment.',
     longDescription: 'Multi-tenant SaaS application that leverages LLMs to scaffold full-stack applications from high-level product descriptions. Includes billing, auth, and AI-assisted code review pipelines.',
     tech: ['TypeScript', 'React', 'Node.js', 'OpenAI API', 'Firebase', 'Cloudflare Pages'],
@@ -57,6 +60,7 @@ export const projects: Project[] = [
   {
     slug: 'playstorewizard',
     name: 'PlayStoreWizard Pro',
+    screenshot: '/images/projects/playstorewizard.jpg',
     description: 'AI-powered Google Play Store optimization and ASO automation tool.',
     longDescription: 'Automated App Store Optimization platform that uses LLMs to generate, test, and iterate on Google Play Store listings. Analyzes competitor keywords, generates A/B test variants, and tracks ranking improvements.',
     tech: ['TypeScript', 'React', 'Python', 'OpenAI API', 'Cloudflare Pages'],
@@ -131,6 +135,7 @@ export const projects: Project[] = [
   {
     slug: 'getnexa',
     name: 'GetNexa Arcade',
+    screenshot: '/images/projects/getnexa.jpg',
     description: 'Free browser games platform with multiplayer and leaderboards on Cloudflare Workers.',
     longDescription: 'High-performance browser gaming platform built entirely on Cloudflare infrastructure. Features multiplayer capabilities using Workers and Durable Objects, global leaderboards with KV, and zero-latency game delivery via Pages.',
     tech: ['TypeScript', 'Cloudflare Workers', 'Durable Objects', 'KV', 'Cloudflare Pages'],

@@ -18,9 +18,15 @@ const seoProps = Astro.props
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <SEO {...seoProps} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,600&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <Header />
@@ -30,29 +36,63 @@ const seoProps = Astro.props
     <Footer />
 
     <script>
-      // Intersection Observer for reveal animations
-      const observer = new IntersectionObserver(
+      /* ── Intersection Observer: new reveal classes ── */
+      const revealClasses = ['reveal-up','reveal-left','reveal-right','reveal-scale','reveal-rotate']
+
+      const revealObs = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible')
-              // Animate skill bars
-              entry.target.querySelectorAll('.skill-bar-fill').forEach((bar) => {
-                bar.classList.add('animate')
-              })
-            }
+            if (!entry.isIntersecting) return
+            const el = entry.target as HTMLElement
+            el.classList.add('in-view')
+            // Trigger skill bars inside
+            el.querySelectorAll('.skill-bar-fill').forEach((bar) => bar.classList.add('animate'))
+            revealObs.unobserve(el)
+          })
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+      )
+
+      document.querySelectorAll(revealClasses.map(c => `.${c}`).join(',')).forEach((el) =>
+        revealObs.observe(el)
+      )
+
+      /* ── Legacy .reveal class ── */
+      const legacyObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return
+            const el = entry.target as HTMLElement
+            el.classList.add('visible')
+            el.querySelectorAll('.skill-bar-fill').forEach((bar) => bar.classList.add('animate'))
           })
         },
         { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
       )
+      document.querySelectorAll('.reveal').forEach((el) => legacyObs.observe(el))
 
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+      /* ── Staggered grid children ── */
+      const gridObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return
+            const parent = entry.target
+            parent.querySelectorAll('[data-stagger]').forEach((child, i) => {
+              ;(child as HTMLElement).style.transitionDelay = `${i * 90}ms`
+              child.classList.add('in-view')
+            })
+            gridObs.unobserve(parent)
+          })
+        },
+        { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
+      )
+      document.querySelectorAll('[data-stagger-parent]').forEach((el) => gridObs.observe(el))
 
-      // Active nav link
+      /* ── Active nav link ── */
       const currentPath = window.location.pathname
       document.querySelectorAll('[data-nav-link]').forEach((link) => {
         const href = link.getAttribute('href')
-        if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+        if (href === currentPath || (href !== '/' && currentPath.startsWith(href!))) {
           link.classList.add('active')
         }
       })

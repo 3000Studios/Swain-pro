@@ -5,21 +5,31 @@ import { projects } from '../data/projects'
 ---
 
 <BaseLayout
-  title="Projects — Jeremy Swain AI Developer"
-  description="Real AI projects, automation tools, and full-stack systems built by Jeremy Swain. VoiceToWebsite, MyAppAI, PlayStoreWizard, YouTuneAI, and more."
+  title="Projects — Mr. Swain AI Developer"
+  description="Real AI projects, automation tools, and full-stack systems built by Mr. Swain. VoiceToWebsite, MyAppAI, PlayStoreWizard, YouTuneAI, and more."
 >
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-    <div class="max-w-2xl mb-16">
-      <p class="section-label">Portfolio</p>
-      <h1 class="text-4xl sm:text-5xl font-black mb-5">
-        Real <span class="gradient-text">Projects</span>
-      </h1>
-      <p class="text-[var(--color-dim)] text-lg leading-relaxed">
-        AI systems, automation tools, and full-stack applications built, deployed, and running.
-        Filter by category, expand any card for full details.
-      </p>
-    </div>
 
-    <ProjectExplorer projects={projects} client:load />
+  <!-- Hero (dark) -->
+  <section class="section-dark">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
+      <div class="max-w-2xl">
+        <p class="section-label">Portfolio</p>
+        <h1 class="text-5xl sm:text-6xl font-black mb-6 text-[var(--color-text)]">
+          Real <span class="gradient-text">Projects</span>
+        </h1>
+        <p class="text-[var(--color-dim)] text-xl leading-relaxed">
+          AI systems, automation tools, and full-stack applications built, deployed, and running.
+          Filter by category, expand any card for full details.
+        </p>
+      </div>
+    </div>
   </section>
+
+  <!-- Explorer (light) -->
+  <section class="section-light">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+      <ProjectExplorer projects={projects} client:load />
+    </div>
+  </section>
+
 </BaseLayout>

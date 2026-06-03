@@ -84,7 +84,7 @@ export const domains: Domain[] = [
   {
     name: 'Swain.pro',
     url: 'https://swain.pro',
-    description: "Jeremy Swain's professional portfolio — AI developer, automation engineer, LLM systems builder.",
+    description: "Mr. Swain's professional portfolio — AI developer, automation engineer, LLM systems builder.",
     category: 'Portfolio',
     status: 'live',
     tech: ['Astro', 'TypeScript', 'Tailwind CSS', 'Cloudflare Pages'],
