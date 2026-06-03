@@ -5,9 +5,7 @@ export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const preferenceKey = 'swainpro-music'
 
-  const play = async () => {
-    const audio = audioRef.current
-    if (!audio) return
+  const doPlay = async (audio: HTMLAudioElement) => {
     try {
       audio.volume = 0.32
       await audio.play()
@@ -16,13 +14,17 @@ export default function MusicPlayer() {
     } catch {}
   }
 
-  const pause = () => {
+  const doPause = () => {
     audioRef.current?.pause()
     setPlaying(false)
     localStorage.setItem(preferenceKey, '0')
   }
 
-  const toggle = () => (playing ? pause() : play())
+  const toggle = () => {
+    const audio = audioRef.current
+    if (!audio) return
+    playing ? doPause() : doPlay(audio)
+  }
 
   useEffect(() => {
     const audio = new Audio('/audio/profile-music.mp3')
@@ -30,20 +32,25 @@ export default function MusicPlayer() {
     audio.preload = 'auto'
     audioRef.current = audio
 
-    const saved = localStorage.getItem(preferenceKey)
-    if (saved === '0') return
+    if (localStorage.getItem(preferenceKey) === '0') return
 
-    const onGesture = () => {
-      document.removeEventListener('pointerdown', onGesture)
-      document.removeEventListener('keydown', onGesture)
-      play()
-    }
-    document.addEventListener('pointerdown', onGesture, { once: true })
-    document.addEventListener('keydown', onGesture, { once: true })
+    // Try immediate autoplay — works if browser allows it (repeat visitors, user gesture already happened)
+    audio.volume = 0.32
+    audio.play()
+      .then(() => {
+        setPlaying(true)
+        localStorage.setItem(preferenceKey, '1')
+      })
+      .catch(() => {
+        // Blocked — unlock on first gesture
+        const unlock = () => {
+          doPlay(audio)
+        }
+        document.addEventListener('pointerdown', unlock, { once: true })
+        document.addEventListener('keydown', unlock, { once: true })
+      })
 
     return () => {
-      document.removeEventListener('pointerdown', onGesture)
-      document.removeEventListener('keydown', onGesture)
       audio.pause()
       audio.src = ''
     }
@@ -54,11 +61,11 @@ export default function MusicPlayer() {
       onClick={toggle}
       className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-3.5 py-2.5 rounded-full text-xs font-medium transition-all duration-300"
       style={{
-        background: playing ? 'rgba(0,212,255,0.15)' : 'rgba(13,15,23,0.9)',
-        border: `1px solid ${playing ? 'rgba(0,212,255,0.4)' : 'rgba(255,255,255,0.1)'}`,
-        color: playing ? 'var(--color-cyan)' : 'var(--color-muted)',
+        background: playing ? 'rgba(200,169,110,0.12)' : 'rgba(13,15,23,0.9)',
+        border: `1px solid ${playing ? 'rgba(200,169,110,0.45)' : 'rgba(255,255,255,0.1)'}`,
+        color: playing ? 'var(--color-gold)' : 'var(--color-muted)',
         backdropFilter: 'blur(10px)',
-        boxShadow: playing ? '0 0 20px rgba(0,212,255,0.2)' : 'none',
+        boxShadow: playing ? '0 0 24px rgba(200,169,110,0.3)' : 'none',
       }}
       aria-label={playing ? 'Pause background music' : 'Play background music'}
     >
@@ -91,7 +98,7 @@ export default function MusicPlayer() {
       <style>{`
         @keyframes bar-bounce {
           from { transform: scaleY(0.4); }
-          to { transform: scaleY(1.2); }
+          to   { transform: scaleY(1.2); }
         }
       `}</style>
     </button>

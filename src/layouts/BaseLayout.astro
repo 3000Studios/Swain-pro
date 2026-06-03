@@ -36,8 +36,8 @@ const seoProps = Astro.props
     <Footer />
 
     <script>
-      /* ── Intersection Observer: new reveal classes ── */
-      const revealClasses = ['reveal-up','reveal-left','reveal-right','reveal-scale','reveal-rotate']
+      /* ── Intersection Observer: reveal classes ── */
+      const revealClasses = ['reveal-up','reveal-left','reveal-right','reveal-scale','reveal-rotate','reveal-3d']
 
       const revealObs = new IntersectionObserver(
         (entries) => {
@@ -45,7 +45,6 @@ const seoProps = Astro.props
             if (!entry.isIntersecting) return
             const el = entry.target as HTMLElement
             el.classList.add('in-view')
-            // Trigger skill bars inside
             el.querySelectorAll('.skill-bar-fill').forEach((bar) => bar.classList.add('animate'))
             revealObs.unobserve(el)
           })
@@ -56,6 +55,15 @@ const seoProps = Astro.props
       document.querySelectorAll(revealClasses.map(c => `.${c}`).join(',')).forEach((el) =>
         revealObs.observe(el)
       )
+
+      /* ── Auto 3D float-in on headings not already in a reveal wrapper ── */
+      const revealSelector = revealClasses.map(c => `.${c}`).join(',')
+      document.querySelectorAll<HTMLElement>('h1, h2').forEach((heading) => {
+        if (!heading.closest(revealSelector)) {
+          heading.classList.add('reveal-3d')
+          revealObs.observe(heading)
+        }
+      })
 
       /* ── Legacy .reveal class ── */
       const legacyObs = new IntersectionObserver(
@@ -96,6 +104,26 @@ const seoProps = Astro.props
           link.classList.add('active')
         }
       })
+
+      /* ── Nav hide on scroll down, show on scroll up ── */
+      const header = document.querySelector<HTMLElement>('.header-blur')
+      let lastScrollY = 0
+      let ticking = false
+      window.addEventListener('scroll', () => {
+        if (ticking) return
+        ticking = true
+        requestAnimationFrame(() => {
+          const y = window.scrollY
+          if (y > 120) {
+            if (y > lastScrollY) header?.classList.add('nav-hidden')
+            else header?.classList.remove('nav-hidden')
+          } else {
+            header?.classList.remove('nav-hidden')
+          }
+          lastScrollY = y
+          ticking = false
+        })
+      }, { passive: true })
     </script>
   </body>
 </html>

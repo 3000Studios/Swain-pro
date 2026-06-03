@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import HeroCanvas3D from '../components/HeroCanvas3D.tsx'
 import MusicPlayer from '../components/MusicPlayer.tsx'
 import { featuredProjects } from '../data/projects'
 import { blogPosts } from '../data/blog'
@@ -18,11 +17,24 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-dark relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
 
-    <!-- Three.js background -->
-    <div class="absolute inset-0">
-      <HeroCanvas3D client:only="react" />
-      <div class="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[rgba(11,11,11,0.6)] to-transparent pointer-events-none"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0B0B0B] pointer-events-none"></div>
+    <!-- Project screenshot reel -->
+    <div class="absolute inset-0" id="hero-reel-bg" aria-hidden="true">
+      <div class="absolute inset-0 overflow-hidden">
+        {[
+          { src: '/images/projects/voicetowebsite.jpg', pos: 'center top' },
+          { src: '/images/projects/myappai.jpg',        pos: 'center center' },
+          { src: '/images/projects/playstorewizard.jpg',pos: 'center top' },
+          { src: '/images/projects/getnexa.jpg',        pos: 'center center' },
+        ].map(({ src, pos }) => (
+          <div
+            class="reel-slide"
+            style={`background-image:url(${src});background-position:${pos}`}
+          ></div>
+        ))}
+      </div>
+      <!-- Overlays: left-to-right fade so text reads cleanly, bottom fade into next section -->
+      <div class="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[rgba(11,11,11,0.72)] to-[rgba(11,11,11,0.25)] pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[rgba(11,11,11,0.5)] via-transparent to-[#0B0B0B] pointer-events-none"></div>
     </div>
 
     <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-28 lg:py-36 w-full">
@@ -67,7 +79,7 @@ const recentPosts = blogPosts.slice(0, 3)
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
-            Hire Mr. Swain
+            Contact
           </a>
           <a href="/projects" class="btn-outline text-sm px-7 py-3.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -514,6 +526,28 @@ const recentPosts = blogPosts.slice(0, 3)
 </BaseLayout>
 
 <script>
+  /* ── Project screenshot reel cycling ── */
+  const reelSlides = document.querySelectorAll<HTMLElement>('.reel-slide')
+  const reelBg = document.getElementById('hero-reel-bg')
+  let reelIdx = 0
+
+  if (reelSlides.length) {
+    reelSlides[0].classList.add('is-active')
+    setInterval(() => {
+      reelSlides[reelIdx].classList.remove('is-active')
+      reelIdx = (reelIdx + 1) % reelSlides.length
+      reelSlides[reelIdx].classList.add('is-active')
+    }, 5000)
+  }
+
+  /* ── Reel fade + parallax on scroll ── */
+  window.addEventListener('scroll', () => {
+    if (!reelBg) return
+    const progress = Math.min(1, window.scrollY / (window.innerHeight * 0.75))
+    reelBg.style.opacity = String(1 - progress * 0.85)
+    reelBg.style.transform = `translateY(${window.scrollY * 0.25}px)`
+  }, { passive: true })
+
   /* ── Hero entrance — staggered clip-wipe per line ── */
   const heroLines = document.querySelectorAll<HTMLElement>('.hero-line')
   const heroSubs  = ['.hero-sub', '.hero-tags', '.hero-cta', '.hero-stats'].map(
@@ -546,10 +580,10 @@ const recentPosts = blogPosts.slice(0, 3)
     }, 700 + i * 120)
   })
 
-  /* ── Device orientation parallax on hero ── */
+  /* ── Device orientation subtle parallax on hero content ── */
   const heroContent = document.querySelector<HTMLElement>('.hero-content')
   window.addEventListener('deviceorientation', (e: DeviceOrientationEvent) => {
     if (!heroContent || e.gamma == null || e.beta == null) return
-    heroContent.style.transform = `translate(${(e.gamma / 40) * 7}px, ${((e.beta - 45) / 40) * 4}px)`
+    heroContent.style.transform = `translate(${(e.gamma / 40) * 5}px, ${((e.beta - 45) / 40) * 3}px)`
   }, { passive: true })
 </script>
