@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroVideo from '../components/HeroVideo.astro'
 import { skillCategories, coreCompetencies } from '../data/skills'
 ---
 
@@ -7,6 +8,23 @@ import { skillCategories, coreCompetencies } from '../data/skills'
   title="Resume — Mr. Swain AI Developer & Automation Engineer"
   description="Mr. Swain's professional resume — AI Developer, Automation Engineer, LLM Integration Specialist, Business Analyst. Atlanta, GA. Available for contracts and full-time roles."
 >
+
+  <!-- Hero (dark) — no-print so it doesn't appear on PDF -->
+  <section class="section-dark relative overflow-hidden no-print" aria-label="Resume hero">
+    <HeroVideo src="/videos/hero-resume.mp4" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-20 lg:py-28">
+      <div class="max-w-2xl">
+        <p class="section-label">Resume</p>
+        <h1 class="text-5xl sm:text-6xl font-black mb-6 text-[var(--color-text)]">
+          Mr. Swain<br /><span class="gradient-text">AI Developer</span>
+        </h1>
+        <p class="text-[var(--color-dim)] text-xl leading-relaxed">
+          AI Developer · Automation Engineer · LLM Integration Specialist · Atlanta, GA
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- Print-optimized, ATS-readable resume page -->
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 

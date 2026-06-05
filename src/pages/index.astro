@@ -17,27 +17,23 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-dark relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
 
-    <!-- Project screenshot reel -->
+    <!-- AI-generated hero video background -->
     <div class="absolute inset-0" id="hero-reel-bg" aria-hidden="true">
-      <div class="absolute inset-0 overflow-hidden">
-        {[
-          { src: '/images/projects/voicetowebsite.jpg', pos: 'center top' },
-          { src: '/images/projects/myappai.jpg',        pos: 'center center' },
-          { src: '/images/projects/playstorewizard.jpg',pos: 'center top' },
-          { src: '/images/projects/getnexa.jpg',        pos: 'center center' },
-        ].map(({ src, pos }) => (
-          <div
-            class="reel-slide"
-            style={`background-image:url(${src});background-position:${pos}`}
-          ></div>
-        ))}
-      </div>
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0.45;pointer-events:none;"
+      >
+        <source src="/videos/hero-home.mp4" type="video/mp4" />
+      </video>
       <!-- Overlays: left-to-right fade so text reads cleanly, bottom fade into next section -->
       <div class="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[rgba(11,11,11,0.72)] to-[rgba(11,11,11,0.25)] pointer-events-none"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-[rgba(11,11,11,0.5)] via-transparent to-[#0B0B0B] pointer-events-none"></div>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-28 lg:py-36 w-full">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28 lg:py-36 w-full">
       <div class="max-w-3xl hero-content">
 
         <!-- Status badge -->
@@ -526,21 +522,8 @@ const recentPosts = blogPosts.slice(0, 3)
 </BaseLayout>
 
 <script>
-  /* ── Project screenshot reel cycling ── */
-  const reelSlides = document.querySelectorAll<HTMLElement>('.reel-slide')
+  /* ── Video hero fade + parallax on scroll ── */
   const reelBg = document.getElementById('hero-reel-bg')
-  let reelIdx = 0
-
-  if (reelSlides.length) {
-    reelSlides[0].classList.add('is-active')
-    setInterval(() => {
-      reelSlides[reelIdx].classList.remove('is-active')
-      reelIdx = (reelIdx + 1) % reelSlides.length
-      reelSlides[reelIdx].classList.add('is-active')
-    }, 5000)
-  }
-
-  /* ── Reel fade + parallax on scroll ── */
   window.addEventListener('scroll', () => {
     if (!reelBg) return
     const progress = Math.min(1, window.scrollY / (window.innerHeight * 0.75))

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import HeroVideo from '../components/HeroVideo.astro'
 
 const services = [
   {
@@ -65,8 +66,9 @@ const services = [
 >
 
   <!-- Hero (dark) -->
-  <section class="section-dark">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
+  <section class="section-dark relative overflow-hidden">
+    <HeroVideo src="/videos/hero-services.mp4" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">What I Do</p>
         <h1 class="text-5xl sm:text-6xl font-black mb-6 text-[var(--color-text)]">
