@@ -39,3 +39,7 @@ npm-debug.log*
 # Build
 .cache/
 coverage/
+
+public/music/
+public/videos/bg/
+

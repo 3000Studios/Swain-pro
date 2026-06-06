@@ -1,9 +1,75 @@
 import { useEffect, useRef, useState } from 'react'
 
+const ALL_TRACKS: string[] = [
+  '/music/corporate-01-corporate-calm.mp3',
+  '/music/corporate-02-ambient-calm.mp3',
+  '/music/corporate-03-motivational-calm.mp3',
+  '/music/corporate-04-technology-calm.mp3',
+  '/music/corporate-05-upbeat-calm.mp3',
+  '/music/corporate-06-business-calm.mp3',
+  '/music/corporate-07-corporate-calm.mp3',
+  '/music/corporate-08-ambient-calm.mp3',
+  '/music/corporate-09-motivational-relaxed.mp3',
+  '/music/corporate-10-technology-calm.mp3',
+  '/music/corporate-11-upbeat-calm.mp3',
+  '/music/corporate-12-business-calm.mp3',
+  '/music/corporate-13-corporate-calm.mp3',
+  '/music/corporate-14-ambient-calm.mp3',
+  '/music/corporate-15-motivational-calm.mp3',
+  '/music/corporate-16-technology-calm.mp3',
+  '/music/corporate-17-upbeat-calm.mp3',
+  '/music/corporate-18-business-calm.mp3',
+  '/music/corporate-19-corporate-calm.mp3',
+  '/music/corporate-20-ambient-calm.mp3',
+  '/music/corporate-21-motivational-calm.mp3',
+  '/music/corporate-22-technology-calm.mp3',
+  '/music/corporate-23-upbeat-calm.mp3',
+  '/music/corporate-24-business-calm.mp3',
+  '/music/corporate-25-corporate-relaxed.mp3',
+  '/music/corporate-26-ambient-relaxed.mp3',
+  '/music/corporate-27-motivational-relaxed.mp3',
+  '/music/corporate-28-technology-relaxed.mp3',
+  '/music/corporate-29-upbeat-relaxed.mp3',
+  '/music/corporate-30-business-relaxed.mp3',
+  '/music/corporate-31-corporate-relaxed.mp3',
+  '/music/corporate-32-ambient-relaxed.mp3',
+  '/music/corporate-33-motivational-relaxed.mp3',
+  '/music/corporate-34-technology-relaxed.mp3',
+  '/music/corporate-35-upbeat-relaxed.mp3',
+  '/music/corporate-36-business-relaxed.mp3',
+  '/music/corporate-37-corporate-relaxed.mp3',
+  '/music/corporate-38-ambient-relaxed.mp3',
+  '/music/corporate-39-motivational-relaxed.mp3',
+  '/music/corporate-40-technology-relaxed.mp3',
+  '/music/corporate-41-upbeat-relaxed.mp3',
+  '/music/corporate-42-business-bright.mp3',
+  '/music/corporate-43-corporate-bright.mp3',
+  '/music/corporate-44-ambient-bright.mp3',
+  '/music/corporate-45-motivational-bright.mp3',
+  '/music/corporate-46-technology-relaxed.mp3',
+  '/music/corporate-47-upbeat-calm.mp3',
+  '/music/corporate-48-business-calm.mp3',
+  '/music/corporate-49-corporate-relaxed.mp3',
+  '/music/corporate-50-ambient-relaxed.mp3',
+]
+
+function randTrackIdx(exclude: number): number {
+  let n = Math.floor(Math.random() * ALL_TRACKS.length)
+  while (n === exclude) n = Math.floor(Math.random() * ALL_TRACKS.length)
+  return n
+}
+
 export default function MusicPlayer() {
   const [playing, setPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const trackIdxRef = useRef<number>(-1)
   const preferenceKey = 'swainpro-music'
+
+  const loadTrack = (audio: HTMLAudioElement, idx: number) => {
+    trackIdxRef.current = idx
+    audio.src = ALL_TRACKS[idx]
+    audio.load()
+  }
 
   const doPlay = async (audio: HTMLAudioElement) => {
     try {
@@ -27,25 +93,29 @@ export default function MusicPlayer() {
   }
 
   useEffect(() => {
-    const audio = new Audio('/audio/profile-music.mp3')
-    audio.loop = true
+    const startIdx = randTrackIdx(-1)
+    const audio = new Audio()
+    audio.volume = 0.32
     audio.preload = 'auto'
     audioRef.current = audio
 
+    loadTrack(audio, startIdx)
+
+    audio.addEventListener('ended', () => {
+      const next = randTrackIdx(trackIdxRef.current)
+      loadTrack(audio, next)
+      audio.play().catch(() => {})
+    })
+
     if (localStorage.getItem(preferenceKey) === '0') return
 
-    // Try immediate autoplay — works if browser allows it (repeat visitors, user gesture already happened)
-    audio.volume = 0.32
     audio.play()
       .then(() => {
         setPlaying(true)
         localStorage.setItem(preferenceKey, '1')
       })
       .catch(() => {
-        // Blocked — unlock on first gesture
-        const unlock = () => {
-          doPlay(audio)
-        }
+        const unlock = () => doPlay(audio)
         document.addEventListener('pointerdown', unlock, { once: true })
         document.addEventListener('keydown', unlock, { once: true })
       })

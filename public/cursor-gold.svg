@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="42" viewBox="0 0 36 42">
+  <defs>
+    <linearGradient id="metalGold" x1="0%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%"   stop-color="#FFF0A0"/>
+      <stop offset="18%"  stop-color="#E8CC78"/>
+      <stop offset="38%"  stop-color="#C8A96E"/>
+      <stop offset="55%"  stop-color="#7A5820"/>
+      <stop offset="72%"  stop-color="#BF9F5A"/>
+      <stop offset="88%"  stop-color="#A88040"/>
+      <stop offset="100%" stop-color="#C8A055"/>
+    </linearGradient>
+    <linearGradient id="gloss1" x1="0%" y1="0%" x2="55%" y2="100%">
+      <stop offset="0%"   stop-color="rgba(255,255,255,0.75)"/>
+      <stop offset="30%"  stop-color="rgba(255,255,255,0.30)"/>
+      <stop offset="60%"  stop-color="rgba(255,255,255,0.06)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    <linearGradient id="gloss2" x1="100%" y1="30%" x2="20%" y2="100%">
+      <stop offset="0%"   stop-color="rgba(255,240,160,0.35)"/>
+      <stop offset="100%" stop-color="rgba(255,240,160,0)"/>
+    </linearGradient>
+    <filter id="shadow" x="-40%" y="-30%" width="180%" height="180%">
+      <feDropShadow dx="2" dy="3" stdDeviation="2.5" flood-color="rgba(0,0,0,0.75)"/>
+    </filter>
+  </defs>
+  <!-- Arrow: tip at (2,2) -->
+  <path d="M2 2 L2 31 L9.5 25 L14.5 37.5 L19.5 35.2 L14.5 23 L24 23 Z"
+        fill="url(#metalGold)" filter="url(#shadow)"/>
+  <!-- Gloss primary (top-left reflective coating) -->
+  <path d="M2 2 L2 31 L9.5 25 L14.5 37.5 L19.5 35.2 L14.5 23 L24 23 Z"
+        fill="url(#gloss1)" opacity="0.65"/>
+  <!-- Gloss secondary (right-edge warm bounce) -->
+  <path d="M2 2 L2 31 L9.5 25 L14.5 37.5 L19.5 35.2 L14.5 23 L24 23 Z"
+        fill="url(#gloss2)" opacity="0.4"/>
+  <!-- Left bright edge highlight -->
+  <line x1="2" y1="2.5" x2="2" y2="29" stroke="rgba(255,248,180,0.9)" stroke-width="0.8"/>
+  <!-- Top bright edge -->
+  <line x1="2" y1="2" x2="22.5" y2="22.5" stroke="rgba(255,248,180,0.5)" stroke-width="0.5"/>
+  <!-- Dark shadow edges for depth -->
+  <path d="M2 31 L9.5 25 L14.5 23" fill="none" stroke="rgba(50,30,0,0.55)" stroke-width="0.7"/>
+  <path d="M14.5 23 L24 23" fill="none" stroke="rgba(80,50,0,0.35)" stroke-width="0.5"/>
+  <!-- Specular hotspot at tip -->
+  <circle cx="2.5" cy="2.5" r="1.8" fill="rgba(255,252,210,0.9)"/>
+  <circle cx="2.5" cy="2.5" r="0.9" fill="rgba(255,255,240,1)"/>
+</svg>

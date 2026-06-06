@@ -11,7 +11,7 @@ import { projects } from '../data/projects'
 >
 
   <!-- Hero (dark) -->
-  <section class="section-dark relative overflow-hidden">
+  <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-projects.mp4" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
@@ -27,8 +27,8 @@ import { projects } from '../data/projects'
     </div>
   </section>
 
-  <!-- Explorer (light) -->
-  <section class="section-light">
+  <!-- Explorer (dark — flip cards are dark surface) -->
+  <section class="section-dark">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <ProjectExplorer projects={projects} client:load />
     </div>

@@ -4,7 +4,14 @@ import { caseStudies } from '../data/caseStudies'
 
 const SITE = 'https://swain.pro'
 
-const staticPages = [
+type SitemapPage = {
+  url: string
+  priority: string
+  changefreq: string
+  lastmod?: string
+}
+
+const staticPages: SitemapPage[] = [
   { url: '/', priority: '1.0', changefreq: 'weekly' },
   { url: '/about', priority: '0.9', changefreq: 'monthly' },
   { url: '/projects', priority: '0.9', changefreq: 'weekly' },
@@ -17,20 +24,20 @@ const staticPages = [
 ]
 
 export const GET: APIRoute = () => {
-  const blogUrls = blogPosts.map(p => ({
+  const blogUrls: SitemapPage[] = blogPosts.map(p => ({
     url: `/blog/${p.slug}`,
     lastmod: p.date,
     priority: '0.7',
     changefreq: 'monthly',
   }))
 
-  const caseUrls = caseStudies.map(cs => ({
+  const caseUrls: SitemapPage[] = caseStudies.map(cs => ({
     url: `/case-studies/${cs.slug}`,
     priority: '0.8',
     changefreq: 'monthly',
   }))
 
-  const allPages = [...staticPages, ...blogUrls, ...caseUrls]
+  const allPages: SitemapPage[] = [...staticPages, ...blogUrls, ...caseUrls]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
