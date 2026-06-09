@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import GalaxyBg from '../../components/backgrounds/GalaxyBg'
 import { blogPosts } from '../../data/blog'
 
 export function getStaticPaths() {
@@ -51,6 +52,10 @@ const articleSchema = {
   tags={post.tags}
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(articleSchema)} />
+
+  <section class="section-dark relative overflow-hidden">
+    <GalaxyBg client:only="react" />
+    <div class="relative z-10">
 
   <!-- Breadcrumb -->
   <nav class="max-w-4xl mx-auto px-4 sm:px-6 pt-8 pb-2" aria-label="Breadcrumb">
@@ -120,4 +125,6 @@ const articleSchema = {
       </div>
     </footer>
   </article>
+    </div>
+  </section>
 </BaseLayout>

@@ -1,4 +1,7 @@
 ---
+import MusicToggle from './MusicToggle.tsx'
+import HeaderAura from './backgrounds/HeaderAura.tsx'
+
 const navLinks = [
   { href: '/',             label: 'Home' },
   { href: '/about',        label: 'About' },
@@ -13,9 +16,10 @@ const navLinks = [
 ---
 
 <!-- Fixed header -->
-<header class="header-blur fixed top-0 left-0 right-0 z-50" role="banner">
+<header class="header-blur fixed top-0 left-0 right-0 z-50 overflow-hidden" role="banner">
+  <HeaderAura client:load />
   <nav
-    class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between"
+    class="relative z-[1] max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between"
     aria-label="Main navigation"
   >
     <!-- Logo -->
@@ -56,6 +60,9 @@ const navLinks = [
 
     <!-- Right side -->
     <div class="flex items-center gap-3">
+      <!-- Background music speaker toggle -->
+      <MusicToggle client:load />
+
       <a
         href="/contact"
         class="btn-primary text-[0.75rem] px-4 py-2 hidden sm:inline-flex"

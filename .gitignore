@@ -42,4 +42,8 @@ coverage/
 
 public/music/
 public/videos/bg/
+public/shared-media/
 
+
+# Raw audio dropbox — canonical copies live in src/audio/
+src/Media/

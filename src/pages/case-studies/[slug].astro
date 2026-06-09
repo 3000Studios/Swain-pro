@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import MagneticBg from '../../components/backgrounds/MagneticBg'
 import { caseStudies } from '../../data/caseStudies'
 
 export function getStaticPaths() {
@@ -13,6 +14,10 @@ const { cs } = Astro.props
   title={`${cs.title} — Case Study | Mr. Swain`}
   description={cs.subtitle}
 >
+  <section class="section-dark relative overflow-hidden">
+    <MagneticBg client:only="react" />
+    <div class="relative z-10">
+
   <!-- Breadcrumb -->
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-2" aria-label="Breadcrumb">
     <ol class="flex items-center gap-2 text-xs text-[var(--color-muted)]">
@@ -131,4 +136,6 @@ const { cs } = Astro.props
       </div>
     </div>
   </article>
+    </div>
+  </section>
 </BaseLayout>

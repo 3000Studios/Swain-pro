@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroVideo from '../components/HeroVideo.astro'
+import MagneticBg from '../components/backgrounds/MagneticBg'
+import AquariumBg from '../components/backgrounds/AquariumBg'
+import LavaBg from '../components/backgrounds/LavaBg'
 import { domains } from '../data/domains'
 ---
 
@@ -12,6 +15,7 @@ import { domains } from '../data/domains'
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-domains.mp4" />
+    <MagneticBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Ventures</p>
@@ -27,8 +31,9 @@ import { domains } from '../data/domains'
   </section>
 
   <!-- Domain grid (light) -->
-  <section class="section-light">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+  <section class="section-light relative overflow-hidden">
+    <AquariumBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-stagger-parent>
         {domains.map((domain, i) => (
           <article
@@ -37,7 +42,6 @@ import { domains } from '../data/domains'
             data-stagger
           >
             <div class="flex items-start justify-between gap-3 mb-4">
-              <!-- Domain initial icon instead of emoji -->
               <div class="w-10 h-10 rounded-lg bg-[var(--color-onyx)] text-[var(--color-gold)] font-mono font-bold text-sm flex items-center justify-center shrink-0">
                 {domain.name.slice(0, 2).toUpperCase()}
               </div>
@@ -104,8 +108,9 @@ import { domains } from '../data/domains'
   </section>
 
   <!-- CTA (dark) -->
-  <section class="section-dark">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+  <section class="section-dark relative overflow-hidden">
+    <LavaBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <div class="reveal-up max-w-xl">
         <h2 class="text-3xl font-black mb-5 text-[var(--color-text)]">Interested in a venture?</h2>
         <p class="text-[var(--color-dim)] mb-10 text-lg leading-relaxed">

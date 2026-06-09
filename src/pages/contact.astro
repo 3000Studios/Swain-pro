@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroVideo from '../components/HeroVideo.astro'
+import LightningBg from '../components/backgrounds/LightningBg'
+import AquariumBg from '../components/backgrounds/AquariumBg'
 ---
 
 <BaseLayout
@@ -11,6 +13,7 @@ import HeroVideo from '../components/HeroVideo.astro'
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-contact.mp4" />
+    <LightningBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Get in Touch</p>
@@ -25,8 +28,9 @@ import HeroVideo from '../components/HeroVideo.astro'
   </section>
 
   <!-- Contact grid (light) -->
-  <section class="section-light">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+  <section class="section-light relative overflow-hidden">
+    <AquariumBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20">
 
         <!-- Direct contact -->

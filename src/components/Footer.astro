@@ -16,13 +16,15 @@ const portfolioLinks = [
 ]
 
 const year = new Date().getFullYear()
+import FooterAura from './backgrounds/FooterAura.tsx'
 ---
 
-<footer class="bg-[var(--color-onyx-mid)] border-t border-[var(--color-border-glow)]">
+<footer class="relative overflow-hidden bg-[var(--color-onyx-mid)] border-t border-[var(--color-border-glow)]">
+  <FooterAura client:load />
   <!-- Top strip with gold divider glow -->
-  <div class="divider-gold"></div>
+  <div class="relative z-10 divider-gold"></div>
 
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-16">
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-16">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-14">
 
       <!-- Brand -->

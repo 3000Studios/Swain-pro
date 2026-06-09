@@ -2,6 +2,7 @@
 import SEO from '../components/SEO.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import BridgeWalkers from '../components/BridgeWalkers.tsx'
 import '../styles/global.css'
 
 interface Props {
@@ -41,6 +42,9 @@ const seoProps = Astro.props
       <slot />
     </main>
     <Footer />
+
+    <!-- Global interactive bridge: 10 walkers descend page → footer podium dance -->
+    <BridgeWalkers client:only="react" />
 
     <script>
       /* ══════════════════════════════════════════════

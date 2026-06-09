@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HeroVideo from '../components/HeroVideo.astro'
+import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
+import FluidInkBg from '../components/backgrounds/FluidInkBg'
+import LavaBg from '../components/backgrounds/LavaBg'
 
 const services = [
   {
@@ -68,6 +71,7 @@ const services = [
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-services.mp4" />
+    <SpiderWebBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">What I Do</p>
@@ -83,8 +87,9 @@ const services = [
   </section>
 
   <!-- Service cards (light) -->
-  <section class="section-light">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-28">
+  <section class="section-light relative overflow-hidden">
+    <FluidInkBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-24" data-stagger-parent>
         {services.map((service, i) => (
           <article
@@ -152,8 +157,9 @@ const services = [
   </section>
 
   <!-- CTA (dark) -->
-  <section class="section-dark">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+  <section class="section-dark relative overflow-hidden">
+    <LavaBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <div class="reveal-up card p-10 sm:p-14 text-center border-glow max-w-3xl mx-auto">
         <h2 class="text-3xl sm:text-4xl font-black mb-5 text-[var(--color-text)]">Ready to Get Started?</h2>
         <p class="text-[var(--color-dim)] max-w-lg mx-auto mb-10 text-lg leading-relaxed">

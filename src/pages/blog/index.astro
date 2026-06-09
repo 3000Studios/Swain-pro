@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import HeroVideo from '../../components/HeroVideo.astro'
+import LightningBg from '../../components/backgrounds/LightningBg'
+import FluidInkBg from '../../components/backgrounds/FluidInkBg'
 import { blogPosts } from '../../data/blog'
 
 const categories = Array.from(new Set(blogPosts.map(p => p.category)))
@@ -14,6 +16,7 @@ const categories = Array.from(new Set(blogPosts.map(p => p.category)))
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-blog.mp4" />
+    <LightningBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Writing</p>
@@ -28,8 +31,9 @@ const categories = Array.from(new Set(blogPosts.map(p => p.category)))
   </section>
 
   <!-- Posts (light) -->
-  <section class="section-light">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+  <section class="section-light relative overflow-hidden">
+    <FluidInkBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
 
       <!-- Category filter -->
       <div class="flex flex-wrap gap-2 mb-12 reveal-up" role="list" aria-label="Blog categories">

@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import ProjectExplorer from '../components/ProjectExplorer.tsx'
 import HeroVideo from '../components/HeroVideo.astro'
+import GalaxyBg from '../components/backgrounds/GalaxyBg'
+import MagneticBg from '../components/backgrounds/MagneticBg'
 import { projects } from '../data/projects'
 ---
 
@@ -13,6 +15,7 @@ import { projects } from '../data/projects'
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-projects.mp4" />
+    <GalaxyBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Portfolio</p>
@@ -27,9 +30,10 @@ import { projects } from '../data/projects'
     </div>
   </section>
 
-  <!-- Explorer (dark — flip cards are dark surface) -->
-  <section class="section-dark">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+  <!-- Explorer (dark) -->
+  <section class="section-dark relative overflow-hidden">
+    <MagneticBg client:only="react" />
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <ProjectExplorer projects={projects} client:load />
     </div>
   </section>

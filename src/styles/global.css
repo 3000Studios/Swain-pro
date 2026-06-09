@@ -430,6 +430,33 @@ h3 {
   transform: translateY(-2px);
 }
 
+/* ── Animated card backgrounds (global, GPU-cheap) ──── */
+@keyframes card-aura {
+  0%   { transform: translate(-8%, -6%) rotate(0deg);   }
+  50%  { transform: translate(8%, 6%)  rotate(8deg);    }
+  100% { transform: translate(-8%, -6%) rotate(0deg);   }
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -45%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(200,169,110,0.12), transparent 60%),
+    radial-gradient(circle at 72% 68%, rgba(120,95,200,0.09), transparent 55%);
+  animation: card-aura 16s ease-in-out infinite;
+  animation-delay: var(--gloss-delay, 0s);
+  opacity: 0.85;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+.card:hover::before {
+  opacity: 1;
+  animation-duration: 7s;
+}
+
 /* ── Card on light bg ──────────────────────────────── */
 .card-light {
   background: #FFFFFF;
@@ -453,6 +480,24 @@ h3 {
     0 0 30px rgba(200,169,110,0.08);
   transform: translateY(-5px);
 }
+
+/* Animated background for light cards */
+.card-light::before {
+  content: '';
+  position: absolute;
+  inset: -45%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 28% 26%, rgba(200,169,110,0.10), transparent 58%),
+    radial-gradient(circle at 74% 72%, rgba(154,112,64,0.07), transparent 55%);
+  animation: card-aura 18s ease-in-out infinite;
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+.card-light:hover::before { opacity: 1; animation-duration: 8s; }
+.card-light > * { position: relative; z-index: 1; }
 
 /* ── Glass card ────────────────────────────────────── */
 .card-glass {
