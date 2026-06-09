@@ -8,6 +8,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "public/**/*"],
+  "include": ["src/**/*", "src/vite-env.d.ts", "public/**/*"],
   "exclude": ["node_modules", "dist"]
 }
