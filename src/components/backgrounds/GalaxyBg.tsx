@@ -56,7 +56,9 @@ export default function GalaxyBg() {
     window.addEventListener('resize', resize)
     resize()
 
+    let onScreen = true
     const draw = () => {
+      if (!onScreen) { raf = 0; return }
       t++
       ctx.clearRect(0, 0, W, H)
 
@@ -149,10 +151,23 @@ export default function GalaxyBg() {
 
       raf = requestAnimationFrame(draw)
     }
+    const io = new IntersectionObserver((es) => {
+      const vis = es[0]?.isIntersecting ?? true
+      if (vis && !onScreen) { onScreen = true; if (!raf) raf = requestAnimationFrame(draw) }
+      else if (!vis) { onScreen = false; cancelAnimationFrame(raf); raf = 0 }
+    }, { threshold: 0 })
+    io.observe(canvas)
+    const onVis = () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0 }
+      else if (onScreen && !raf) raf = requestAnimationFrame(draw)
+    }
+    document.addEventListener("visibilitychange", onVis)
     draw()
 
     return () => {
       cancelAnimationFrame(raf)
+      io.disconnect()
+      document.removeEventListener("visibilitychange", onVis)
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('resize', resize)
     }

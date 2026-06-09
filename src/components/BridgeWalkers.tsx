@@ -123,7 +123,14 @@ export default function BridgeWalkers() {
 
     // ── interaction: click near a human's feet ───────────
     const onPointer = (clientX: number, clientY: number) => {
-      const docY = clientY + window.scrollY
+      // banner hotspot wins — it's the lead-gen CTA
+      if (bannerHot) {
+        const b = bannerHot
+        if (clientX >= b.x && clientX <= b.x + b.w && clientY >= b.y && clientY <= b.y + b.h) {
+          window.location.href = '/contact'
+          return
+        }
+      }
       let best: Human | null = null
       let bestD = 56 // hit radius (px)
       for (const hmn of humans) {
@@ -239,6 +246,45 @@ export default function BridgeWalkers() {
       ctx.restore()
     }
 
+    // ── podium lead-gen banner (appears once someone is dancing) ──
+    // Screen-space hotspot; clicks routed to /contact via the window listener.
+    let bannerHot: { x: number; y: number; w: number; h: number } | null = null
+    const drawBanner = (anchorX: number, podSy: number) => {
+      const label = 'Made by Mr. Swain — want one? →'
+      ctx.save()
+      ctx.font = '600 12px ui-sans-serif, system-ui, sans-serif'
+      const padX = 11
+      const w = ctx.measureText(label).width + padX * 2
+      const h = 24
+      // sit the pill just above the podium, nudged right so it clears the lane
+      let x = anchorX + 30
+      let y = podSy - 34
+      if (x + w > vw - 12) x = vw - 12 - w   // keep on screen
+      if (y < 6) y = 6
+      bannerHot = { x, y, w, h }
+      // pill
+      const r = h / 2
+      ctx.beginPath()
+      ctx.moveTo(x + r, y)
+      ctx.arcTo(x + w, y, x + w, y + h, r)
+      ctx.arcTo(x + w, y + h, x, y + h, r)
+      ctx.arcTo(x, y + h, x, y, r)
+      ctx.arcTo(x, y, x + w, y, r)
+      ctx.closePath()
+      ctx.fillStyle = 'rgba(18,16,12,0.82)'
+      ctx.shadowColor = 'rgba(200,169,110,0.55)'
+      ctx.shadowBlur = 14
+      ctx.fill()
+      ctx.shadowBlur = 0
+      ctx.strokeStyle = 'rgba(200,169,110,0.8)'
+      ctx.lineWidth = 1
+      ctx.stroke()
+      ctx.fillStyle = 'rgb(200,169,110)'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(label, x + padX, y + h / 2 + 0.5)
+      ctx.restore()
+    }
+
     // ── main loop ────────────────────────────────────────
     let raf = 0
     let running = true
@@ -302,6 +348,13 @@ export default function BridgeWalkers() {
         ctx.fillStyle = c.c
         ctx.fillRect(-2.5, -2.5, 5, 5)
         ctx.restore()
+      }
+
+      // lead-gen banner once a dancer is on the podium and it's on screen
+      bannerHot = null
+      const podSy = footerTop - window.scrollY
+      if (danceCount > 0 && podSy < vh && podSy > -120) {
+        drawBanner(podBaseX(), podSy)
       }
 
       raf = requestAnimationFrame(frame)
