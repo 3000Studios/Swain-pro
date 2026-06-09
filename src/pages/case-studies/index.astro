@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import MagneticBg from '../../components/backgrounds/MagneticBg'
+import FluidInkBg from '../../components/backgrounds/FluidInkBg'
+import ParticleFieldBg from '../../components/backgrounds/ParticleFieldBg'
 import HeroVideo from '../../components/HeroVideo.astro'
-import SpiderWebBg from '../../components/backgrounds/SpiderWebBg'
-import AquariumBg from '../../components/backgrounds/AquariumBg'
-import LavaBg from '../../components/backgrounds/LavaBg'
 import { caseStudies } from '../../data/caseStudies'
 ---
 
@@ -15,7 +15,7 @@ import { caseStudies } from '../../data/caseStudies'
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-case-studies.mp4" />
-    <SpiderWebBg client:only="react" />
+    <MagneticBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Case Studies</p>
@@ -31,7 +31,7 @@ import { caseStudies } from '../../data/caseStudies'
 
   <!-- Case studies (alternating light/dark feel via cards) -->
   <section class="section-light relative overflow-hidden">
-    <AquariumBg client:only="react" />
+    <FluidInkBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="space-y-6">
         {caseStudies.map((cs, i) => (
@@ -92,7 +92,7 @@ import { caseStudies } from '../../data/caseStudies'
 
   <!-- CTA (dark) -->
   <section class="section-dark relative overflow-hidden">
-    <LavaBg client:only="react" />
+    <ParticleFieldBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <div class="reveal-up max-w-xl">
         <h2 class="text-3xl font-black mb-5 text-[var(--color-text)]">Have a similar challenge?</h2>

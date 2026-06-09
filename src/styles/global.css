@@ -984,6 +984,41 @@ h3 {
   [class~="py-32"] { padding-top: 5.5rem; padding-bottom: 5.5rem; }
 }
 
+/* ── SCROLL-DRIVEN SECTION TRANSITIONS ──────────────────
+   Each <section> rises + fades + un-skews as it scrolls into view, then
+   parallax-departs (sinks + dims) as it leaves toward the next section —
+   a continuous "hand-off" between sections. Pure CSS scroll timelines:
+   GPU-driven, no JS, and browsers without animation-timeline simply show
+   the section normally (the reveal-* classes still handle entrance there).
+   Skipped entirely under reduced-motion. */
+@keyframes sec-rise {
+  from { opacity: 0; transform: translateY(64px) scale(0.97) perspective(1200px) rotateX(4deg); }
+  to   { opacity: 1; transform: translateY(0)    scale(1)    perspective(1200px) rotateX(0deg); }
+}
+@keyframes sec-depart {
+  from { opacity: 1; transform: translateY(0)     scale(1);    }
+  to   { opacity: 0.45; transform: translateY(-44px) scale(0.965); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    main > section {
+      animation: sec-rise linear both, sec-depart linear both;
+      animation-timeline: view(), view();
+      animation-range: entry 2% cover 20%, exit 78% exit 100%;
+      transform-origin: center top;
+      will-change: transform, opacity;
+    }
+    /* Don't animate-in the first section — it's above the fold on load and
+       would flash. Let it sit, but keep its parallax departure. */
+    main > section:first-child {
+      animation: sec-depart linear both;
+      animation-timeline: view();
+      animation-range: exit 78% exit 100%;
+    }
+  }
+}
+
 /* ── Print ──────────────────────────────────────────── */
 @media print {
   .no-print { display: none !important; }

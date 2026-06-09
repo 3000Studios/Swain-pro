@@ -1,8 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import HeroVideo from '../components/HeroVideo.astro'
 import LightningBg from '../components/backgrounds/LightningBg'
-import AquariumBg from '../components/backgrounds/AquariumBg'
+import WaveGridBg from '../components/backgrounds/WaveGridBg'
+import HeroVideo from '../components/HeroVideo.astro'
+
+// Booking link: set PUBLIC_CALCOM_URL (e.g. https://cal.com/mrjwswain/ai-audit)
+// in env to wire a real scheduler. Until then the CTA scrolls to the working
+// contact form so the button is never dead.
+const bookingUrl = import.meta.env.PUBLIC_CALCOM_URL || '#contact-form'
+const bookingExternal = bookingUrl.startsWith('http')
 ---
 
 <BaseLayout
@@ -27,9 +33,38 @@ import AquariumBg from '../components/backgrounds/AquariumBg'
     </div>
   </section>
 
+  <!-- Free AI audit CTA band (dark) -->
+  <section class="section-dark relative overflow-hidden border-y border-[var(--color-gold)]/15">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-14 lg:py-16">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+        <div class="max-w-2xl">
+          <p class="section-label">No Cost, No Pitch</p>
+          <h2 class="text-3xl sm:text-4xl font-black text-[var(--color-text)] mb-3">
+            Book a free <span class="gradient-text">15-min AI audit</span>
+          </h2>
+          <p class="text-[var(--color-dim)] text-lg leading-relaxed">
+            Bring one process you'd love to automate. I'll tell you straight whether AI is worth it,
+            what it'd take, and the fastest win — in 15 minutes, free.
+          </p>
+        </div>
+        <a
+          href={bookingUrl}
+          {...(bookingExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          class="btn-primary shrink-0 px-8 py-4 text-base"
+          aria-label="Book a free 15-minute AI audit"
+        >
+          Grab a free slot
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact grid (light) -->
   <section class="section-light relative overflow-hidden">
-    <AquariumBg client:only="react" />
+    <WaveGridBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20">
 

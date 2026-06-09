@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import HeroVideo from '../components/HeroVideo.astro'
-import MagneticBg from '../components/backgrounds/MagneticBg'
-import AquariumBg from '../components/backgrounds/AquariumBg'
+import HexGridBg from '../components/backgrounds/HexGridBg'
+import FluidInkBg from '../components/backgrounds/FluidInkBg'
 import LavaBg from '../components/backgrounds/LavaBg'
+import HeroVideo from '../components/HeroVideo.astro'
 import { domains } from '../data/domains'
 ---
 
@@ -15,7 +15,7 @@ import { domains } from '../data/domains'
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden min-h-[80vh] flex items-center">
     <HeroVideo src="/videos/hero-domains.mp4" />
-    <MagneticBg client:only="react" />
+    <HexGridBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 lg:py-32">
       <div class="max-w-2xl">
         <p class="section-label">Ventures</p>
@@ -32,7 +32,7 @@ import { domains } from '../data/domains'
 
   <!-- Domain grid (light) -->
   <section class="section-light relative overflow-hidden">
-    <AquariumBg client:only="react" />
+    <FluidInkBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-stagger-parent>
         {domains.map((domain, i) => (

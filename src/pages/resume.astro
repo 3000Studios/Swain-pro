@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import HeroVideo from '../components/HeroVideo.astro'
 import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
-import GalaxyBg from '../components/backgrounds/GalaxyBg'
+import PlasmaBg from '../components/backgrounds/PlasmaBg'
+import HeroVideo from '../components/HeroVideo.astro'
 import { skillCategories, coreCompetencies } from '../data/skills'
 ---
 
@@ -30,7 +30,7 @@ import { skillCategories, coreCompetencies } from '../data/skills'
 
   <!-- Resume content (dark) -->
   <section class="section-dark relative overflow-hidden">
-    <GalaxyBg client:only="react" />
+    <PlasmaBg client:only="react" />
     <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-10">
 
       <!-- Actions -->

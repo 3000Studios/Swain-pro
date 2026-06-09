@@ -49,12 +49,13 @@ export default function BridgeWalkers() {
     const canvas = ref.current
     if (!canvas) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    // Skip on small touch screens — keeps mobile snappy and uncluttered.
-    if (window.matchMedia('(max-width: 640px)').matches) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5)
+    // Lighter on small touch screens: fewer walkers, lower DPR — still alive.
+    const isMobile = window.matchMedia('(max-width: 640px)').matches
+    const count = isMobile ? 5 : COUNT
+    const DPR = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5)
     let vw = 0, vh = 0
     const resize = () => {
       vw = window.innerWidth
@@ -92,7 +93,7 @@ export default function BridgeWalkers() {
     }
 
     // ── humans ───────────────────────────────────────────
-    const humans: Human[] = Array.from({ length: COUNT }, (_, i) => ({
+    const humans: Human[] = Array.from({ length: count }, (_, i) => ({
       id: i,
       y: -RUNG * (i * 1.5 + 2),          // staggered so they "drop in" on load
       xo: (i % 5) / 4,                    // spread across the lane

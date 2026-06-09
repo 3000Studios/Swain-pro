@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import MagneticBg from '../../components/backgrounds/MagneticBg'
+import GalaxyBg from '../../components/backgrounds/GalaxyBg'
 import { caseStudies } from '../../data/caseStudies'
 
 export function getStaticPaths() {
@@ -15,7 +15,7 @@ const { cs } = Astro.props
   description={cs.subtitle}
 >
   <section class="section-dark relative overflow-hidden">
-    <MagneticBg client:only="react" />
+    <GalaxyBg client:only="react" />
     <div class="relative z-10">
 
   <!-- Breadcrumb -->

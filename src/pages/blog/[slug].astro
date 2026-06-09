@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import GalaxyBg from '../../components/backgrounds/GalaxyBg'
+import NeuralNetBg from '../../components/backgrounds/NeuralNetBg'
 import { blogPosts } from '../../data/blog'
 
 export function getStaticPaths() {
@@ -54,7 +54,7 @@ const articleSchema = {
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(articleSchema)} />
 
   <section class="section-dark relative overflow-hidden">
-    <GalaxyBg client:only="react" />
+    <NeuralNetBg client:only="react" />
     <div class="relative z-10">
 
   <!-- Breadcrumb -->

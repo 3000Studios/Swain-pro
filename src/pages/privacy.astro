@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import HexGridBg from '../components/backgrounds/HexGridBg'
+import WaveGridBg from '../components/backgrounds/WaveGridBg'
 ---
 
 <BaseLayout
@@ -9,6 +11,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   <!-- Hero (dark) -->
   <section class="section-dark relative overflow-hidden py-24 lg:py-32">
+    <HexGridBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8">
       <div class="max-w-3xl">
         <p class="section-label">Legal</p>
@@ -24,6 +27,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 
   <!-- Content (light) -->
   <section class="section-light relative overflow-hidden">
+    <WaveGridBg client:only="react" />
     <div class="relative z-10 max-w-4xl mx-auto px-5 sm:px-8 py-20">
       <div class="prose-policy space-y-12 text-[var(--color-onyx)]/80 leading-relaxed text-[1.05rem]">
 

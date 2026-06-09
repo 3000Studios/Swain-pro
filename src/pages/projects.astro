@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import GalaxyBg from '../components/backgrounds/GalaxyBg'
+import NeuralNetBg from '../components/backgrounds/NeuralNetBg'
 import ProjectExplorer from '../components/ProjectExplorer.tsx'
 import HeroVideo from '../components/HeroVideo.astro'
-import GalaxyBg from '../components/backgrounds/GalaxyBg'
-import MagneticBg from '../components/backgrounds/MagneticBg'
 import { projects } from '../data/projects'
 ---
 
@@ -32,7 +32,7 @@ import { projects } from '../data/projects'
 
   <!-- Explorer (dark) -->
   <section class="section-dark relative overflow-hidden">
-    <MagneticBg client:only="react" />
+    <NeuralNetBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
       <ProjectExplorer projects={projects} client:load />
     </div>
