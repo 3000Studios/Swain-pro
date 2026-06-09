@@ -46,8 +46,8 @@ export default function HeaderAura() {
         const cx = (0.5 + 0.5 * Math.cos(b.a + b.x * 6)) * w
         const cy = (0.5 + 0.5 * Math.sin(b.a * 1.3 + b.y * 6)) * h
         const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, b.r)
-        g.addColorStop(0, 'rgba(200,169,110,0.30)')
-        g.addColorStop(0.5, 'rgba(160,130,70,0.12)')
+        g.addColorStop(0, 'rgba(200,169,110,0.46)')
+        g.addColorStop(0.5, 'rgba(160,130,70,0.20)')
         g.addColorStop(1, 'rgba(200,169,110,0)')
         ctx.fillStyle = g
         ctx.beginPath()
@@ -88,7 +88,7 @@ export default function HeaderAura() {
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        opacity: 0.55,
+        opacity: 0.8,
         zIndex: 0,
       }}
     />

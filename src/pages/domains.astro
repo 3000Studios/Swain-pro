@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import HexGridBg from '../components/backgrounds/HexGridBg'
-import FluidInkBg from '../components/backgrounds/FluidInkBg'
 import LavaBg from '../components/backgrounds/LavaBg'
+import WaveGridBg from '../components/backgrounds/WaveGridBg'
 import HeroVideo from '../components/HeroVideo.astro'
 import { domains } from '../data/domains'
 ---
@@ -32,7 +32,7 @@ import { domains } from '../data/domains'
 
   <!-- Domain grid (light) -->
   <section class="section-light relative overflow-hidden">
-    <FluidInkBg client:only="react" />
+    <WaveGridBg client:only="react" light />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-stagger-parent>
         {domains.map((domain, i) => (

@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 /** Perspective wireframe grid — a synthwave plane receding to a horizon, its
  *  vertices displaced by travelling sine waves that bulge toward the cursor. */
 
-export default function WaveGridBg() {
+export default function WaveGridBg({ light = false }: { light?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -11,6 +11,10 @@ export default function WaveGridBg() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Deep slate wireframe on light sections (high contrast on cream); soft
+    // champagne gold on dark sections.
+    const lineRGB = light ? '34,46,64' : '200,169,110'
 
     let W = 0, H = 0, raf = 0, t = 0
     const mouse = { x: -9999, y: -9999, active: false }
@@ -48,19 +52,19 @@ export default function WaveGridBg() {
       if (!onScreen) { raf = 0; return }
       t++
       ctx.clearRect(0, 0, W, H)
-      ctx.lineWidth = 1
+      ctx.lineWidth = light ? 1.4 : 1
       // horizontal lines
       for (let r = 0; r <= ROWS; r++) {
         ctx.beginPath()
         for (let c = 0; c <= COLS; c++) { const p = pt(c, r); c === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y) }
-        ctx.strokeStyle = `rgba(200,169,110,${0.05 + (r / ROWS) * 0.22})`
+        ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.14 : 0.05) + (r / ROWS) * (light ? 0.42 : 0.22)})`
         ctx.stroke()
       }
       // vertical lines
       for (let c = 0; c <= COLS; c++) {
         ctx.beginPath()
         for (let r = 0; r <= ROWS; r++) { const p = pt(c, r); r === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y) }
-        ctx.strokeStyle = `rgba(200,169,110,${0.04 + (c / COLS) * 0.12})`
+        ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.1 : 0.04) + (c / COLS) * (light ? 0.26 : 0.12)})`
         ctx.stroke()
       }
       if (reduce) { raf = 0; return }

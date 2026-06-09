@@ -444,17 +444,17 @@ h3 {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 30% 30%, rgba(200,169,110,0.12), transparent 60%),
-    radial-gradient(circle at 72% 68%, rgba(120,95,200,0.09), transparent 55%);
-  animation: card-aura 16s ease-in-out infinite;
+    radial-gradient(circle at 30% 30%, rgba(200,169,110,0.30), transparent 60%),
+    radial-gradient(circle at 72% 68%, rgba(140,110,230,0.22), transparent 55%);
+  animation: card-aura 14s ease-in-out infinite;
   animation-delay: var(--gloss-delay, 0s);
-  opacity: 0.85;
+  opacity: 1;
   transition: opacity 0.4s ease;
   will-change: transform;
 }
 .card:hover::before {
   opacity: 1;
-  animation-duration: 7s;
+  animation-duration: 6s;
 }
 
 /* ── Card on light bg ──────────────────────────────── */
@@ -489,14 +489,14 @@ h3 {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 28% 26%, rgba(200,169,110,0.10), transparent 58%),
-    radial-gradient(circle at 74% 72%, rgba(154,112,64,0.07), transparent 55%);
-  animation: card-aura 18s ease-in-out infinite;
-  opacity: 0.7;
+    radial-gradient(circle at 28% 26%, rgba(184,124,28,0.22), transparent 58%),
+    radial-gradient(circle at 74% 72%, rgba(28,118,176,0.16), transparent 55%);
+  animation: card-aura 15s ease-in-out infinite;
+  opacity: 0.95;
   transition: opacity 0.4s ease;
   will-change: transform;
 }
-.card-light:hover::before { opacity: 1; animation-duration: 8s; }
+.card-light:hover::before { opacity: 1; animation-duration: 7s; }
 .card-light > * { position: relative; z-index: 1; }
 
 /* ── Glass card ────────────────────────────────────── */

@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
 type Node = { x: number; y: number; vx: number; vy: number; r: number; pulse: number }
 type Edge = { a: number; b: number; signal: number }
 
-export default function NeuralNetBg() {
+export default function NeuralNetBg({ light = false }: { light?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -14,6 +14,13 @@ export default function NeuralNetBg() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Light sections get dark-ink synapses + deep nodes + saturated blue
+    // signals so the web pops on cream; dark sections keep champagne gold.
+    const edgeRGB = light ? '38,52,74' : '200,169,110'
+    const sigRGB = light ? '32,108,224' : '120,220,255'
+    const edgeBaseMul = light ? 2.4 : 1
+    const edgeNearMul = light ? 0.5 : 0.35
 
     let W = 0, H = 0, raf = 0, t = 0
     let nodes: Node[] = []
@@ -79,27 +86,30 @@ export default function NeuralNetBg() {
         const near = mouse.active
           ? Math.max(0, 1 - Math.min(Math.hypot((a.x + b.x) / 2 - mouse.x, (a.y + b.y) / 2 - mouse.y), 200) / 200)
           : 0
-        const base = (1 - d / 165) * 0.16
-        ctx.strokeStyle = `rgba(200,169,110,${base + near * 0.35})`
-        ctx.lineWidth = 0.5 + near
+        const base = (1 - d / 165) * 0.16 * edgeBaseMul
+        ctx.strokeStyle = `rgba(${edgeRGB},${base + near * edgeNearMul})`
+        ctx.lineWidth = (light ? 0.7 : 0.5) + near
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
         if (e.signal > 0) {
           const sx = b.x + (a.x - b.x) * e.signal, sy = b.y + (a.y - b.y) * e.signal
-          ctx.fillStyle = `rgba(120,220,255,${e.signal})`
-          ctx.beginPath(); ctx.arc(sx, sy, 2.2, 0, Math.PI * 2); ctx.fill()
+          ctx.fillStyle = `rgba(${sigRGB},${e.signal})`
+          ctx.beginPath(); ctx.arc(sx, sy, light ? 2.8 : 2.2, 0, Math.PI * 2); ctx.fill()
           e.signal -= 0.04
           if (e.signal <= 0) nodes[e.b].pulse = 1
         }
       }
       // nodes
       for (const n of nodes) {
-        const g = 50 + n.pulse * 45
+        const g = light ? 30 - n.pulse * 6 : 50 + n.pulse * 45
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r + n.pulse * 2.5, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${44 + n.pulse * 150},85%,${g}%,${0.35 + n.pulse * 0.55})`
+        ctx.fillStyle = light
+          ? `hsla(${28 + n.pulse * 200},75%,${g}%,${0.5 + n.pulse * 0.45})`
+          : `hsla(${44 + n.pulse * 150},85%,${g}%,${0.35 + n.pulse * 0.55})`
         ctx.fill()
         if (n.pulse > 0.3) {
           const rg = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 6)
-          rg.addColorStop(0, `rgba(200,169,110,${n.pulse * 0.3})`); rg.addColorStop(1, 'rgba(200,169,110,0)')
+          const halo = light ? sigRGB : '200,169,110'
+          rg.addColorStop(0, `rgba(${halo},${n.pulse * (light ? 0.22 : 0.3)})`); rg.addColorStop(1, `rgba(${halo},0)`)
           ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 6, 0, Math.PI * 2); ctx.fill()
         }
       }

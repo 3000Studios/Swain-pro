@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import WaveGridBg from '../components/backgrounds/WaveGridBg'
-import AquariumBg from '../components/backgrounds/AquariumBg'
 import MagneticBg from '../components/backgrounds/MagneticBg'
+import NeuralNetBg from '../components/backgrounds/NeuralNetBg'
+import WaveGridBg from '../components/backgrounds/WaveGridBg'
 import HeroVideo from '../components/HeroVideo.astro'
 
 const services = [
@@ -88,7 +88,7 @@ const services = [
 
   <!-- Service cards (light) -->
   <section class="section-light relative overflow-hidden">
-    <AquariumBg client:only="react" />
+    <NeuralNetBg client:only="react" light />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-24" data-stagger-parent>
         {services.map((service, i) => (

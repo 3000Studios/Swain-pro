@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import LightningBg from '../../components/backgrounds/LightningBg'
 import HexGridBg from '../../components/backgrounds/HexGridBg'
+import LightningBg from '../../components/backgrounds/LightningBg'
 import HeroVideo from '../../components/HeroVideo.astro'
 import { blogPosts } from '../../data/blog'
 
@@ -32,7 +32,7 @@ const categories = Array.from(new Set(blogPosts.map(p => p.category)))
 
   <!-- Posts (light) -->
   <section class="section-light relative overflow-hidden">
-    <HexGridBg client:only="react" />
+    <HexGridBg client:only="react" light />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24">
 
       <!-- Category filter -->
