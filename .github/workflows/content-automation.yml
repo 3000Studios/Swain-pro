@@ -1,0 +1,32 @@
+name: Content Automation
+on:
+  schedule:
+    - cron: '0 */8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate blog post
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node .github/scripts/generate-post.js
+      - name: Commit and push
+        run: |
+          git config user.name "Content Bot"
+          git config user.email "content-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No new content generated"
+          else
+            git commit -m "content: auto-generate blog post $(date +%Y-%m-%d)"
+            git push
+          fi
