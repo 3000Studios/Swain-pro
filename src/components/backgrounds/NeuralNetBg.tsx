@@ -17,10 +17,10 @@ export default function NeuralNetBg({ light = false }: { light?: boolean }) {
 
     // Light sections get dark-ink synapses + deep nodes + saturated blue
     // signals so the web pops on cream; dark sections keep champagne gold.
-    const edgeRGB = light ? '38,52,74' : '200,169,110'
-    const sigRGB = light ? '32,108,224' : '120,220,255'
-    const edgeBaseMul = light ? 2.4 : 1
-    const edgeNearMul = light ? 0.5 : 0.35
+    const edgeRGB = light ? '28,40,62' : '200,169,110'
+    const sigRGB = light ? '24,104,232' : '120,220,255'
+    const edgeBaseMul = light ? 4.2 : 1
+    const edgeNearMul = light ? 0.6 : 0.35
 
     let W = 0, H = 0, raf = 0, t = 0
     let nodes: Node[] = []
@@ -88,7 +88,7 @@ export default function NeuralNetBg({ light = false }: { light?: boolean }) {
           : 0
         const base = (1 - d / 165) * 0.16 * edgeBaseMul
         ctx.strokeStyle = `rgba(${edgeRGB},${base + near * edgeNearMul})`
-        ctx.lineWidth = (light ? 0.7 : 0.5) + near
+        ctx.lineWidth = (light ? 1.05 : 0.5) + near
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
         if (e.signal > 0) {
           const sx = b.x + (a.x - b.x) * e.signal, sy = b.y + (a.y - b.y) * e.signal

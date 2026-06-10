@@ -984,6 +984,70 @@ h3 {
   [class~="py-32"] { padding-top: 5.5rem; padding-bottom: 5.5rem; }
 }
 
+/* ── ANIMATED SECTION DIVIDERS ──────────────────────────
+   Live seams between sections; each variant a different design, all react on
+   hover. Sit flush on the onyx so they bridge dark↔light cleanly. */
+.sec-divider {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  margin: -1px 0;                 /* kill sub-pixel seams against sections */
+  background: var(--color-onyx);
+  overflow: hidden;
+  line-height: 0;
+  cursor: pointer;
+}
+.sec-divider svg { width: 100%; height: 100%; display: block; }
+
+/* wave */
+.sec-divider--wave .wave { fill: none; stroke: var(--color-gold); stroke-width: 2; opacity: 0.55; }
+.sec-divider--wave .wave-a { animation: dv-slide 9s linear infinite; }
+.sec-divider--wave .wave-b { stroke: var(--color-gold-light); opacity: 0.3; animation: dv-slide 7s linear infinite reverse; }
+@keyframes dv-slide { from { transform: translateX(0); } to { transform: translateX(-150px); } }
+.sec-divider--wave:hover .wave { opacity: 0.9; stroke-width: 2.6; filter: drop-shadow(0 0 6px rgba(200,169,110,0.6)); }
+
+/* circuit */
+.sec-divider--circuit .trace { fill: none; stroke: rgba(200,169,110,0.4); stroke-width: 1.6; }
+.sec-divider--circuit .via { fill: var(--color-gold); }
+.sec-divider--circuit .pulse-dot { fill: var(--color-gold-light); filter: drop-shadow(0 0 6px rgba(200,169,110,0.9)); animation: dv-race 3.4s linear infinite; }
+@keyframes dv-race { from { transform: translateX(0); } to { transform: translateX(1224px); } }
+.sec-divider--circuit:hover .pulse-dot { animation-duration: 1.4s; }
+.sec-divider--circuit:hover .via { fill: var(--color-gold-light); }
+
+/* zigzag */
+.sec-divider--zigzag .bolt {
+  fill: none; stroke: var(--color-gold); stroke-width: 2;
+  stroke-dasharray: 60 1600; stroke-dashoffset: 0;
+  filter: drop-shadow(0 0 4px rgba(200,169,110,0.5));
+  animation: dv-dash 2.6s linear infinite;
+}
+@keyframes dv-dash { to { stroke-dashoffset: -1660; } }
+.sec-divider--zigzag:hover .bolt { stroke: var(--color-gold-light); stroke-width: 3; animation-duration: 1.2s; }
+
+/* pulse (EKG) */
+.sec-divider--pulse .ekg {
+  fill: none; stroke: var(--color-emerald); stroke-width: 2;
+  stroke-dasharray: 120 1400; filter: drop-shadow(0 0 5px rgba(63,185,80,0.6));
+  animation: dv-beat 2.2s linear infinite;
+}
+@keyframes dv-beat { to { stroke-dashoffset: -1520; } }
+.sec-divider--pulse:hover .ekg { stroke-width: 2.8; animation-duration: 1s; }
+
+/* aurora */
+.sec-divider--aurora .aurora-band {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, var(--color-gold-dark), var(--color-purple, #8b5cf6), var(--color-gold-light), transparent);
+  background-size: 250% 100%;
+  opacity: 0.35; filter: blur(6px);
+  animation: dv-aurora 8s ease-in-out infinite;
+}
+@keyframes dv-aurora { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.sec-divider--aurora:hover .aurora-band { opacity: 0.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-divider * { animation: none !important; }
+}
+
 /* ── SCROLL-DRIVEN SECTION TRANSITIONS ──────────────────
    Each <section> rises + fades + un-skews as it scrolls into view, then
    parallax-departs (sinks + dims) as it leaves toward the next section —
@@ -992,12 +1056,22 @@ h3 {
    the section normally (the reveal-* classes still handle entrance there).
    Skipped entirely under reduced-motion. */
 @keyframes sec-rise {
-  from { opacity: 0; transform: translateY(64px) scale(0.97) perspective(1200px) rotateX(4deg); }
-  to   { opacity: 1; transform: translateY(0)    scale(1)    perspective(1200px) rotateX(0deg); }
+  from {
+    opacity: 0;
+    transform: translateY(110px) scale(0.94) perspective(1400px) rotateX(7deg);
+    filter: blur(7px);
+    clip-path: inset(38% 0 0 0 round 40% 40% 0 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) perspective(1400px) rotateX(0deg);
+    filter: blur(0);
+    clip-path: inset(0 0 0 0 round 0);
+  }
 }
 @keyframes sec-depart {
-  from { opacity: 1; transform: translateY(0)     scale(1);    }
-  to   { opacity: 0.45; transform: translateY(-44px) scale(0.965); }
+  from { opacity: 1;    transform: translateY(0)     scale(1);     }
+  to   { opacity: 0.35; transform: translateY(-60px) scale(0.95);  }
 }
 
 @media (prefers-reduced-motion: no-preference) {

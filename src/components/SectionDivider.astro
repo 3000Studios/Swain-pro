@@ -1,0 +1,47 @@
+---
+/**
+ * Animated divider that sits between page sections. Each `variant` is a
+ * different live design; all react on hover. Pure CSS/SVG animation — GPU-light,
+ * no JS, and it quietly goes static under prefers-reduced-motion.
+ *
+ *   wave    — twin gold sine waves sliding opposite directions
+ *   circuit — a data pulse racing along a circuit trace with via dots
+ *   zigzag  — a chevron lightning seam that shimmers
+ *   pulse   — an EKG/heartbeat line that beats across
+ *   aurora  — a soft gradient ribbon that breathes
+ */
+interface Props {
+  variant?: 'wave' | 'circuit' | 'zigzag' | 'pulse' | 'aurora'
+  label?: string
+}
+const { variant = 'wave', label } = Astro.props
+---
+
+<div class={`sec-divider sec-divider--${variant}`} role="separator" aria-label={label ?? 'Section divider'}>
+  {variant === 'wave' && (
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+      <path class="wave wave-a" d="M0,30 C150,5 300,55 450,30 C600,5 750,55 900,30 C1050,5 1200,55 1350,30" />
+      <path class="wave wave-b" d="M0,32 C150,58 300,8 450,32 C600,58 750,8 900,32 C1050,58 1200,8 1350,32" />
+    </svg>
+  )}
+  {variant === 'circuit' && (
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+      <path class="trace" d="M0,30 H280 L320,12 H560 L600,48 H880 L920,30 H1200" />
+      <circle class="via" cx="320" cy="12" r="4" />
+      <circle class="via" cx="600" cy="48" r="4" />
+      <circle class="via" cx="920" cy="30" r="4" />
+      <rect class="pulse-dot" x="-12" y="26" width="24" height="8" rx="4" />
+    </svg>
+  )}
+  {variant === 'zigzag' && (
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+      <path class="bolt" d="M0,40 L100,20 L200,40 L300,20 L400,40 L500,20 L600,40 L700,20 L800,40 L900,20 L1000,40 L1100,20 L1200,40" />
+    </svg>
+  )}
+  {variant === 'pulse' && (
+    <svg viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ekg" d="M0,30 H460 l18,-22 l16,44 l16,-44 l14,22 H720 l40,-14 l16,14 H1200" />
+    </svg>
+  )}
+  {variant === 'aurora' && <span class="aurora-band" aria-hidden="true"></span>}
+</div>

@@ -16,19 +16,32 @@ interface Props {
 }
 
 const seoProps = Astro.props
+
+// Public Google IDs (safe for the browser — these are NOT secrets; the AdSense
+// publisher id is already public in /ads.txt). Overridable via build-time env.
+const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-DH1WBK8YWK'
+const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-5800977493749262'
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DH1WBK8YWK"></script>
-    <script>
+    <!-- Google Analytics (GA4) -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-DH1WBK8YWK');
+      gtag('config', GA_MEASUREMENT_ID);
     </script>
+
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content={ADSENSE_CLIENT} />
+    <script
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+      crossorigin="anonymous"></script>
+
     <SEO {...seoProps} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

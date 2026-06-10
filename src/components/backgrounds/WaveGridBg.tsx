@@ -14,7 +14,8 @@ export default function WaveGridBg({ light = false }: { light?: boolean }) {
 
     // Deep slate wireframe on light sections (high contrast on cream); soft
     // champagne gold on dark sections.
-    const lineRGB = light ? '34,46,64' : '200,169,110'
+    const lineRGB = light ? '24,36,56' : '200,169,110'
+    const glowRGB = light ? '32,108,224' : '200,169,110'
 
     let W = 0, H = 0, raf = 0, t = 0
     const mouse = { x: -9999, y: -9999, active: false }
@@ -52,19 +53,28 @@ export default function WaveGridBg({ light = false }: { light?: boolean }) {
       if (!onScreen) { raf = 0; return }
       t++
       ctx.clearRect(0, 0, W, H)
-      ctx.lineWidth = light ? 1.4 : 1
+      ctx.lineWidth = light ? 1.7 : 1
+      // glowing ridge that tracks the cursor column when active
+      const glowCol = mouse.active ? (mouse.x / W) * COLS : -99
       // horizontal lines
       for (let r = 0; r <= ROWS; r++) {
         ctx.beginPath()
         for (let c = 0; c <= COLS; c++) { const p = pt(c, r); c === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y) }
-        ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.14 : 0.05) + (r / ROWS) * (light ? 0.42 : 0.22)})`
+        ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.24 : 0.05) + (r / ROWS) * (light ? 0.52 : 0.22)})`
         ctx.stroke()
       }
-      // vertical lines
+      // vertical lines — the one nearest the cursor lights up in saturated blue
       for (let c = 0; c <= COLS; c++) {
         ctx.beginPath()
         for (let r = 0; r <= ROWS; r++) { const p = pt(c, r); r === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y) }
-        ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.1 : 0.04) + (c / COLS) * (light ? 0.26 : 0.12)})`
+        const near = Math.max(0, 1 - Math.abs(c - glowCol) / 2.5)
+        if (near > 0.05) {
+          ctx.strokeStyle = `rgba(${glowRGB},${0.2 + near * (light ? 0.6 : 0.4)})`
+          ctx.lineWidth = (light ? 1.7 : 1) + near * 1.6
+        } else {
+          ctx.strokeStyle = `rgba(${lineRGB},${(light ? 0.18 : 0.04) + (c / COLS) * (light ? 0.34 : 0.12)})`
+          ctx.lineWidth = light ? 1.7 : 1
+        }
         ctx.stroke()
       }
       if (reduce) { raf = 0; return }

@@ -20,8 +20,9 @@ const COLORS = [
 const COUNT = 10
 const RUNG = 66            // px between ladder rungs (doc space)
 const LANE_W = 48          // ladder width
+const WARP_FRAMES = 46     // how long a black-hole warp takes
 
-type State = 'walk' | 'fall' | 'dance'
+type State = 'walk' | 'fall' | 'warp' | 'dance'
 
 interface Human {
   id: number
@@ -33,8 +34,18 @@ interface Human {
   color: number      // index into COLORS
   phase: number      // limb animation phase
   state: State
+  warp: number       // warp countdown (frames); >0 while being sucked through a black hole
+  warpFrom: number   // doc-y where the warp started
+  warpTo: number     // doc-y the black hole spits them out at
   danceSeed: number
   podX: number       // resolved screen x while dancing
+}
+
+interface Vortex {
+  docY: number       // document-space center
+  xo: number         // lane offset of the human it belongs to
+  age: number        // frames (can start negative to delay the exit portal)
+  max: number
 }
 
 interface Confetti {
@@ -95,7 +106,7 @@ export default function BridgeWalkers() {
     // ── humans ───────────────────────────────────────────
     const humans: Human[] = Array.from({ length: count }, (_, i) => ({
       id: i,
-      y: -RUNG * (i * 1.5 + 2),          // staggered so they "drop in" on load
+      y: 90 + i * 78,                     // spread down the first screens — visible immediately
       xo: (i % 5) / 4,                    // spread across the lane
       speed: 0.45 + (i % 3) * 0.08,
       boost: 1,
@@ -103,10 +114,14 @@ export default function BridgeWalkers() {
       color: 0,
       phase: Math.random() * Math.PI * 2,
       state: 'walk',
+      warp: 0,
+      warpFrom: 0,
+      warpTo: 0,
       danceSeed: Math.random() * Math.PI * 2,
       podX: 0,
     }))
     let firstArrived = false
+    const vortexes: Vortex[] = []
 
     const confetti: Confetti[] = []
     const burstConfetti = (x: number, y: number, n = 14) => {
@@ -133,19 +148,27 @@ export default function BridgeWalkers() {
         }
       }
       let best: Human | null = null
-      let bestD = 56 // hit radius (px)
+      let bestD = 64 // hit radius (px)
       for (const hmn of humans) {
-        if (hmn.state === 'dance') continue
+        if (hmn.state === 'dance' || hmn.state === 'warp') continue
         const sx = laneX + LANE_W * hmn.xo + 8
         const sy = hmn.y - window.scrollY
         const d = Math.hypot(clientX - sx, clientY - sy)
         if (d < bestD) { bestD = d; best = hmn }
       }
       if (best) {
-        best.color = (best.color + 1) % COLORS.length      // change colors
-        best.boost = Math.min(best.boost + 0.6, 4)          // move faster (permanent)
-        best.fastUntil = nextPlatformBelow(best.y)          // fall to next section
-        burstConfetti(laneX + LANE_W * best.xo + 8, best.y - window.scrollY, 8)
+        // Click = open a BLACK HOLE under their feet. They spiral in, the floor
+        // drops, and they warp down to the next section, faster and recolored.
+        best.color = (best.color + 1) % COLORS.length
+        best.boost = Math.min(best.boost + 0.5, 4)
+        const dest = nextPlatformBelow(best.y)
+        best.warpFrom = best.y
+        best.warpTo = dest
+        best.warp = WARP_FRAMES
+        best.state = 'warp'
+        vortexes.push({ docY: best.y, xo: best.xo, age: 0, max: 56 })       // entry hole
+        vortexes.push({ docY: dest, xo: best.xo, age: -WARP_FRAMES, max: 56 }) // exit hole
+        burstConfetti(laneX + LANE_W * best.xo + 8, best.y - window.scrollY, 12)
       }
     }
     const clickHandler = (e: MouseEvent) => onPointer(e.clientX, e.clientY)
@@ -155,41 +178,64 @@ export default function BridgeWalkers() {
     const drawBridge = () => {
       const top = window.scrollY
       const x1 = laneX, x2 = laneX + LANE_W
-      // ropes
-      ctx.strokeStyle = 'rgba(160,130,70,0.5)'
-      ctx.lineWidth = 3
+      // ropes — brighter, with a soft gold glow so they're clearly visible
+      ctx.save()
+      ctx.shadowColor = 'rgba(200,169,110,0.5)'
+      ctx.shadowBlur = 6
+      ctx.strokeStyle = 'rgba(210,178,118,0.85)'
+      ctx.lineWidth = 3.5
       ctx.beginPath(); ctx.moveTo(x1, 0); ctx.lineTo(x1, vh); ctx.stroke()
       ctx.beginPath(); ctx.moveTo(x2, 0); ctx.lineTo(x2, vh); ctx.stroke()
+      ctx.restore()
       // rungs (only those visible)
       const firstRung = Math.floor(top / RUNG) * RUNG
       for (let dy = firstRung; dy < top + vh + RUNG; dy += RUNG) {
         const sy = dy - top
         const isBoard = platforms.some((p) => Math.abs(p - dy) < RUNG / 2)
         if (isBoard) {
-          ctx.fillStyle = 'rgba(200,169,110,0.32)'
+          ctx.fillStyle = 'rgba(200,169,110,0.5)'
           ctx.fillRect(x1 - 8, sy - 4, LANE_W + 16, 8)
-          ctx.strokeStyle = 'rgba(200,169,110,0.7)'
+          ctx.strokeStyle = 'rgba(220,185,120,0.9)'
           ctx.lineWidth = 1.5
           ctx.strokeRect(x1 - 8, sy - 4, LANE_W + 16, 8)
         } else {
-          ctx.strokeStyle = 'rgba(140,115,65,0.4)'
+          ctx.strokeStyle = 'rgba(170,140,80,0.6)'
           ctx.lineWidth = 4
           ctx.beginPath(); ctx.moveTo(x1, sy); ctx.lineTo(x2, sy); ctx.stroke()
         }
       }
     }
 
+    // checkered finish line drawn across the lane at the footer top
+    const drawFinishLine = () => {
+      const sy = footerTop - window.scrollY
+      if (sy > vh + 20 || sy < -40) return
+      const x1 = laneX - 10, w = LANE_W + 64, cell = 9
+      const rows = 2
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c * cell < w; c++) {
+          ctx.fillStyle = (r + c) % 2 ? '#0b0b0b' : '#e9dcc0'
+          ctx.fillRect(x1 + c * cell, sy - 12 + r * cell, cell, cell)
+        }
+      }
+      ctx.fillStyle = 'rgba(200,169,110,0.95)'
+      ctx.font = '700 10px ui-sans-serif, system-ui, sans-serif'
+      ctx.textBaseline = 'alphabetic'
+      ctx.fillText('FINISH', x1, sy - 16)
+    }
+
     const drawHuman = (sx: number, sy: number, color: string, phase: number, state: State) => {
       ctx.save()
       ctx.translate(sx, sy)
+      ctx.scale(1.4, 1.4)               // bigger so they're clearly visible
       const swing = Math.sin(phase)
       ctx.strokeStyle = color
       ctx.fillStyle = color
-      ctx.lineWidth = 2.4
+      ctx.lineWidth = 2.2
       ctx.lineCap = 'round'
       // glow
       ctx.shadowColor = color
-      ctx.shadowBlur = 8
+      ctx.shadowBlur = 11
 
       if (state === 'fall') ctx.rotate(swing * 0.5)
       const bob = state === 'dance' ? Math.abs(Math.sin(phase * 1.6)) * -4 : 0
@@ -229,6 +275,59 @@ export default function BridgeWalkers() {
         ctx.moveTo(0, -2); ctx.lineTo(4, 5 - swing * 3)
       }
       ctx.stroke()
+      ctx.restore()
+    }
+
+    // ── black hole / warp portal ─────────────────────────
+    const drawVortex = (sx: number, sy: number, age: number, max: number) => {
+      if (age < 0) return
+      const k = Math.min(1, age / max)
+      const env = Math.sin(k * Math.PI)                 // 0→1→0 grow/shrink
+      const R = 10 + env * 34
+      ctx.save()
+      ctx.translate(sx, sy)
+      // dark gravitational well
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, R)
+      g.addColorStop(0, `rgba(0,0,0,${0.9 * env})`)
+      g.addColorStop(0.55, `rgba(28,12,40,${0.5 * env})`)
+      g.addColorStop(1, 'rgba(0,0,0,0)')
+      ctx.fillStyle = g
+      ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill()
+      // swirling gold accretion arms
+      const spin = age * 0.35
+      for (let arm = 0; arm < 3; arm++) {
+        ctx.beginPath()
+        for (let a = 0; a <= Math.PI * 4; a += 0.25) {
+          const rr = R * (a / (Math.PI * 4))
+          const x = Math.cos(a + spin + arm * 2.094) * rr
+          const y = Math.sin(a + spin + arm * 2.094) * rr * 0.62  // squashed = lying flat
+          a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+        }
+        ctx.strokeStyle = `rgba(200,169,110,${0.85 * env})`
+        ctx.lineWidth = 1.8
+        ctx.shadowColor = 'rgba(200,169,110,0.7)'
+        ctx.shadowBlur = 10
+        ctx.stroke()
+      }
+      // event-horizon ring
+      ctx.beginPath(); ctx.ellipse(0, 0, R * 0.92, R * 0.58, 0, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(120,200,255,${0.6 * env})`
+      ctx.lineWidth = 2
+      ctx.stroke()
+      ctx.restore()
+    }
+
+    // a human spiralling into / out of the warp — spins and shrinks at mid-point
+    const drawHumanWarp = (sx: number, sy: number, color: string, k: number) => {
+      const env = Math.sin(k * Math.PI)                 // shrink toward the middle of the warp
+      const scale = Math.max(0.05, 1 - env)
+      const spin = k * Math.PI * 10
+      ctx.save()
+      ctx.translate(sx, sy)
+      ctx.rotate(spin)
+      ctx.scale(scale, scale)
+      ctx.translate(-sx, -sy)
+      drawHuman(sx, sy, color, k * 12, 'fall')
       ctx.restore()
     }
 
@@ -299,10 +398,35 @@ export default function BridgeWalkers() {
       ctx.clearRect(0, 0, vw, vh)
 
       drawBridge()
+      drawFinishLine()
       drawPodium()
+
+      // black-hole portals (behind the humans)
+      for (let i = vortexes.length - 1; i >= 0; i--) {
+        const v = vortexes[i]
+        v.age++
+        if (v.age > v.max) { vortexes.splice(i, 1); continue }
+        const sx = laneX + LANE_W * v.xo + 8
+        const sy = v.docY - window.scrollY
+        if (sy > -60 && sy < vh + 60) drawVortex(sx, sy, v.age, v.max)
+      }
 
       let danceCount = 0
       for (const hmn of humans) {
+        if (hmn.state === 'warp') {
+          hmn.warp--
+          const k = 1 - hmn.warp / WARP_FRAMES        // 0 → 1
+          const ease = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2
+          hmn.y = hmn.warpFrom + (hmn.warpTo - hmn.warpFrom) * ease
+          const sx = laneX + LANE_W * hmn.xo + 8
+          const sy = hmn.y - window.scrollY
+          if (sy > -40 && sy < vh + 40) drawHumanWarp(sx, sy, COLORS[hmn.color], k)
+          if (hmn.warp <= 0) {
+            hmn.state = 'walk'
+            burstConfetti(sx, sy, 10)
+          }
+          continue
+        }
         if (hmn.state === 'dance') {
           danceCount++
           hmn.phase += 0.18 + hmn.boost * 0.02
