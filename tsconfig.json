@@ -5,9 +5,19 @@
     "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    }
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "ignoreDeprecations": "5.0"
   },
-  "include": ["src/**/*", "src/vite-env.d.ts", "public/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",
+    "src/vite-env.d.ts",
+    "public/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
