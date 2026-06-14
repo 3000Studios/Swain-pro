@@ -45,7 +45,7 @@ import { domains } from '../data/domains'
               <div class="w-10 h-10 rounded-lg bg-[var(--color-onyx)] text-[var(--color-gold)] font-mono font-bold text-sm flex items-center justify-center shrink-0">
                 {domain.name.slice(0, 2).toUpperCase()}
               </div>
-              <span class={`badge ${domain.status === 'live' ? 'badge-emerald' : domain.status === 'in-dev' ? 'badge-amber' : 'badge-purple'}`}>
+              <span class={`badge ${domain.status === 'live' ? 'badge-emerald' : domain.status === 'in-dev' ? 'badge-amber' : 'badge-slate'}`}>
                 {domain.status === 'live' ? '● Live' : domain.status === 'in-dev' ? '⟳ In Dev' : 'Owned'}
               </span>
             </div>
@@ -55,7 +55,7 @@ import { domains } from '../data/domains'
             <p class="text-sm text-[var(--color-onyx)]/60 leading-relaxed mb-4 flex-1">{domain.description}</p>
 
             <div class="mb-4">
-              <span class="badge badge-purple">{domain.category}</span>
+              <span class="badge badge-slate">{domain.category}</span>
             </div>
 
             {domain.tech && (

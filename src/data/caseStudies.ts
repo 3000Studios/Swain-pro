@@ -71,7 +71,7 @@ export const caseStudies: CaseStudy[] = [
       'Chat widget deployed on website with mobile-optimized UI',
       'Analytics dashboard tracking resolution rates and conversation topics',
     ],
-    heroColor: 'purple',
+    heroColor: 'slate',
     icon: '💬',
   },
   {

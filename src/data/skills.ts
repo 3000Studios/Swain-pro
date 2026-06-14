@@ -28,7 +28,7 @@ export const skillCategories: SkillCategory[] = [
   {
     label: 'Development',
     icon: '💻',
-    color: 'purple',
+    color: 'slate',
     skills: [
       { name: 'Python', level: 90, category: 'dev' },
       { name: 'TypeScript / JavaScript', level: 88, category: 'dev' },

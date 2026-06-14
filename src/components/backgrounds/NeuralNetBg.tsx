@@ -15,12 +15,11 @@ export default function NeuralNetBg({ light = false }: { light?: boolean }) {
     const ctx = canvas.getContext('2d')!
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Light sections get dark-ink synapses + deep nodes + saturated blue
-    // signals so the web pops on cream; dark sections keep champagne gold.
-    const edgeRGB = light ? '28,40,62' : '200,169,110'
-    const sigRGB = light ? '24,104,232' : '120,220,255'
-    const edgeBaseMul = light ? 4.2 : 1
-    const edgeNearMul = light ? 0.6 : 0.35
+    // Clean corporate palette: Slate Grey and 24k Gold
+    const edgeRGB = light ? '100,116,139' : '212,175,55'
+    const sigRGB = '212,175,55'
+    const edgeBaseMul = light ? 3.0 : 1
+    const edgeNearMul = light ? 0.5 : 0.45
 
     let W = 0, H = 0, raf = 0, t = 0
     let nodes: Node[] = []
@@ -103,12 +102,12 @@ export default function NeuralNetBg({ light = false }: { light?: boolean }) {
         const g = light ? 30 - n.pulse * 6 : 50 + n.pulse * 45
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r + n.pulse * 2.5, 0, Math.PI * 2)
         ctx.fillStyle = light
-          ? `hsla(${28 + n.pulse * 200},75%,${g}%,${0.5 + n.pulse * 0.45})`
-          : `hsla(${44 + n.pulse * 150},85%,${g}%,${0.35 + n.pulse * 0.55})`
+          ? `rgba(100, 116, 139, ${0.4 + n.pulse * 0.45})`
+          : `rgba(212, 175, 55, ${0.3 + n.pulse * 0.55})`
         ctx.fill()
         if (n.pulse > 0.3) {
           const rg = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 6)
-          const halo = light ? sigRGB : '200,169,110'
+          const halo = '212,175,55'
           rg.addColorStop(0, `rgba(${halo},${n.pulse * (light ? 0.22 : 0.3)})`); rg.addColorStop(1, `rgba(${halo},0)`)
           ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 6, 0, Math.PI * 2); ctx.fill()
         }

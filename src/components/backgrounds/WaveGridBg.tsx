@@ -12,10 +12,9 @@ export default function WaveGridBg({ light = false }: { light?: boolean }) {
     const ctx = canvas.getContext('2d')!
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // Deep slate wireframe on light sections (high contrast on cream); soft
-    // champagne gold on dark sections.
-    const lineRGB = light ? '24,36,56' : '200,169,110'
-    const glowRGB = light ? '32,108,224' : '200,169,110'
+    // Slate grey on light sections, 24k metallic gold on dark.
+    const lineRGB = light ? '100,116,139' : '212,175,55'
+    const glowRGB = '212,175,55'
 
     let W = 0, H = 0, raf = 0, t = 0
     const mouse = { x: -9999, y: -9999, active: false }

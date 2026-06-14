@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react'
 
-type Ember = {
-  x: number; y: number; vx: number; vy: number
-  life: number; maxLife: number
-  size: number; hue: number
-}
-
-type LavaPool = {
-  x: number; y: number; r: number; maxR: number; life: number; maxLife: number
+type Polyhedron = {
+  x: number; y: number; ox: number; oy: number
+  vx: number; vy: number
+  size: number
+  vertices: { x: number; y: number; z: number }[]
+  edges: [number, number][]
+  angleX: number; angleY: number; angleZ: number
+  spinX: number; spinY: number; spinZ: number
+  color: string
 }
 
 export default function LavaBg() {
@@ -19,32 +20,88 @@ export default function LavaBg() {
     const ctx = canvas.getContext('2d')!
 
     let W = 0, H = 0, raf = 0, t = 0
-    const embers: Ember[] = []
-    const pools: LavaPool[] = []
+    let models: Polyhedron[] = []
     const mouse = { x: -9999, y: -9999, active: false }
+
+    const createCube = (size: number): { vertices: any[], edges: [number, number][] } => {
+      const v = [
+        { x: -1, y: -1, z: -1 }, { x: 1, y: -1, z: -1 },
+        { x: 1, y: 1, z: -1 }, { x: -1, y: 1, z: -1 },
+        { x: -1, y: -1, z: 1 }, { x: 1, y: -1, z: 1 },
+        { x: 1, y: 1, z: 1 }, { x: -1, y: 1, z: 1 }
+      ].map(pt => ({ x: pt.x * size, y: pt.y * size, z: pt.z * size }))
+      const e: [number, number][] = [
+        [0, 1], [1, 2], [2, 3], [3, 0], // back
+        [4, 5], [5, 6], [6, 7], [7, 4], // front
+        [0, 4], [1, 5], [2, 6], [3, 7]  // links
+      ]
+      return { vertices: v, edges: e }
+    }
+
+    const createTetrahedron = (size: number): { vertices: any[], edges: [number, number][] } => {
+      const v = [
+        { x: 1, y: 1, z: 1 }, { x: -1, y: -1, z: 1 },
+        { x: -1, y: 1, z: -1 }, { x: 1, y: -1, z: -1 }
+      ].map(pt => ({ x: pt.x * size * 1.2, y: pt.y * size * 1.2, z: pt.z * size * 1.2 }))
+      const e: [number, number][] = [
+        [0, 1], [0, 2], [0, 3],
+        [1, 2], [1, 3], [2, 3]
+      ]
+      return { vertices: v, edges: e }
+    }
+
+    const createOctahedron = (size: number): { vertices: any[], edges: [number, number][] } => {
+      const v = [
+        { x: 0, y: 1, z: 0 }, { x: 0, y: -1, z: 0 },
+        { x: 1, y: 0, z: 0 }, { x: -1, y: 0, z: 0 },
+        { x: 0, y: 0, z: 1 }, { x: 0, y: 0, z: -1 }
+      ].map(pt => ({ x: pt.x * size * 1.3, y: pt.y * size * 1.3, z: pt.z * size * 1.3 }))
+      const e: [number, number][] = [
+        [0, 2], [0, 3], [0, 4], [0, 5],
+        [1, 2], [1, 3], [1, 4], [1, 5],
+        [2, 4], [4, 3], [3, 5], [5, 2]
+      ]
+      return { vertices: v, edges: e }
+    }
+
+    const buildModels = () => {
+      const count = Math.min(15, Math.floor(W / 120))
+      models = Array.from({ length: count }, (_, i) => {
+        const ox = Math.random() * W
+        const oy = Math.random() * H
+        const size = 18 + Math.random() * 22
+        
+        // Pick random geometric geometry shape
+        const shapeType = i % 3
+        const geom = shapeType === 0 ? createCube(size) : (shapeType === 1 ? createTetrahedron(size) : createOctahedron(size))
+        
+        const colors = [
+          'rgba(212, 175, 55, ',  // 24k gold outlines
+          'rgba(100, 116, 139, ', // slate grey outlines
+          'rgba(250, 249, 246, '  // ivory white outlines
+        ]
+
+        return {
+          x: ox, y: oy, ox, oy,
+          vx: 0, vy: 0,
+          size,
+          vertices: geom.vertices,
+          edges: geom.edges,
+          angleX: Math.random() * Math.PI,
+          angleY: Math.random() * Math.PI,
+          angleZ: Math.random() * Math.PI,
+          spinX: (Math.random() - 0.5) * 0.015,
+          spinY: (Math.random() - 0.5) * 0.015,
+          spinZ: (Math.random() - 0.5) * 0.015,
+          color: colors[i % colors.length]
+        }
+      })
+    }
 
     const resize = () => {
       W = canvas.offsetWidth; H = canvas.offsetHeight
       canvas.width = W; canvas.height = H
-    }
-
-    const spawnEmber = (x: number, y: number, intense = false) => {
-      const hue = intense ? 20 + Math.random() * 30 : 10 + Math.random() * 50
-      embers.push({
-        x, y,
-        vx: (Math.random() - 0.5) * (intense ? 3 : 1.5),
-        vy: -(0.8 + Math.random() * (intense ? 4 : 2.5)),
-        life: 0,
-        maxLife: 40 + Math.random() * (intense ? 80 : 50),
-        size: 1.5 + Math.random() * (intense ? 4.5 : 2.5),
-        hue,
-      })
-    }
-
-    const spawnPool = (x: number, y: number) => {
-      const maxR = 30 + Math.random() * 60
-      pools.push({ x, y, r: 0, maxR, life: 0, maxLife: 120 + Math.random() * 80 })
-      if (pools.length > 12) pools.splice(0, pools.length - 12)
+      buildModels()
     }
 
     const onMove = (e: MouseEvent) => {
@@ -62,7 +119,23 @@ export default function LavaBg() {
     window.addEventListener('resize', resize)
     resize()
 
-    let poolTimer = 0
+    // 3D projection rendering helper
+    const project = (v: { x: number, y: number, z: number }, ax: number, ay: number, az: number) => {
+      // Rotation X
+      let y1 = v.y * Math.cos(ax) - v.z * Math.sin(ax)
+      let z1 = v.y * Math.sin(ax) + v.z * Math.cos(ax)
+      // Rotation Y
+      let x2 = v.x * Math.cos(ay) + z1 * Math.sin(ay)
+      let z2 = -v.x * Math.sin(ay) + z1 * Math.cos(ay)
+      // Rotation Z
+      let x3 = x2 * Math.cos(az) - y1 * Math.sin(az)
+      let y3 = x2 * Math.sin(az) + y1 * Math.cos(az)
+      
+      // Simple perspective
+      const d = 160
+      const scale = d / (d + z2)
+      return { x: x3 * scale, y: y3 * scale }
+    }
 
     let onScreen = true
     const draw = () => {
@@ -70,112 +143,77 @@ export default function LavaBg() {
       t++
       ctx.clearRect(0, 0, W, H)
 
-      // Lava ground glow — base layer
-      const groundGrad = ctx.createLinearGradient(0, H * 0.65, 0, H)
-      groundGrad.addColorStop(0, 'rgba(200,60,0,0)')
-      groundGrad.addColorStop(0.6, 'rgba(200,50,0,0.06)')
-      groundGrad.addColorStop(1, 'rgba(180,40,0,0.12)')
-      ctx.fillStyle = groundGrad
+      // Background ambient gold tint
+      const gradient = ctx.createLinearGradient(0, H * 0.5, 0, H)
+      gradient.addColorStop(0, 'rgba(8,8,8,0)')
+      gradient.addColorStop(1, 'rgba(212,175,55,0.02)')
+      ctx.fillStyle = gradient
       ctx.fillRect(0, 0, W, H)
 
-      // Spawn base embers from bottom edge
-      if (t % 2 === 0) {
-        for (let i = 0; i < 3; i++) {
-          spawnEmber(Math.random() * W, H + 5)
+      for (const m of models) {
+        // Drift ambiently
+        m.x += Math.sin(t * 0.005 + m.size) * 0.15
+        m.y += Math.cos(t * 0.004 + m.size) * 0.15
+        m.angleX += m.spinX
+        m.angleY += m.spinY
+        m.angleZ += m.spinZ
+
+        // Respond to mouse coordinate gravity
+        let alpha = 0.07
+        if (mouse.active) {
+          const dx = mouse.x - m.x, dy = mouse.y - m.y
+          const dist = Math.hypot(dx, dy)
+          if (dist < 280) {
+            const force = (280 - dist) / 280
+            // Shift model slightly away or towards mouse
+            m.x += (dx / dist) * force * 1.5
+            m.y += (dy / dist) * force * 1.5
+            m.angleX += m.spinX * 3 * force
+            m.angleY += m.spinY * 3 * force
+            alpha += force * 0.35
+          }
         }
-      }
 
-      // Spawn embers at mouse (intensely)
-      if (mouse.active && mouse.x > 0) {
-        for (let i = 0; i < 5; i++) {
-          spawnEmber(mouse.x + (Math.random() - 0.5) * 40, mouse.y + (Math.random() - 0.5) * 20, true)
+        // Return to home position gently
+        m.x += (m.ox - m.x) * 0.003
+        m.y += (m.oy - m.y) * 0.003
+
+        // Project and draw edges
+        const projected = m.vertices.map(v => project(v, m.angleX, m.angleY, m.angleZ))
+
+        ctx.strokeStyle = m.color + alpha + ')'
+        ctx.lineWidth = 1.0
+        
+        for (const [i1, i2] of m.edges) {
+          const p1 = projected[i1]
+          const p2 = projected[i2]
+          if (p1 && p2) {
+            ctx.beginPath()
+            ctx.moveTo(m.x + p1.x, m.y + p1.y)
+            ctx.lineTo(m.x + p2.x, m.y + p2.y)
+            ctx.stroke()
+          }
         }
-        // Spawn lava pool at mouse periodically
-        poolTimer++
-        if (poolTimer > 15) {
-          spawnPool(mouse.x + (Math.random() - 0.5) * 60, mouse.y + 10 + Math.random() * 30)
-          poolTimer = 0
+
+        // Draw vertices
+        ctx.fillStyle = `rgba(212, 175, 55, ${alpha + 0.1})`
+        for (const pt of projected) {
+          ctx.beginPath()
+          ctx.arc(m.x + pt.x, m.y + pt.y, 2.5, 0, Math.PI * 2)
+          ctx.fill()
         }
-      }
-
-      if (embers.length > 700) embers.splice(0, embers.length - 700)
-
-      // Draw lava pools
-      for (let i = pools.length - 1; i >= 0; i--) {
-        const p = pools[i]
-        p.life++
-        p.r = p.maxR * Math.min(1, (p.life / 20) ** 0.5)
-        const fade = p.life > p.maxLife * 0.6 ? 1 - (p.life - p.maxLife * 0.6) / (p.maxLife * 0.4) : 1
-        if (p.life > p.maxLife || fade < 0.02) { pools.splice(i, 1); continue }
-
-        // Lava pool glow
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r)
-        g.addColorStop(0, `rgba(255,120,0,${fade * 0.35})`)
-        g.addColorStop(0.4, `rgba(220,60,0,${fade * 0.2})`)
-        g.addColorStop(0.75, `rgba(160,30,0,${fade * 0.1})`)
-        g.addColorStop(1, 'rgba(100,0,0,0)')
-        ctx.fillStyle = g
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill()
-
-        // Cracked lava surface
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r * 0.4, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255,80,0,${fade * 0.2})`
-        ctx.fill()
-      }
-
-      // Draw embers (fire particles)
-      for (let i = embers.length - 1; i >= 0; i--) {
-        const em = embers[i]
-        em.life++
-        em.x += em.vx + Math.sin(em.life * 0.12 + em.x * 0.02) * 0.5
-        em.vy += 0.03  // slight gravity
-        em.y += em.vy
-        em.size *= 0.992
-
-        const progress = em.life / em.maxLife
-        if (progress >= 1 || em.size < 0.4) { embers.splice(i, 1); continue }
-
-        // Color: bright yellow → orange → red → dark red as it ages
-        const hue = em.hue + progress * 15
-        const lum = 65 - progress * 35
-        const sat = 100 - progress * 20
-        const alpha = (1 - progress) * 0.8
-
-        ctx.beginPath()
-        ctx.arc(em.x, em.y, em.size, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${hue},${sat}%,${lum}%,${alpha})`
-        ctx.fill()
-
-        // Glow on larger embers
-        if (em.size > 2 && progress < 0.5) {
-          const eg = ctx.createRadialGradient(em.x, em.y, 0, em.x, em.y, em.size * 3.5)
-          eg.addColorStop(0, `hsla(${hue},100%,70%,${alpha * 0.4})`)
-          eg.addColorStop(1, 'hsla(0,0%,0%,0)')
-          ctx.fillStyle = eg
-          ctx.beginPath(); ctx.arc(em.x, em.y, em.size * 3.5, 0, Math.PI * 2); ctx.fill()
-        }
-      }
-
-      // Intense heat distortion glow at mouse
-      if (mouse.active && mouse.x > 0) {
-        const pulse = 0.7 + Math.sin(t * 0.15) * 0.3
-        const mg = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 90)
-        mg.addColorStop(0, `rgba(255,100,0,${0.14 * pulse})`)
-        mg.addColorStop(0.5, `rgba(200,50,0,${0.07 * pulse})`)
-        mg.addColorStop(1, 'rgba(150,0,0,0)')
-        ctx.fillStyle = mg
-        ctx.fillRect(0, 0, W, H)
       }
 
       raf = requestAnimationFrame(draw)
     }
+
     const io = new IntersectionObserver((es) => {
       const vis = es[0]?.isIntersecting ?? true
       if (vis && !onScreen) { onScreen = true; if (!raf) raf = requestAnimationFrame(draw) }
       else if (!vis) { onScreen = false; cancelAnimationFrame(raf); raf = 0 }
     }, { threshold: 0 })
     io.observe(canvas)
+
     const onVis = () => {
       if (document.hidden) { cancelAnimationFrame(raf); raf = 0 }
       else if (onScreen && !raf) raf = requestAnimationFrame(draw)

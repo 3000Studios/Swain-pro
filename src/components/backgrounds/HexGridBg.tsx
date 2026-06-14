@@ -12,14 +12,13 @@ export default function HexGridBg({ light = false }: { light?: boolean }) {
     const ctx = canvas.getContext('2d')!
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // On light sections paint dark ink + saturated amber so the grid actually
-    // reads against cream; on dark sections keep the soft champagne gold.
-    const baseRGB = light ? '58,46,22' : '200,169,110'
-    const glowRGB = light ? '196,124,16' : '200,169,110'
-    const baseA = light ? 0.34 : 0.06
-    const glowMul = light ? 0.95 : 0.55
-    const fillMul = light ? 0.34 : 0.16
-    const shimAmp = light ? 0.46 : 0.12
+    // Tweak to slate grey and 24k metallic gold outlines
+    const baseRGB = light ? '100,116,139' : '212,175,55'
+    const glowRGB = light ? '212,175,55' : '212,175,55'
+    const baseA = light ? 0.25 : 0.08
+    const glowMul = light ? 0.85 : 0.65
+    const fillMul = light ? 0.15 : 0.12
+    const shimAmp = light ? 0.35 : 0.15
 
     let W = 0, H = 0, raf = 0, t = 0
     const mouse = { x: -9999, y: -9999, active: false }

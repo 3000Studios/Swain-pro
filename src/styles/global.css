@@ -2,43 +2,50 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  /* ── Ivory / Onyx Palette ── */
-  --color-onyx: #0b0b0b;
-  --color-onyx-mid: #141414;
-  --color-onyx-surface: #1c1c1c;
-  --color-onyx-card: #222222;
-  --color-ivory: #f5f1ea;
-  --color-ivory-dim: #eae5dc;
-  --color-ivory-card: #efece5;
-  --color-ivory-muted: #bdb8b0;
+  /* ── Ivory / Onyx Palette (Metallic Sheen) ── */
+  --color-onyx: #080808;
+  --color-onyx-mid: #101012;
+  --color-onyx-surface: #18191b;
+  --color-onyx-card: #1f2023;
+  --color-ivory: #faf9f6;
+  --color-ivory-dim: #f3f0e7;
+  --color-ivory-card: #eae6da;
+  --color-ivory-muted: #bcbaae;
 
-  /* ── Gold accent ── */
-  --color-gold: #c8a96e;
-  --color-gold-light: #d4b87a;
-  --color-gold-dark: #a8894e;
-  --color-gold-dim: rgba(200, 169, 110, 0.18);
+  /* ── 24K Gold accent ── */
+  --color-gold: #d4af37;
+  --color-gold-light: #f3e5ab;
+  --color-gold-dark: #aa7c11;
+  --color-gold-dim: rgba(212, 175, 55, 0.18);
+  --color-gold-glow: rgba(212, 175, 55, 0.4);
 
-  /* ── Secondary accents (toned-down) ── */
-  --color-cyan: #60a5fa;
-  --color-purple: #a78bfa;
-  --color-emerald: #34d399;
-  --color-amber: #fbbf24;
-  --color-rose: #fb7185;
-  --color-cyan-dim: rgba(96, 165, 250, 0.12);
-  --color-purple-dim: rgba(167, 139, 250, 0.12);
+  /* ── Slate Grey Accents ── */
+  --color-slate: #64748b;
+  --color-slate-light: #94a3b8;
+  --color-slate-dark: #334155;
+  --color-slate-dim: rgba(100, 116, 139, 0.15);
+
+  /* ── Secondary accents (toned-down for statuses) ── */
+  --color-cyan: #94a3b8;
+  --color-purple: #475569;
+  --color-emerald: #10b981;
+  --color-amber: #f59e0b;
+  --color-rose: #ef4444;
+  --color-cyan-dim: rgba(148, 163, 184, 0.12);
+  --color-purple-dim: rgba(71, 85, 105, 0.12);
 
   /* ── Semantic ── */
-  --color-bg: #0b0b0b;
-  --color-surface: #161616;
-  --color-card: #202020;
-  --color-text: #f0ebe3;
-  --color-dim: #ada89f;
-  --color-muted: #6e6860;
+  --color-bg: #080808;
+  --color-surface: #101012;
+  --color-card: #18191b;
+  --color-text: #faf9f6;
+  --color-dim: #bcbaae;
+  --color-muted: #707278;
 
   /* ── Borders ── */
-  --color-border: rgba(255, 255, 255, 0.07);
-  --color-border-glow: rgba(200, 169, 110, 0.25);
-  --color-border-light: rgba(0, 0, 0, 0.09);
+  --color-border: rgba(212, 175, 55, 0.12);
+  --color-border-glow: rgba(212, 175, 55, 0.35);
+  --color-border-light: rgba(0, 0, 0, 0.12);
 
   /* ── Typography ── */
   --font-sans: 'Source Sans 3', system-ui, -apple-system, sans-serif;
@@ -46,8 +53,8 @@
   --font-display: 'Playfair Display', Georgia, serif;
 
   /* ── Radius ── */
-  --radius-card: 14px;
-  --radius-sm: 8px;
+  --radius-card: 12px;
+  --radius-sm: 6px;
 }
 
 /* ── Base ─────────────────────────────────────────── */
@@ -825,9 +832,14 @@ h3 {
   border: 1px solid rgba(96, 165, 250, 0.2);
 }
 .badge-purple {
-  background: rgba(167, 139, 250, 0.12);
+  background: var(--color-purple-dim);
   color: var(--color-purple);
-  border: 1px solid rgba(167, 139, 250, 0.2);
+  border: 1px solid rgba(71, 85, 105, 0.2);
+}
+.badge-slate {
+  background: var(--color-slate-dim);
+  color: var(--color-slate);
+  border: 1px solid rgba(100, 116, 139, 0.2);
 }
 .badge-emerald {
   background: rgba(52, 211, 153, 0.12);

@@ -22,14 +22,16 @@ export default function GalaxyBg() {
     const GRAV_STRENGTH = 2.8
 
     const makeStars = () => {
-      const count = Math.min(2200, Math.floor((W * H) / 420))
+      const count = Math.min(1200, Math.floor((W * H) / 600)) // slightly fewer stars for clean constellation look
       stars = Array.from({ length: count }, () => {
         const ox = Math.random() * W, oy = Math.random() * H
+        // Hues: 43 (gold/yellow) or 210 (slate grey/blue) or 60 (ivory)
+        const hues = [43, 210, 60]
         return {
           x: ox, y: oy, ox, oy, vx: 0, vy: 0,
-          size: Math.random() < 0.04 ? 2.2 + Math.random() * 1.4 : 0.5 + Math.random() * 1.2,
-          brightness: 0.2 + Math.random() * 0.8,
-          hue: Math.random() < 0.3 ? 200 + Math.random() * 60 : (Math.random() < 0.5 ? 30 + Math.random() * 20 : 270 + Math.random() * 40),
+          size: Math.random() < 0.05 ? 2.0 + Math.random() * 1.5 : 0.6 + Math.random() * 1.2,
+          brightness: 0.25 + Math.random() * 0.75,
+          hue: hues[Math.floor(Math.random() * hues.length)],
           twinklePhase: Math.random() * Math.PI * 2,
         }
       })
@@ -62,26 +64,26 @@ export default function GalaxyBg() {
       t++
       ctx.clearRect(0, 0, W, H)
 
-      // Deep space nebula blobs
+      // Ambient Slate/Gold corporate space blobs
       const nebulae = [
-        { x: W * 0.2, y: H * 0.3, r: W * 0.3, h: 260, s: 80 },
-        { x: W * 0.75, y: H * 0.6, r: W * 0.25, h: 300, s: 70 },
-        { x: W * 0.5, y: H * 0.15, r: W * 0.2, h: 220, s: 60 },
+        { x: W * 0.25, y: H * 0.35, r: W * 0.25, h: 43, s: 60 },  // gold
+        { x: W * 0.7, y: H * 0.55, r: W * 0.22, h: 210, s: 40 },  // slate grey
+        { x: W * 0.5, y: H * 0.2, r: W * 0.18, h: 43, s: 50 },
       ]
       for (const nb of nebulae) {
         const g = ctx.createRadialGradient(nb.x, nb.y, 0, nb.x, nb.y, nb.r)
-        g.addColorStop(0, `hsla(${nb.h},${nb.s}%,35%,0.04)`)
-        g.addColorStop(0.5, `hsla(${nb.h},${nb.s}%,25%,0.025)`)
+        g.addColorStop(0, `hsla(${nb.h},${nb.s}%,25%,0.035)`)
+        g.addColorStop(0.5, `hsla(${nb.h},${nb.s}%,15%,0.02)`)
         g.addColorStop(1, 'hsla(0,0%,0%,0)')
         ctx.fillStyle = g
         ctx.fillRect(0, 0, W, H)
       }
 
-      // Gravitational vortex glow
+      // Gravitational gold vortex glow
       if (mouse.active) {
         const gv = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, GRAV_R)
-        gv.addColorStop(0, 'rgba(180,130,255,0.08)')
-        gv.addColorStop(0.4, 'rgba(100,80,200,0.04)')
+        gv.addColorStop(0, 'rgba(212,175,55,0.06)')
+        gv.addColorStop(0.4, 'rgba(100,116,139,0.03)')
         gv.addColorStop(1, 'rgba(0,0,0,0)')
         ctx.fillStyle = gv
         ctx.fillRect(0, 0, W, H)
@@ -115,37 +117,55 @@ export default function GalaxyBg() {
         const md = Math.sqrt(mdx * mdx + mdy * mdy)
         const proximity = mouse.active ? Math.max(0, 1 - md / GRAV_R) : 0
 
-        const alpha = s.brightness * twinkle * (0.5 + proximity * 0.5)
+        const alpha = s.brightness * twinkle * (0.4 + proximity * 0.5)
 
-        // Bright core
+        // Bright geometric star core
         ctx.beginPath()
-        ctx.arc(s.x, s.y, s.size * (1 + proximity * 0.8), 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(${s.hue},${60 + proximity * 30}%,${80 + proximity * 15}%,${alpha})`
+        ctx.arc(s.x, s.y, s.size * (1 + proximity * 0.6), 0, Math.PI * 2)
+        ctx.fillStyle = `hsla(${s.hue},${50 + proximity * 30}%,${75 + proximity * 15}%,${alpha})`
         ctx.fill()
 
-        // Larger stars get a soft halo
+        // Larger stars get a soft gold halo
         if (s.size > 1.8 || proximity > 0.5) {
           const haloR = s.size * 3.5 + proximity * 6
           const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, haloR)
-          g.addColorStop(0, `hsla(${s.hue},80%,90%,${alpha * 0.4})`)
-          g.addColorStop(1, 'hsla(0,0%,0%,0)')
+          g.addColorStop(0, `rgba(212, 175, 55, ${alpha * 0.3})`)
+          g.addColorStop(1, 'rgba(212, 175, 55, 0)')
           ctx.fillStyle = g
           ctx.beginPath(); ctx.arc(s.x, s.y, haloR, 0, Math.PI * 2); ctx.fill()
         }
       }
 
-      // Event horizon ring at cursor
+      // Draw geometric constellation line links
+      ctx.lineWidth = 0.3
+      const numConstellation = Math.min(150, stars.length)
+      for (let i = 0; i < numConstellation; i++) {
+        const s1 = stars[i]
+        for (let j = i + 1; j < numConstellation; j++) {
+          const s2 = stars[j]
+          const dx = s2.x - s1.x, dy = s2.y - s1.y
+          const d2 = dx * dx + dy * dy
+          if (d2 < 6400) { // 80px connection radius
+            const d = Math.sqrt(d2)
+            const alpha = (1 - d / 80) * 0.16
+            ctx.strokeStyle = `rgba(212, 175, 55, ${alpha})`
+            ctx.beginPath(); ctx.moveTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.stroke()
+          }
+        }
+      }
+
+      // Event horizon gold ring at cursor
       if (mouse.active) {
         const ringR = 12 + Math.sin(t * 0.08) * 4
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, ringR, 0, Math.PI * 2)
-        ctx.strokeStyle = 'rgba(200,160,255,0.4)'
-        ctx.lineWidth = 1
+        ctx.strokeStyle = 'rgba(212,175,55,0.4)'
+        ctx.lineWidth = 0.8
         ctx.stroke()
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, ringR * 2, 0, Math.PI * 2)
-        ctx.strokeStyle = 'rgba(200,160,255,0.15)'
-        ctx.lineWidth = 0.6
+        ctx.strokeStyle = 'rgba(212,175,55,0.15)'
+        ctx.lineWidth = 0.5
         ctx.stroke()
       }
 

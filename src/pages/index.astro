@@ -7,6 +7,7 @@ import MagneticBg from '../components/backgrounds/MagneticBg'
 import NeuralNetBg from '../components/backgrounds/NeuralNetBg'
 import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
 import WaveGridBg from '../components/backgrounds/WaveGridBg'
+import HeroCanvas3D from '../components/HeroCanvas3D'
 import SectionDivider from '../components/SectionDivider.astro'
 import { featuredProjects } from '../data/projects'
 import { blogPosts } from '../data/blog'
@@ -40,7 +41,8 @@ const recentPosts = blogPosts.slice(0, 3)
       <div class="absolute inset-0 bg-gradient-to-b from-[rgba(11,11,11,0.5)] via-transparent to-[#0B0B0B] pointer-events-none"></div>
     </div>
 
-    <!-- Section 1 background: spider web that snaps to cursor -->
+    <!-- Section 1 background: interactive 3D geometric model display -->
+    <HeroCanvas3D client:only="react" />
     <SpiderWebBg client:only="react" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24 lg:py-36 w-full">
@@ -230,7 +232,7 @@ const recentPosts = blogPosts.slice(0, 3)
                   <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-gold'}`}>
                     {project.status}
                   </span>
-                  <span class="badge badge-purple">{project.category}</span>
+                  <span class="badge badge-slate">{project.category}</span>
                 </div>
                 <h3 class="font-bold text-[var(--color-text)] text-xl leading-tight">{project.name}</h3>
               </div>
