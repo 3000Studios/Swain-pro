@@ -64,6 +64,7 @@ export default function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const trackIdxRef = useRef<number>(-1)
   const preferenceKey = 'swainpro-music'
+  const defaultVolume = 0.3
 
   const loadTrack = (audio: HTMLAudioElement, idx: number) => {
     trackIdxRef.current = idx
@@ -73,7 +74,7 @@ export default function MusicPlayer() {
 
   const doPlay = async (audio: HTMLAudioElement) => {
     try {
-      audio.volume = 0.32
+      audio.volume = defaultVolume
       await audio.play()
       setPlaying(true)
       localStorage.setItem(preferenceKey, '1')
@@ -95,7 +96,7 @@ export default function MusicPlayer() {
   useEffect(() => {
     const startIdx = randTrackIdx(-1)
     const audio = new Audio()
-    audio.volume = 0.32
+    audio.volume = defaultVolume
     audio.preload = 'auto'
     audioRef.current = audio
 
@@ -109,7 +110,8 @@ export default function MusicPlayer() {
 
     if (localStorage.getItem(preferenceKey) === '0') return
 
-    audio.play()
+    audio
+      .play()
       .then(() => {
         setPlaying(true)
         localStorage.setItem(preferenceKey, '1')

@@ -29,10 +29,12 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
     <!-- Google Analytics (GA4) -->
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
     <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', GA_MEASUREMENT_ID);
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', GA_MEASUREMENT_ID)
     </script>
 
     <!-- Google AdSense -->
@@ -51,7 +53,6 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
     />
   </head>
   <body>
-
     <!-- ── Fixed full-page rotating background video ── -->
     <div class="page-bg-video-wrap" aria-hidden="true" id="page-bg-wrap">
       <video id="page-bg-vid-a" muted playsinline loop preload="none"></video>
@@ -59,7 +60,7 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
     </div>
 
     <Header />
-    <main id="main-content">
+    <main id="main-content" class="relative z-10">
       <slot />
     </main>
     <Footer />
@@ -73,7 +74,7 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
          Cycles through 50 corporate bg videos.
          Each page load picks a random video, cross-fades when ended.
       ══════════════════════════════════════════════ */
-            const bgVideos: string[] = [
+      const bgVideos: string[] = [
         'https://cdn.pixabay.com/video/2015/10/16/1046-142621379_medium.mp4',
         'https://cdn.pixabay.com/video/2020/05/04/38084-416330724_medium.mp4',
         'https://cdn.pixabay.com/video/2016/05/12/3188-166339073_medium.mp4',
@@ -368,7 +369,7 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
         'https://videos.pexels.com/video-files/32033963/13654862_640_360_30fps.mp4',
         'https://videos.pexels.com/video-files/37921514/16091474_682_360_30fps.mp4',
         'https://videos.pexels.com/video-files/32549582/13882611_640_360_30fps.mp4',
-        'https://videos.pexels.com/video-files/5624058/5624058-hd_1280_720_24fps.mp4'
+        'https://videos.pexels.com/video-files/5624058/5624058-hd_1280_720_24fps.mp4',
       ]
 
       const vidA = document.getElementById('page-bg-vid-a') as HTMLVideoElement
@@ -396,14 +397,18 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
         activeVid.style.zIndex = '1'
         loadBg(inactiveVid, nextIdx)
 
-        inactiveVid.addEventListener('canplay', () => {
-          inactiveVid.classList.add('bg-active')
-          activeVid.classList.remove('bg-active')
-          // Swap references
-          const tmp = activeVid
-          activeVid = inactiveVid
-          inactiveVid = tmp
-        }, { once: true })
+        inactiveVid.addEventListener(
+          'canplay',
+          () => {
+            inactiveVid.classList.add('bg-active')
+            activeVid.classList.remove('bg-active')
+            // Swap references
+            const tmp = activeVid
+            activeVid = inactiveVid
+            inactiveVid = tmp
+          },
+          { once: true }
+        )
       }
 
       // Kick off first video
@@ -416,8 +421,15 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
       vidB.addEventListener('ended', crossfade)
 
       /* ── Intersection Observer: reveal classes ── */
-      const revealClasses = ['reveal-up','reveal-left','reveal-right','reveal-scale','reveal-rotate','reveal-3d']
-      const revealSelector = revealClasses.map(c => `.${c}`).join(',')
+      const revealClasses = [
+        'reveal-up',
+        'reveal-left',
+        'reveal-right',
+        'reveal-scale',
+        'reveal-rotate',
+        'reveal-3d',
+      ]
+      const revealSelector = revealClasses.map((c) => `.${c}`).join(',')
       const isCoarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches
       const revealOptions = {
         threshold: isCoarsePointer ? 0.02 : 0.1,
@@ -436,18 +448,16 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
       })
 
       const revealTargets = document.querySelectorAll(revealSelector)
-      const revealObs = 'IntersectionObserver' in window
-        ? new IntersectionObserver(
-            (entries) => {
+      const revealObs =
+        'IntersectionObserver' in window
+          ? new IntersectionObserver((entries) => {
               entries.forEach((entry) => {
                 if (!entry.isIntersecting) return
                 showReveal(entry.target)
                 revealObs.unobserve(entry.target)
               })
-            },
-            revealOptions
-          )
-        : null
+            }, revealOptions)
+          : null
 
       requestAnimationFrame(() => {
         revealTargets.forEach((el) => {
@@ -498,23 +508,25 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
       const header = document.querySelector<HTMLElement>('.header-blur')
       let lastScrollY = 0
       let ticking = false
-      window.addEventListener('scroll', () => {
-        if (ticking) return
-        ticking = true
-        requestAnimationFrame(() => {
-          const y = window.scrollY
-          if (y > 120) {
-            if (y > lastScrollY) header?.classList.add('nav-hidden')
-            else header?.classList.remove('nav-hidden')
-          } else {
-            header?.classList.remove('nav-hidden')
-          }
-          lastScrollY = y
-          ticking = false
-        })
-      }, { passive: true })
-
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return
+          ticking = true
+          requestAnimationFrame(() => {
+            const y = window.scrollY
+            if (y > 120) {
+              if (y > lastScrollY) header?.classList.add('nav-hidden')
+              else header?.classList.remove('nav-hidden')
+            } else {
+              header?.classList.remove('nav-hidden')
+            }
+            lastScrollY = y
+            ticking = false
+          })
+        },
+        { passive: true }
+      )
     </script>
   </body>
 </html>
-

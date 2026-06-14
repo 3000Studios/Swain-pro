@@ -10,7 +10,7 @@ const TRACK_MAP = import.meta.glob('../audio/*.mp3', {
 
 const TRACKS: string[] = Object.values(TRACK_MAP)
 
-const VOLUME = 0.5
+const VOLUME = 0.3
 const PREF_KEY = 'swainpro-music'
 
 function randIdx(exclude: number): number {
