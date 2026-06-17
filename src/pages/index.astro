@@ -1,11 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import GalaxyBg from '../components/backgrounds/GalaxyBg'
-import HexGridBg from '../components/backgrounds/HexGridBg'
-import LavaBg from '../components/backgrounds/LavaBg'
-import MagneticBg from '../components/backgrounds/MagneticBg'
-import NeuralNetBg from '../components/backgrounds/NeuralNetBg'
-import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
 import WaveGridBg from '../components/backgrounds/WaveGridBg'
 import HeroCanvas3D from '../components/HeroCanvas3D'
 import SectionDivider from '../components/SectionDivider.astro'
@@ -43,7 +37,7 @@ const recentPosts = blogPosts.slice(0, 3)
 
     <!-- Section 1 background: interactive 3D geometric model display -->
     <HeroCanvas3D client:only="react" />
-    <SpiderWebBg client:only="react" />
+    <WaveGridBg client:only="react" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24 lg:py-36 w-full">
       <div class="max-w-3xl hero-content">
@@ -130,7 +124,7 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-light relative overflow-hidden" aria-label="About Mr. Swain">
     <!-- Section 2 background: aquarium with tsunami mouse effect -->
-    <HexGridBg client:only="react" light />
+    <WaveGridBg client:only="react" light />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -199,9 +193,8 @@ const recentPosts = blogPosts.slice(0, 3)
   <!-- ════════════════════════════════════════
        SECTION 3 · FEATURED PROJECTS  (DARK)
   ════════════════════════════════════════ -->
-  <section class="section-dark relative overflow-hidden" aria-label="Featured projects">
-    <!-- Section 3 background: magnetic particles pulled to cursor -->
-    <MagneticBg client:only="react" />
+    <!-- Section 3 background: perspective 3D wireframe grid receding to horizon -->
+    <WaveGridBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up flex items-end justify-between mb-14">
@@ -226,53 +219,151 @@ const recentPosts = blogPosts.slice(0, 3)
             style={`--delay:${i * 100}ms; --gloss-delay:${i * 1.4}s`}
             data-stagger
           >
-            <div class="flex items-start justify-between gap-4 mb-5">
-              <div>
-                <div class="flex flex-wrap gap-2 mb-2.5">
-                  <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-gold'}`}>
-                    {project.status}
-                  </span>
-                  <span class="badge badge-slate">{project.category}</span>
+            {i === 0 ? (
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
+                <div class="lg:col-span-7 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-start justify-between gap-4 mb-5">
+                      <div>
+                        <div class="flex flex-wrap gap-2 mb-2.5">
+                          <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-gold'}`}>
+                            {project.status}
+                          </span>
+                          <span class="badge badge-slate">{project.category}</span>
+                        </div>
+                        <h3 class="font-bold text-[var(--color-text)] text-2xl leading-tight">{project.name}</h3>
+                      </div>
+                      <div class="flex gap-2 shrink-0">
+                        {project.url && (
+                          <a href={project.url} target="_blank" rel="noopener noreferrer"
+                             class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                             aria-label={`Visit ${project.name}`}>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                          </a>
+                        )}
+                        {project.github && (
+                          <a href={project.github} target="_blank" rel="noopener noreferrer"
+                             class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                             aria-label={`${project.name} on GitHub`}>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <p class="text-[var(--color-dim)] leading-relaxed mb-5">{project.description}</p>
+                    <ul class="mb-5 space-y-2">
+                      {project.highlights.map(h => (
+                        <li class="flex items-start gap-2.5 text-sm text-[var(--color-dim)]">
+                          <span class="text-[var(--color-gold)] text-xs mt-0.5 shrink-0">▸</span>
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div class="flex flex-wrap gap-1.5 mt-auto">
+                    {project.tech.map(t => (
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/[0.04] border border-[var(--color-border)]">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <h3 class="font-bold text-[var(--color-text)] text-xl leading-tight">{project.name}</h3>
+                <div class="lg:col-span-5 flex flex-col justify-center">
+                  {project.screenshot && (
+                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup">
+                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+                        <span class="ml-2 font-mono text-[10px] text-[var(--color-muted)] truncate max-w-[150px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                      </div>
+                      <div class="aspect-video w-full overflow-hidden bg-black/20">
+                        <img
+                          src={project.screenshot}
+                          alt={`${project.name} screenshot`}
+                          class="w-full h-full object-cover object-top transition-transform duration-500 group-hover/mockup:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div class="flex gap-2 shrink-0">
-                {project.url && (
-                  <a href={project.url} target="_blank" rel="noopener noreferrer"
-                     class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
-                     aria-label={`Visit ${project.name}`}>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                    </svg>
-                  </a>
-                )}
-                {project.github && (
-                  <a href={project.github} target="_blank" rel="noopener noreferrer"
-                     class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
-                     aria-label={`${project.name} on GitHub`}>
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                  </a>
-                )}
+            ) : (
+              <div class="flex flex-col h-full justify-between">
+                <div>
+                  <div class="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                      <div class="flex flex-wrap gap-2 mb-2.5">
+                        <span class={`badge ${project.status === 'live' ? 'badge-emerald' : 'badge-gold'}`}>
+                          {project.status}
+                        </span>
+                        <span class="badge badge-slate">{project.category}</span>
+                      </div>
+                      <h3 class="font-bold text-[var(--color-text)] text-xl leading-tight">{project.name}</h3>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                      {project.url && (
+                        <a href={project.url} target="_blank" rel="noopener noreferrer"
+                           class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                           aria-label={`Visit ${project.name}`}>
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                          </svg>
+                        </a>
+                      )}
+                      {project.github && (
+                        <a href={project.github} target="_blank" rel="noopener noreferrer"
+                           class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+                           aria-label={`${project.name} on GitHub`}>
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  {project.screenshot && (
+                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup mb-5">
+                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
+                        <span class="w-2 h-2 rounded-full bg-[#ff5f56]"></span>
+                        <span class="w-2 h-2 rounded-full bg-[#ffbd2e]"></span>
+                        <span class="w-2 h-2 rounded-full bg-[#27c93f]"></span>
+                        <span class="ml-2 font-mono text-[9px] text-[var(--color-muted)] truncate max-w-[120px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                      </div>
+                      <div class="aspect-video w-full overflow-hidden bg-black/20">
+                        <img
+                          src={project.screenshot}
+                          alt={`${project.name} screenshot`}
+                          class="w-full h-full object-cover object-top transition-transform duration-500 group-hover/mockup:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  <p class="text-[var(--color-dim)] leading-relaxed mb-5">{project.description}</p>
+                  <ul class="mb-5 space-y-2">
+                    {project.highlights.map(h => (
+                      <li class="flex items-start gap-2.5 text-sm text-[var(--color-dim)]">
+                        <span class="text-[var(--color-gold)] text-xs mt-0.5 shrink-0">▸</span>
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="flex flex-wrap gap-1.5 mt-auto">
+                  {project.tech.map(t => (
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/[0.04] border border-[var(--color-border)]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-            <p class="text-[var(--color-dim)] leading-relaxed mb-5 flex-1">{project.longDescription}</p>
-            <ul class="mb-5 space-y-2">
-              {project.highlights.map(h => (
-                <li class="flex items-start gap-2.5 text-sm text-[var(--color-dim)]">
-                  <span class="text-[var(--color-gold)] text-xs mt-0.5 shrink-0">▸</span>
-                  {h}
-                </li>
-              ))}
-            </ul>
-            <div class="flex flex-wrap gap-1.5 mt-auto">
-              {project.tech.map(t => (
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono text-[var(--color-muted)] bg-white/[0.04] border border-[var(--color-border)]">
-                  {t}
-                </span>
-              ))}
-            </div>
+            )}
           </article>
         ))}
       </div>
@@ -369,8 +460,8 @@ const recentPosts = blogPosts.slice(0, 3)
        SECTION 5 · SKILLS  (DARK)
   ════════════════════════════════════════ -->
   <section class="section-dark relative overflow-hidden" aria-label="Technical skills">
-    <!-- Section 5 background: galaxy/nebula — stars spiral into cursor gravity -->
-    <GalaxyBg client:only="react" />
+    <!-- Section 5 background: perspective 3D wireframe grid receding to horizon -->
+    <WaveGridBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up mb-14">
@@ -458,8 +549,8 @@ const recentPosts = blogPosts.slice(0, 3)
        SECTION 6 · BLOG PREVIEW  (LIGHT)
   ════════════════════════════════════════ -->
   <section class="section-light relative overflow-hidden" aria-label="Recent blog posts">
-    <!-- Section 6 background: fluid ink spreads from cursor movement -->
-    <NeuralNetBg client:only="react" light />
+    <!-- Section 6 background: perspective 3D wireframe grid receding to horizon -->
+    <WaveGridBg client:only="react" light />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up flex items-end justify-between mb-14">
@@ -527,8 +618,8 @@ const recentPosts = blogPosts.slice(0, 3)
       <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-[var(--color-gold)] opacity-[0.03] blur-3xl"></div>
     </div>
 
-    <!-- Section 7 background: lava/fire intensifies at cursor -->
-    <LavaBg client:only="react" />
+    <!-- Section 7 background: perspective 3D wireframe grid receding to horizon -->
+    <WaveGridBg client:only="react" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-32">
       <div class="reveal-up max-w-2xl mx-auto text-center">
