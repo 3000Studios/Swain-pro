@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "deploy": "astro build && wrangler pages deploy dist --project-name swain-pro --branch main"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
