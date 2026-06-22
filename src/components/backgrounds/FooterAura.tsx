@@ -32,6 +32,7 @@ export default function FooterAura() {
       r: Math.random() * 1.3 + 0.3,
       tw: Math.random() * Math.PI * 2,
     }))
+    const bursts: { x: number; y: number; life: number; r: number }[] = []
 
     type Ember = { x: number; y: number; vy: number; r: number; life: number; max: number }
     const embers: Ember[] = []
@@ -100,10 +101,27 @@ export default function FooterAura() {
       }
       ctx.globalCompositeOperation = 'source-over'
 
+      for (let i = bursts.length - 1; i >= 0; i--) {
+        const b = bursts[i]
+        b.life -= 0.03
+        b.r += 1.7
+        if (b.life <= 0) { bursts.splice(i, 1); continue }
+        ctx.strokeStyle = `rgba(130,247,255,${b.life * 0.45})`
+        ctx.lineWidth = 1 + (1 - b.life) * 2.5
+        ctx.beginPath()
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+
       raf = requestAnimationFrame(draw)
     }
 
     const kick = () => { if (!raf && running && onScreen) raf = requestAnimationFrame(draw) }
+    const onPointerDown = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect()
+      bursts.push({ x: e.clientX - r.left, y: e.clientY - r.top, life: 1, r: 0 })
+      kick()
+    }
 
     const io = new IntersectionObserver(
       (entries) => { onScreen = entries[0]?.isIntersecting ?? false; kick() },
@@ -113,6 +131,7 @@ export default function FooterAura() {
 
     const onVis = () => { running = !document.hidden; if (running) kick(); else { cancelAnimationFrame(raf); raf = 0 } }
     document.addEventListener('visibilitychange', onVis)
+    window.addEventListener('pointerdown', onPointerDown, { passive: true })
 
     if (reduce) { onScreen = true; draw(); cancelAnimationFrame(raf); raf = 0; running = false }
     else kick()
@@ -122,6 +141,7 @@ export default function FooterAura() {
       ro.disconnect()
       io.disconnect()
       document.removeEventListener('visibilitychange', onVis)
+      window.removeEventListener('pointerdown', onPointerDown)
     }
   }, [])
 

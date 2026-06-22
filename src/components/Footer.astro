@@ -19,24 +19,22 @@ const year = new Date().getFullYear()
 import FooterAura from './backgrounds/FooterAura.tsx'
 ---
 
-<footer
-  class="relative z-10 overflow-hidden bg-[var(--color-onyx-mid)] border-t border-[var(--color-border-glow)]"
->
+<footer class="relative z-10 overflow-hidden section-dark border-t border-white/10">
   <FooterAura client:load />
   <div
     aria-hidden="true"
     class="pointer-events-none absolute bottom-0 right-4 sm:right-8 z-0 flex items-end gap-1.5 opacity-60"
   >
     <div
-      class="w-14 sm:w-16 h-10 sm:h-12 rounded-t-xl bg-gradient-to-b from-[rgba(200,169,110,0.72)] to-[rgba(104,77,31,0.12)] border border-[rgba(200,169,110,0.18)]"
+      class="w-14 sm:w-16 h-10 sm:h-12 rounded-t-xl bg-gradient-to-b from-[rgba(130,247,255,0.72)] to-[rgba(111,124,255,0.12)] border border-[rgba(130,247,255,0.18)]"
     >
     </div>
     <div
-      class="w-9 sm:w-10 h-7 sm:h-8 rounded-t-lg bg-gradient-to-b from-[rgba(160,130,70,0.55)] to-[rgba(55,43,21,0.08)] border border-[rgba(200,169,110,0.14)]"
+      class="w-9 sm:w-10 h-7 sm:h-8 rounded-t-lg bg-gradient-to-b from-[rgba(183,156,255,0.55)] to-[rgba(55,43,21,0.08)] border border-[rgba(130,247,255,0.14)]"
     >
     </div>
     <div
-      class="w-9 sm:w-10 h-7 sm:h-8 rounded-t-lg bg-gradient-to-b from-[rgba(160,130,70,0.55)] to-[rgba(55,43,21,0.08)] border border-[rgba(200,169,110,0.14)]"
+      class="w-9 sm:w-10 h-7 sm:h-8 rounded-t-lg bg-gradient-to-b from-[rgba(96,109,243,0.55)] to-[rgba(55,43,21,0.08)] border border-[rgba(130,247,255,0.14)]"
     >
     </div>
   </div>
@@ -49,7 +47,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
       <div class="lg:col-span-1">
         <a href="/" class="inline-flex items-center gap-3 mb-5 group" aria-label="Mr. Swain Home">
           <div
-            class="w-10 h-10 rounded-xl metallic gloss-sweep flex items-center justify-center font-mono font-bold text-[var(--color-gold)] text-sm border border-[var(--color-border-glow)] relative"
+          class="w-10 h-10 rounded-xl metallic gloss-sweep flex items-center justify-center font-mono font-bold text-[var(--color-gold)] text-sm border border-[var(--color-border-glow)] relative"
           >
             JS
           </div>
@@ -72,7 +70,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
             href="https://www.linkedin.com/in/mrjwswain/"
             target="_blank"
             rel="noopener noreferrer"
-            class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+          class="p-2 rounded-full border border-white/10 bg-white/[0.03] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-all hover:scale-110 active:scale-95"
             aria-label="LinkedIn profile"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -85,7 +83,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
             href="https://github.com/3000Studios"
             target="_blank"
             rel="noopener noreferrer"
-            class="p-2 rounded-lg border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-colors"
+          class="p-2 rounded-full border border-white/10 bg-white/[0.03] text-[var(--color-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-border-glow)] transition-all hover:scale-110 active:scale-95"
             aria-label="GitHub profile"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -110,7 +108,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
               <li>
                 <a
                   href={link.href}
-                  class="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors"
+                  class="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-all hover:translate-x-1"
                 >
                   {link.label}
                 </a>
@@ -133,7 +131,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
               <li>
                 <a
                   href={link.href}
-                  class="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors"
+                  class="text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-all hover:translate-x-1"
                 >
                   {link.label}
                 </a>
@@ -154,7 +152,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
           <li>
             <a
               href="tel:+14046407734"
-              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors"
+              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-all hover:translate-x-1"
             >
               <svg
                 class="w-3.5 h-3.5 shrink-0"
@@ -176,7 +174,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
           <li>
             <a
               href="mailto:Mr.Jwswain@gmail.com"
-              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors"
+              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-all hover:translate-x-1"
             >
               <svg
                 class="w-3.5 h-3.5 shrink-0"
@@ -200,7 +198,7 @@ import FooterAura from './backgrounds/FooterAura.tsx'
               href="https://www.linkedin.com/in/mrjwswain/"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors"
+              class="flex items-center gap-2.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-all hover:translate-x-1"
             >
               <svg
                 class="w-3.5 h-3.5 shrink-0"

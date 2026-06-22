@@ -42,7 +42,8 @@ export default function HeaderAura() {
 
     const mouse = { x: -9999, y: -9999, active: false }
     const trail: { x: number; y: number; life: number }[] = []
-    const onMove = (e: MouseEvent) => {
+    const bursts: { x: number; y: number; life: number; r: number }[] = []
+    const onMove = (e: PointerEvent | MouseEvent) => {
       const r = canvas.getBoundingClientRect()
       const x = e.clientX - r.left, y = e.clientY - r.top
       // react while the pointer is anywhere over the header band
@@ -52,7 +53,15 @@ export default function HeaderAura() {
         if (trail.length > 18) trail.shift()
       } else { mouse.active = false }
     }
-    window.addEventListener('mousemove', onMove)
+    const onPointerMove = (e: PointerEvent) => onMove(e)
+    const onMouseMove = (e: MouseEvent) => onMove(e)
+    const onPointerDown = (e: PointerEvent) => {
+      onMove(e)
+      bursts.push({ x: mouse.x, y: mouse.y, life: 1, r: 0 })
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('mousemove', onMouseMove, { passive: true })
+    window.addEventListener('pointerdown', onPointerDown, { passive: true })
 
     const resize0 = resize
     resize0()
@@ -117,6 +126,18 @@ export default function HeaderAura() {
       }
       while (trail.length && trail[0].life <= 0) trail.shift()
 
+      for (let i = bursts.length - 1; i >= 0; i--) {
+        const b = bursts[i]
+        b.life -= 0.035
+        b.r += 1.8
+        if (b.life <= 0) { bursts.splice(i, 1); continue }
+        ctx.strokeStyle = `rgba(130,247,255,${b.life * 0.55})`
+        ctx.lineWidth = 1 + (1 - b.life) * 2
+        ctx.beginPath()
+        ctx.arc(b.x, b.y, 8 + b.r, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+
       if (reduce) { running = false; return }
       raf = requestAnimationFrame(draw)
     }
@@ -132,7 +153,9 @@ export default function HeaderAura() {
     return () => {
       cancelAnimationFrame(raf)
       ro.disconnect()
-      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('visibilitychange', onVis)
     }
   }, [])

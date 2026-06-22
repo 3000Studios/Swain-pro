@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
 import WaveGridBg from '../components/backgrounds/WaveGridBg'
+import PlasmaBg from '../components/backgrounds/PlasmaBg'
+import GalaxyBg from '../components/backgrounds/GalaxyBg'
+import LightningBg from '../components/backgrounds/LightningBg'
+import FluidInkBg from '../components/backgrounds/FluidInkBg'
+import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
 import HeroCanvas3D from '../components/HeroCanvas3D'
 import SectionDivider from '../components/SectionDivider.astro'
 import { featuredProjects } from '../data/projects'
@@ -18,96 +23,112 @@ const recentPosts = blogPosts.slice(0, 3)
        SECTION 1 · HERO  (DARK)
   ════════════════════════════════════════ -->
   <section class="section-dark relative min-h-screen flex items-center overflow-hidden" aria-label="Hero">
-
-    <!-- AI-generated hero video background -->
-    <div class="absolute inset-0" id="hero-reel-bg" aria-hidden="true">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0.45;pointer-events:none;"
-      >
-        <source src="/videos/hero-home.mp4" type="video/mp4" />
-      </video>
-      <!-- Overlays: left-to-right fade so text reads cleanly, bottom fade into next section -->
-      <div class="absolute inset-0 bg-gradient-to-r from-[#0B0B0B] via-[rgba(11,11,11,0.72)] to-[rgba(11,11,11,0.25)] pointer-events-none"></div>
-      <div class="absolute inset-0 bg-gradient-to-b from-[rgba(11,11,11,0.5)] via-transparent to-[#0B0B0B] pointer-events-none"></div>
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-24 -left-24 w-[30rem] h-[30rem] rounded-full bg-[rgba(130,247,255,0.16)] blur-3xl"></div>
+      <div class="absolute top-10 right-0 w-[28rem] h-[28rem] rounded-full bg-[rgba(183,156,255,0.14)] blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 w-[38rem] h-[18rem] rounded-full bg-[rgba(255,111,145,0.12)] blur-3xl"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_45%)]"></div>
     </div>
 
-    <!-- Section 1 background: interactive 3D geometric model display -->
     <HeroCanvas3D client:only="react" />
     <WaveGridBg client:only="react" />
 
-    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24 lg:py-36 w-full">
-      <div class="max-w-3xl hero-content">
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28 lg:py-36 w-full">
+      <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16 items-center">
+        <div class="hero-content max-w-3xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 mb-8 backdrop-blur-xl">
+            <span class="w-2 h-2 rounded-full bg-[var(--color-emerald)] shadow-[0_0_18px_rgba(70,242,194,0.85)]" aria-hidden="true"></span>
+            <span class="font-mono text-[0.68rem] text-[var(--color-text)]/80 tracking-[0.22em] uppercase">
+              Available for AI Projects &amp; Consulting
+            </span>
+          </div>
 
-        <!-- Status badge -->
-        <div class="flex items-center gap-2.5 mb-8">
-          <span class="w-2 h-2 rounded-full bg-[var(--color-emerald)] animate-pulse" aria-hidden="true"></span>
-          <span class="font-mono text-[0.68rem] text-[var(--color-emerald)] tracking-[0.18em] uppercase">
-            Available for AI Projects &amp; Consulting
-          </span>
+          <h1 class="text-[2.8rem] sm:text-6xl lg:text-7xl xl:text-[5.8rem] font-black leading-[0.95] mb-6 tracking-tight">
+            <span class="block overflow-hidden">
+              <span class="hero-line block text-[var(--color-text)]">Sleek AI</span>
+            </span>
+            <span class="block overflow-hidden">
+              <span class="hero-line block gradient-text-animated">With Chrome</span>
+            </span>
+            <span class="block overflow-hidden">
+              <span class="hero-line block text-[var(--color-text)]">Energy.</span>
+            </span>
+          </h1>
+
+          <p class="hero-sub text-base sm:text-xl text-[var(--color-dim)] leading-relaxed mb-6 max-w-2xl">
+            Mr. Swain builds production AI systems, automation workflows, and edge-native products with a premium finish: fast, cinematic, and built to ship.
+          </p>
+
+          <div class="hero-tags flex flex-wrap gap-2 mb-8">
+            {['AI Systems', 'Automation', 'LLMs', 'Cloudflare Edge', 'Business Strategy'].map((role) => (
+              <span class="badge badge-gold">{role}</span>
+            ))}
+          </div>
+
+          <div class="hero-cta flex flex-wrap gap-3 sm:gap-4 mb-8">
+            <a href="/contact" class="btn-primary text-sm px-7 py-3.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+              Contact
+            </a>
+            <a href="/projects" class="btn-outline text-sm px-7 py-3.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+              </svg>
+              View Projects
+            </a>
+          </div>
+
+          <div class="hero-stats grid grid-cols-3 gap-3 sm:gap-4 max-w-xl">
+            {[
+              { value: '7+', label: 'Years Exp.' },
+              { value: '13+', label: 'Live Projects' },
+              { value: '14', label: 'Live Domains' },
+            ].map((stat) => (
+              <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
+                <div class="text-3xl sm:text-4xl font-black gradient-text-animated tabular-nums">{stat.value}</div>
+                <div class="text-[0.68rem] text-[var(--color-muted)] mt-1 leading-tight uppercase tracking-[0.18em]">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <!-- Headline — each line clip-wipes up -->
-        <h1 class="text-[2.6rem] sm:text-5xl lg:text-7xl xl:text-[5.5rem] font-black leading-[1.02] mb-5 sm:mb-7 tracking-tight">
-          <span class="block overflow-hidden">
-            <span class="hero-line block text-[var(--color-text)]">AI Systems</span>
-          </span>
-          <span class="block overflow-hidden">
-            <span class="hero-line block gradient-text">That Actually</span>
-          </span>
-          <span class="block overflow-hidden">
-            <span class="hero-line block text-[var(--color-text)]">Ship.</span>
-          </span>
-        </h1>
-
-        <!-- Sub text -->
-        <p class="hero-sub text-base sm:text-xl text-[var(--color-dim)] leading-relaxed mb-5 sm:mb-6 max-w-xl">
-          Mr. Swain builds scalable LLM integrations, automation workflows, intelligent agents, and full-stack AI tools that solve real business problems — and deploy to production.
-        </p>
-
-        <!-- Role tags -->
-        <div class="hero-tags flex flex-wrap gap-2 mb-6 sm:mb-10">
-          {['AI Developer', 'Automation Engineer', 'LLM Specialist', 'Python Expert', 'Business Analyst'].map(role => (
-            <span class="badge badge-gold">{role}</span>
-          ))}
-        </div>
-
-        <!-- CTAs -->
-        <div class="hero-cta flex flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-14">
-          <a href="/contact" class="btn-primary text-sm px-7 py-3.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-            Contact
-          </a>
-          <a href="/projects" class="btn-outline text-sm px-7 py-3.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-            </svg>
-            View Projects
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <div class="hero-stats grid grid-cols-3 gap-5 max-w-xs">
-          {[
-            { value: '7+', label: 'Years Exp.' },
-            { value: '13+', label: 'Live Projects' },
-            { value: '14',  label: 'Live Domains' },
-          ].map(stat => (
-            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-[var(--color-border-glow)] transition-colors">
-              <div class="text-3xl font-black gradient-text tabular-nums">{stat.value}</div>
-              <div class="text-[0.68rem] text-[var(--color-muted)] mt-1 leading-tight">{stat.label}</div>
+        <div class="relative">
+          <div class="absolute inset-0 -m-8 rounded-[2rem] bg-[radial-gradient(circle_at_30%_20%,rgba(130,247,255,0.24),transparent_30%),radial-gradient(circle_at_75%_75%,rgba(183,156,255,0.2),transparent_28%)] blur-2xl"></div>
+          <div class="relative rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 sm:p-6 backdrop-blur-2xl shadow-[0_35px_120px_rgba(0,0,0,0.35)]">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <p class="font-mono text-[0.6rem] tracking-[0.28em] text-[var(--color-muted)] uppercase">Chromatic Surface</p>
+                <p class="text-sm text-[var(--color-text)]/80 mt-1">Premium systems, tuned for conversion.</p>
+              </div>
+              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[0.6rem] tracking-[0.22em] uppercase text-[var(--color-gold)]">Live</span>
             </div>
-          ))}
+            <div class="grid gap-3">
+              <div class="rounded-2xl border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))] p-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-[var(--color-text)]/85">AI Strategy</span>
+                  <span class="font-mono text-[0.62rem] text-[var(--color-cyan)] tracking-[0.2em] uppercase">40+ patterns</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-white/8 bg-[linear-gradient(135deg,rgba(111,124,255,0.18),rgba(130,247,255,0.06))] p-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-[var(--color-text)]/85">Automation Delivery</span>
+                  <span class="font-mono text-[0.62rem] text-[var(--color-gold-light)] tracking-[0.2em] uppercase">Production grade</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(183,156,255,0.06))] p-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-[var(--color-text)]/85">Edge Deployment</span>
+                  <span class="font-mono text-[0.62rem] text-[var(--color-emerald)] tracking-[0.2em] uppercase">Cloudflare Pages</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator" aria-hidden="true">
       <span class="font-mono text-[0.58rem] text-[var(--color-muted)] tracking-[0.18em] uppercase">Scroll</span>
       <svg class="w-4 h-4 text-[var(--color-gold)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +145,7 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-light relative overflow-hidden" aria-label="About Mr. Swain">
     <!-- Section 2 background: aquarium with tsunami mouse effect -->
-    <WaveGridBg client:only="react" light />
+    <FluidInkBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
@@ -194,7 +215,7 @@ const recentPosts = blogPosts.slice(0, 3)
        SECTION 3 · FEATURED PROJECTS  (DARK)
   ════════════════════════════════════════ -->
     <!-- Section 3 background: perspective 3D wireframe grid receding to horizon -->
-    <WaveGridBg client:only="react" />
+    <GalaxyBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up flex items-end justify-between mb-14">
@@ -382,7 +403,7 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-light relative overflow-hidden" aria-label="AI demos and videos">
     <!-- Section 4 background: electric lightning arcs to cursor -->
-    <WaveGridBg client:only="react" light />
+    <LightningBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up mb-14">
@@ -461,7 +482,7 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-dark relative overflow-hidden" aria-label="Technical skills">
     <!-- Section 5 background: perspective 3D wireframe grid receding to horizon -->
-    <WaveGridBg client:only="react" />
+    <PlasmaBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up mb-14">
@@ -550,7 +571,7 @@ const recentPosts = blogPosts.slice(0, 3)
   ════════════════════════════════════════ -->
   <section class="section-light relative overflow-hidden" aria-label="Recent blog posts">
     <!-- Section 6 background: perspective 3D wireframe grid receding to horizon -->
-    <WaveGridBg client:only="react" light />
+    <SpiderWebBg client:only="react" />
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
 
       <div class="reveal-up flex items-end justify-between mb-14">
@@ -619,7 +640,7 @@ const recentPosts = blogPosts.slice(0, 3)
     </div>
 
     <!-- Section 7 background: perspective 3D wireframe grid receding to horizon -->
-    <WaveGridBg client:only="react" />
+    <FluidInkBg client:only="react" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-32">
       <div class="reveal-up max-w-2xl mx-auto text-center">
