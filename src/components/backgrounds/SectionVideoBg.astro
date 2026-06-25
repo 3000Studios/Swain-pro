@@ -1,0 +1,28 @@
+---
+interface Props {
+  src: string
+  class?: string
+  opacity?: string
+}
+
+const { src, class: className = '', opacity = '0.18' } = Astro.props as Props
+---
+
+<div
+  class={`section-video-bg ${className}`}
+  aria-hidden="true"
+  style={`--section-video-opacity:${opacity};`}
+>
+  <video
+    class="section-video-bg__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    src={src}
+  ></video>
+  <div class="section-video-bg__overlay"></div>
+  <div class="section-video-bg__glow section-video-bg__glow--a"></div>
+  <div class="section-video-bg__glow section-video-bg__glow--b"></div>
+</div>

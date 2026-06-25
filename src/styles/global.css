@@ -129,6 +129,91 @@ html {
   z-index: 1;
 }
 
+/* ── Section background video layer ────────────────── */
+.section-video-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  transform: translateZ(0);
+}
+.section-video-bg__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: var(--section-video-opacity, 0.16);
+  filter: saturate(1.15) contrast(1.06) brightness(0.72);
+  transform: scale(1.08) perspective(1200px) rotateX(4deg);
+  transition: opacity 0.5s ease;
+}
+.section-dark .section-video-bg__video {
+  mix-blend-mode: screen;
+}
+.section-light .section-video-bg__video {
+  mix-blend-mode: multiply;
+  filter: saturate(1.05) contrast(1.02) brightness(1.06);
+}
+.section-video-bg__overlay,
+.section-video-bg__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.section-video-bg__overlay {
+  background:
+    linear-gradient(180deg, rgba(5, 6, 10, 0.26), rgba(5, 6, 10, 0.58)),
+    radial-gradient(circle at 50% 20%, rgba(130, 247, 255, 0.12), transparent 42%),
+    radial-gradient(circle at 70% 80%, rgba(183, 156, 255, 0.12), transparent 35%);
+}
+.section-light .section-video-bg__overlay {
+  background:
+    linear-gradient(180deg, rgba(239, 244, 251, 0.3), rgba(223, 231, 245, 0.72)),
+    radial-gradient(circle at 50% 20%, rgba(130, 247, 255, 0.18), transparent 40%);
+}
+.section-video-bg__glow--a {
+  background: radial-gradient(circle at 18% 22%, rgba(130, 247, 255, 0.18), transparent 26%);
+  animation: bg-drift-a 16s ease-in-out infinite;
+}
+.section-video-bg__glow--b {
+  background: radial-gradient(circle at 78% 70%, rgba(183, 156, 255, 0.14), transparent 24%);
+  animation: bg-drift-b 20s ease-in-out infinite;
+}
+@keyframes bg-drift-a {
+  0%, 100% { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+  50% { transform: translate3d(1.5%, 1%, 0) scale(1.05); }
+}
+@keyframes bg-drift-b {
+  0%, 100% { transform: translate3d(1%, 1.5%, 0) scale(1.02); }
+  50% { transform: translate3d(-1%, -1.5%, 0) scale(1.06); }
+}
+.section-dark,
+.section-light {
+  isolation: isolate;
+}
+.section-dark > .relative.z-10,
+.section-light > .relative.z-10 {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .section-video-bg__video {
+    transform: scale(1.16);
+    opacity: calc(var(--section-video-opacity, 0.16) * 0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-video-bg__glow--a,
+  .section-video-bg__glow--b {
+    animation: none !important;
+  }
+}
+
 /* ── Project Flip Cards ────────────────────────────── */
 
 /*
