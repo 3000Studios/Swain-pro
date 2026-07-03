@@ -10,7 +10,7 @@
     "astro": "astro",
     "check": "astro check",
     "lint": "tsc --noEmit",
-    "deploy": "astro build && wrangler pages deploy dist --project-name swain-pro --branch main"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name swain-pro --branch=main --commit-dirty=true"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
