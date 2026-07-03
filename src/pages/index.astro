@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import WaveGridBg from '../components/backgrounds/WaveGridBg'
 import PlasmaBg from '../components/backgrounds/PlasmaBg'
 import GalaxyBg from '../components/backgrounds/GalaxyBg'
 import LightningBg from '../components/backgrounds/LightningBg'
@@ -33,7 +32,7 @@ const recentPosts = blogPosts.slice(0, 3)
     </div>
 
     <HeroCanvas3D client:only="react" />
-    <WaveGridBg client:only="react" />
+    <SpiderWebBg client:only="react" />
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28 lg:py-36 w-full">
       <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-10 lg:gap-16 items-center">
