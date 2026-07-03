@@ -1,16 +1,4 @@
 User-agent: *
 Allow: /
 
-Disallow: /admin/
-Disallow: /dashboard/
-Disallow: /account/
-Disallow: /auth/
-Disallow: /login/
-Disallow: /signup/
-Disallow: /api/
-Disallow: /billing/
-Disallow: /checkout/
-Disallow: /private/
-Disallow: /config/
-
 Sitemap: https://swain.pro/sitemap.xml

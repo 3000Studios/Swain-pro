@@ -1,13 +1,14 @@
-# Storage Fallback
+# Storage Fallback Plan — swain.pro
 
-Firebase Storage is not initialized on Spark/no-cost.
+Firebase Storage is not initialized on the no-cost Spark plan.
 
 Do not enable billing automatically.
 
-Use:
-1. repo/public for static public assets
-2. Firestore for text metadata only
-3. no uploads until storage is approved
-4. Cloudflare R2 only after separate approval
+Approved no-billing options:
+1. Store static site assets in the repo/public folder.
+2. Store text metadata in Firestore only.
+3. Disable uploads until a storage decision is approved.
+4. Prepare Cloudflare R2 only as a draft if free-tier use is acceptable and separately approved.
 
-Do not store large binary payloads in Firestore.
+Never store large binary uploads directly in Firestore.
+Never commit user-uploaded private files.

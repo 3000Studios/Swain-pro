@@ -1,28 +1,25 @@
-# Portfolio Wire-Up
+# Portfolio Wire-Up Notes
 
-Repo: swain-pro
-Domains: swain.pro
-Firebase apps: swain-pro
-Framework: Astro
-Package manager: npm
+Domain: swain.pro
+Firebase app: swain-pro
+Cloudflare type: Pages
+Known audit gap: Needs robots.txt optimization
+Niche: Professional Portfolio
 
-## Known gaps
-- swain.pro: Needs robots.txt optimization and portfolio SEO
+## Required manual dashboard checks
 
-## Manual checks
-- Cloudflare custom domain binding
-- Cloudflare production branch
-- Cloudflare env variable names
-- Firebase authorized domains
-- GA4 stream
-- Search Console property
-- AdSense status before replacing ads.txt
-- Review firestore.rules.draft before publishing
+- Confirm Cloudflare custom domain binding.
+- Confirm Pages/Worker production branch.
+- Confirm Cloudflare environment variables exist without exposing values.
+- Confirm GA4 stream exists.
+- Confirm Search Console property exists.
+- Confirm AdSense publisher line before replacing ads.txt.
+- Confirm Firebase authorized domains for Auth.
+- Confirm Firestore rules before publishing.
 
-## Forbidden without approval
-- production deploy
-- DNS changes
-- billing
-- secret rotation
-- Firebase rules publish
-- Cloudflare setting changes
+## Do not auto-run
+
+- Do not deploy production without approval.
+- Do not change DNS without approval.
+- Do not enable billing.
+- Do not publish Firebase rules without approval.

@@ -1,20 +1,17 @@
-# AGENTS.md
+# AGENTS.md — 3000Studios Project Rules
 
-## Project
-- App ID: swain-pro
-- Domain: swain.pro
-- Public deployment: Cloudflare Pages/Workers only unless separately approved.
-- Firebase role: Auth and Firestore backend support.
-- Storage: Firebase Storage disabled on Spark/no-cost.
+Project: swain.pro
+Firebase app: swain-pro
+Deployment target: Cloudflare Pages
+Primary gap from audit: Needs robots.txt optimization
 
-## Rules
-- Never expose secrets.
-- Never commit .env files.
-- Never hard-code Firebase config.
-- Never enable billing.
-- Never deploy production without explicit approval.
-- Never publish Firebase rules without explicit approval.
-- Never change DNS without explicit approval.
-- Never cache admin/auth/API/payment/private routes.
-- Public marketing/blog/gallery/pricing pages must be crawlable and indexable.
-- Admin/dashboard/auth/API/private routes must be noindex and no-store.
+Rules:
+- Do not expose secrets.
+- Read variable names only from C:\Users\Servi\.config\env\global.env.
+- Never commit .env files, API keys, service accounts, tokens, cookies, or private keys.
+- Cloudflare is the public deployment platform.
+- Firebase is used for Auth/Firestore only where useful.
+- Firebase Storage is not enabled on Spark; use Cloudflare/static asset fallback until approved.
+- Run lint/typecheck/build/security scans before final changes.
+- Keep UI mobile-first, accessible, fast, SEO-ready, and AdSense-review-ready.
+- Do not deploy production without approval.

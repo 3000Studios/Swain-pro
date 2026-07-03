@@ -15,6 +15,7 @@
   ],
   "words": [
     "AdSense",
+    "AdMob",
     "AppCheck",
     "Cloudflare",
     "Firestore",
@@ -24,6 +25,7 @@
     "Turnstile",
     "Wrangler",
     "voicetowebsite",
+    "3000studios",
     "getnexa",
     "swain",
     "calistique",
@@ -34,7 +36,9 @@
     "pageview",
     "signup",
     "signin",
+    "checkout",
     "webhook",
+    "webhooks",
     "noopener",
     "noreferrer"
   ]
