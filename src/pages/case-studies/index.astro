@@ -36,8 +36,7 @@ import { caseStudies } from '../../data/caseStudies'
       <div class="space-y-6">
         {caseStudies.map((cs, i) => (
           <article
-            class={`reveal-up card-light rounded-[var(--radius-card)] p-8 sm:p-10 ${i === 0 ? 'ring-1 ring-[var(--color-gold)] ring-opacity-30' : ''}`}
-            style={`--delay:${i * 80}ms`}
+            class={`case-study-card card-light rounded-[var(--radius-card)] p-8 sm:p-10 ${i === 0 ? 'ring-1 ring-[var(--color-gold)] ring-opacity-30' : ''}`}
           >
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div class="lg:col-span-2">

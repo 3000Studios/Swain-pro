@@ -24,6 +24,7 @@
     "three": "^0.184.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "astro": "^6.4.6",

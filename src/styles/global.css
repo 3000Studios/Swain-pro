@@ -1601,13 +1601,11 @@ h3 {
   from {
     opacity: 0;
     transform: translateY(110px) scale(0.94) perspective(1400px) rotateX(7deg);
-    filter: blur(7px);
     clip-path: inset(38% 0 0 0 round 40% 40% 0 0);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1) perspective(1400px) rotateX(0deg);
-    filter: blur(0);
     clip-path: inset(0 0 0 0 round 0);
   }
 }
@@ -1645,6 +1643,95 @@ h3 {
   }
 }
 
+/* ── Homepage card families ────────────────────────────
+   Every card collection has its own material, illuminated edge, and interaction. */
+.capability-card {
+  background: linear-gradient(145deg, #f9fcff 0%, #e6f5fb 100%);
+  border-color: rgba(20, 142, 172, 0.28);
+  box-shadow: 0 9px 22px rgba(13, 96, 124, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+.capability-card:hover,
+.capability-card:focus-within {
+  border-color: rgba(0, 181, 218, 0.75);
+  transform: translateY(-7px) rotate(-0.75deg);
+  box-shadow: 0 18px 34px rgba(0, 157, 195, 0.2), 0 0 24px rgba(70, 226, 255, 0.34), inset 0 1px 0 #fff;
+}
+
+.project-card {
+  background: linear-gradient(155deg, rgba(20, 32, 56, 0.98), rgba(9, 15, 29, 0.88));
+  border-color: rgba(183, 156, 255, 0.32);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(205, 191, 255, 0.13);
+}
+.project-card:hover,
+.project-card:focus-within {
+  border-color: rgba(196, 171, 255, 0.88);
+  transform: translateY(-8px) scale(1.012);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.46), 0 0 30px rgba(158, 111, 255, 0.36), inset 0 0 24px rgba(123, 88, 255, 0.13);
+}
+
+.demo-card {
+  background: linear-gradient(180deg, #fffdf8 0%, #f8ecdc 100%);
+  border-color: rgba(198, 127, 35, 0.3);
+  border-radius: 24px 8px 24px 8px;
+  box-shadow: 0 10px 24px rgba(131, 73, 16, 0.12), inset 0 1px 0 #fff;
+}
+.demo-card:hover,
+.demo-card:focus-within {
+  border-color: rgba(231, 142, 27, 0.82);
+  transform: translateY(-6px) rotate(0.65deg);
+  box-shadow: 0 20px 36px rgba(158, 85, 15, 0.2), 0 0 28px rgba(255, 170, 57, 0.36), inset 0 1px 0 #fff;
+}
+.demo-card:hover > :first-child,
+.demo-card:focus-within > :first-child { filter: saturate(1.22) brightness(1.12); }
+
+.demo-cta-card {
+  border: 1px solid rgba(16, 181, 148, 0.36);
+  background: linear-gradient(105deg, #e8fff8 0%, #e6f5ff 52%, #f3edff 100%);
+  box-shadow: 0 12px 30px rgba(17, 124, 109, 0.13), inset 0 1px 0 #fff;
+}
+.demo-cta-card:hover,
+.demo-cta-card:focus-within {
+  border-color: rgba(12, 195, 158, 0.85);
+  transform: translateY(-5px) skewX(-0.5deg);
+  box-shadow: 0 20px 40px rgba(12, 151, 127, 0.18), 0 0 30px rgba(67, 255, 206, 0.32), inset 0 1px 0 #fff;
+}
+
+.skills-card {
+  background: linear-gradient(155deg, rgba(8, 26, 38, 0.96), rgba(11, 18, 39, 0.94));
+  border-color: rgba(69, 224, 255, 0.28);
+  border-radius: 20px 20px 6px 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32), inset 0 2px 0 rgba(92, 240, 255, 0.14);
+}
+.skills-card:hover,
+.skills-card:focus-within {
+  border-color: rgba(85, 239, 255, 0.85);
+  transform: translateY(-8px) perspective(700px) rotateX(3deg);
+  box-shadow: 0 23px 42px rgba(0, 0, 0, 0.44), 0 0 32px rgba(43, 222, 255, 0.32), inset 0 2px 0 rgba(190, 251, 255, 0.24);
+}
+.skills-card:hover .skill-bar-fill,
+.skills-card:focus-within .skill-bar-fill { filter: brightness(1.38) drop-shadow(0 0 5px rgba(91, 239, 255, 0.82)); }
+
+.insight-card {
+  background: linear-gradient(155deg, #fff 0%, #f4eeff 100%);
+  border-color: rgba(134, 90, 203, 0.28);
+  border-radius: 8px 28px 8px 28px;
+  box-shadow: 0 10px 24px rgba(79, 41, 125, 0.1), inset 0 1px 0 #fff;
+}
+.insight-card:hover,
+.insight-card:focus-within {
+  border-color: rgba(150, 91, 238, 0.84);
+  transform: translateY(-7px) rotate(-0.55deg);
+  box-shadow: 0 20px 38px rgba(86, 48, 142, 0.18), 0 0 28px rgba(171, 105, 255, 0.3), inset 0 1px 0 #fff;
+}
+.insight-card:hover h3,
+.insight-card:focus-within h3 { color: #6c34b5; text-shadow: 0 0 18px rgba(166, 100, 255, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .capability-card:hover, .project-card:hover, .demo-card:hover, .demo-cta-card:hover, .skills-card:hover, .insight-card:hover {
+    transform: none;
+  }
+}
+
 /* ── Print ──────────────────────────────────────────── */
 @media print {
   .no-print {
@@ -1661,4 +1748,64 @@ h3 {
   a {
     color: #2563eb;
   }
+}
+
+/* ── Projects explorer ─────────────────────────────── */
+.projects-explorer { color: var(--color-text); }
+.projects-explorer__filters { display: flex; gap: 0.55rem; overflow-x: auto; padding: 0.2rem 0.15rem 0.75rem; margin-bottom: 0.55rem; scrollbar-width: thin; }
+.projects-explorer__filters button { flex: 0 0 auto; min-height: 42px; padding: 0.55rem 0.85rem; border: 1px solid rgba(130,247,255,0.18); border-radius: 999px; color: var(--color-dim); background: rgba(11,15,24,0.72); font: 700 0.7rem/1 var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 180ms ease; }
+.projects-explorer__filters button span { opacity: 0.58; margin-left: 0.25rem; }
+.projects-explorer__filters button:hover, .projects-explorer__filters button:focus-visible, .projects-explorer__filters button.is-active { color: var(--color-onyx); border-color: var(--color-gold); background: var(--color-gold); outline: none; }
+.projects-explorer__filters button:hover { transform: translateY(-2px); }
+.projects-explorer__count { margin: 0 0 1.25rem; color: var(--color-muted); font: 0.72rem/1.4 var(--font-mono); letter-spacing: 0.05em; }
+.projects-explorer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+.projects-card { --project-accent: var(--color-gold); display: flex; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid color-mix(in srgb, var(--project-accent) 38%, transparent); border-radius: 1rem; background: linear-gradient(150deg, rgba(17,24,38,0.96), rgba(5,6,10,0.98)); box-shadow: 0 16px 36px rgba(0,0,0,0.28), inset 0 1px rgba(255,255,255,0.05); transition: transform 240ms cubic-bezier(.2,.8,.2,1), border-color 240ms ease, box-shadow 240ms ease; }
+.projects-card:hover, .projects-card:focus-within { z-index: 1; border-color: var(--project-accent); box-shadow: 0 22px 46px rgba(0,0,0,0.43), 0 0 28px color-mix(in srgb, var(--project-accent) 25%, transparent); transform: translateY(-5px); }
+.projects-card__visual { position: relative; height: 11.5rem; overflow: hidden; background: radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--project-accent) 34%, transparent), transparent 42%), #0b0f18; }
+.projects-card__visual img { width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0.78; transition: transform 520ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease; }
+.projects-card:hover .projects-card__visual img, .projects-card:focus-within .projects-card__visual img { opacity: 0.96; transform: scale(1.055); }
+.projects-card__visual-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,6,10,0.04) 18%, rgba(5,6,10,0.74) 100%); pointer-events: none; }
+.projects-card__badges { position: absolute; top: 0.7rem; left: 0.7rem; right: 0.7rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.projects-card__status, .projects-card__category, .projects-card__tech span { border: 1px solid rgba(255,255,255,0.13); border-radius: 999px; background: rgba(5,6,10,0.73); backdrop-filter: blur(8px); font: 700 0.59rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.projects-card__status, .projects-card__category { padding: 0.38rem 0.5rem; }
+.projects-card__status { display: inline-flex; gap: 0.32rem; align-items: center; }
+.projects-card__status span { width: 0.35rem; height: 0.35rem; border-radius: 50%; box-shadow: 0 0 0.5rem currentColor; }
+.projects-card__category { color: var(--color-text); }
+.projects-card__body { display: flex; flex: 1; flex-direction: column; gap: 0.9rem; padding: 1rem; }
+.projects-card__year { margin: 0 0 0.3rem; color: var(--project-accent); font: 700 0.62rem/1 var(--font-mono); letter-spacing: 0.09em; }
+.projects-card h3 { margin: 0; color: var(--color-text); font-size: clamp(1.3rem, 3vw, 1.55rem); }
+.projects-card__description { display: -webkit-box; margin: 0.55rem 0 0; overflow: hidden; color: var(--color-dim); font-size: 0.82rem; line-height: 1.62; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.projects-card__details { padding-top: 0.1rem; color: var(--color-dim); font-size: 0.78rem; line-height: 1.55; }
+.projects-card__details p { margin: 0; }
+.projects-card__details ul { display: grid; gap: 0.35rem; margin: 0.7rem 0 0; padding-left: 1rem; }
+.projects-card__details li::marker { color: var(--project-accent); }
+.projects-card__tech { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: auto; }
+.projects-card__tech span { padding: 0.34rem 0.45rem; color: var(--color-dim); }
+.projects-card__actions { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; padding-top: 0.1rem; }
+.projects-card__actions a, .projects-card__details-button { min-height: 42px; padding: 0.65rem 0.78rem; border-radius: 0.52rem; font: 700 0.67rem/1 var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+.projects-card__details-button { border: 1px solid rgba(255,255,255,0.14); color: var(--color-text); background: transparent; }
+.projects-card__actions a { color: var(--color-onyx); background: var(--project-accent); }
+.projects-card__actions a:hover, .projects-card__actions a:focus-visible, .projects-card__details-button:hover, .projects-card__details-button:focus-visible { outline: 2px solid var(--project-accent); outline-offset: 2px; }
+@media (max-width: 420px) { .projects-card__actions { align-items: stretch; flex-direction: column; } .projects-card__actions a, .projects-card__details-button { width: 100%; text-align: center; } }
+@media (prefers-reduced-motion: reduce) { .projects-card, .projects-card__visual img, .projects-explorer__filters button { transition: none; } .projects-card:hover, .projects-card:focus-within, .projects-explorer__filters button:hover { transform: none; } }
+
+/* Case studies must remain readable when JavaScript or IntersectionObserver is unavailable. */
+.case-study-card {
+  position: relative;
+  opacity: 1;
+  transform: none;
+  border: 1px solid rgba(130, 247, 255, 0.16);
+  box-shadow: 0 16px 34px rgba(30, 53, 82, 0.12), inset 0 1px rgba(255, 255, 255, 0.9);
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, border-color 220ms ease;
+}
+.case-study-card:hover,
+.case-study-card:focus-within {
+  z-index: 1;
+  border-color: rgba(130, 247, 255, 0.62);
+  box-shadow: 0 22px 42px rgba(30, 53, 82, 0.2), 0 0 26px rgba(130, 247, 255, 0.18);
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-study-card { transition: none; }
+  .case-study-card:hover, .case-study-card:focus-within { transform: none; }
 }

@@ -196,7 +196,7 @@ const recentPosts = blogPosts.slice(0, 3)
             },
           ].map((item, i) => (
             <div
-              class="card-light p-4 sm:p-5 rounded-[var(--radius-card)] reveal-scale"
+              class="card-light capability-card p-4 sm:p-5 rounded-[var(--radius-card)] reveal-scale"
               style={`--delay:${i*80}ms`}
               data-stagger
             >
@@ -240,7 +240,7 @@ const recentPosts = blogPosts.slice(0, 3)
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-stagger-parent>
         {featuredProjects.map((project, i) => (
           <article
-            class={`reveal-scale card card-3d p-7 flex flex-col ${i === 0 ? 'md:col-span-2' : ''}`}
+            class={`reveal-scale card card-3d project-card p-7 flex flex-col ${i === 0 ? 'md:col-span-2' : ''}`}
             style={`--delay:${i * 100}ms; --gloss-delay:${i * 1.4}s`}
             data-stagger
           >
@@ -443,7 +443,7 @@ const recentPosts = blogPosts.slice(0, 3)
           },
         ].map((video, i) => (
           <div
-            class="reveal-scale card-light rounded-[var(--radius-card)] overflow-hidden flex flex-col"
+            class="reveal-scale card-light demo-card rounded-[var(--radius-card)] overflow-hidden flex flex-col"
             style={`--delay:${i * 110}ms`}
             data-stagger
           >
@@ -468,7 +468,7 @@ const recentPosts = blogPosts.slice(0, 3)
       </div>
 
       <div class="mt-14 reveal-up">
-        <div class="card-light p-8 sm:p-10 rounded-[var(--radius-card)] flex flex-col sm:flex-row items-center gap-8">
+        <div class="card-light demo-cta-card p-8 sm:p-10 rounded-[var(--radius-card)] flex flex-col sm:flex-row items-center gap-8">
           <div class="flex-1">
             <h3 class="font-black text-[var(--color-onyx)] text-2xl sm:text-3xl mb-3">Want a live demo?</h3>
             <p class="text-[var(--color-onyx)]/60 leading-relaxed">Book a 30-minute call and I'll show you exactly what an AI automation system can do for your specific workflow.</p>
@@ -542,7 +542,7 @@ const recentPosts = blogPosts.slice(0, 3)
           },
         ].map((cat, ci) => (
           <div
-            class="reveal-scale card card-3d p-6"
+            class="reveal-scale card card-3d skills-card p-6"
             style={`--delay:${ci * 100}ms; --gloss-delay:${ci * 1.8}s`}
             data-stagger
           >
@@ -599,7 +599,7 @@ const recentPosts = blogPosts.slice(0, 3)
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-stagger-parent>
         {recentPosts.map((post, i) => (
           <article
-            class="reveal-rotate card-light rounded-[var(--radius-card)] p-7 flex flex-col"
+            class="reveal-rotate card-light insight-card rounded-[var(--radius-card)] p-7 flex flex-col"
             style={`--delay:${i * 100}ms`}
             data-stagger
           >

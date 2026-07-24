@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * Premium footer wallpaper: layered aurora waves + rising gold embers
+ * Premium footer wallpaper: layered aurora waves + rising, interactive bubbles
  * + a faint starfield. Only animates while the footer is on screen.
  */
 export default function FooterAura() {
@@ -34,15 +34,20 @@ export default function FooterAura() {
     }))
     const bursts: { x: number; y: number; life: number; r: number }[] = []
 
-    type Ember = { x: number; y: number; vy: number; r: number; life: number; max: number }
-    const embers: Ember[] = []
-    const spawnEmber = (): Ember => ({
+    type Bubble = {
+      x: number; y: number; vx: number; vy: number; r: number; life: number; max: number; hue: number
+    }
+    const bubbles: Bubble[] = []
+    const pointer = { x: -1000, y: -1000, active: false }
+    const spawnBubble = (): Bubble => ({
       x: Math.random() * w,
-      y: h + 10,
-      vy: 0.25 + Math.random() * 0.6,
-      r: 0.6 + Math.random() * 1.8,
+      y: h + 36,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: -(0.22 + Math.random() * 0.5),
+      r: 8 + Math.random() * 22,
       life: 0,
-      max: 200 + Math.random() * 200,
+      max: 460 + Math.random() * 320,
+      hue: Math.random() > 0.55 ? 190 : 268,
     })
 
     let raf = 0, t = 0
@@ -81,23 +86,48 @@ export default function FooterAura() {
       wave(h * 0.74, 20, 160, t * 0.016 + 1.5, 'rgba(160,130,70,0.16)')
       wave(h * 0.86, 24, 200, t * 0.02 + 3, 'rgba(200,169,110,0.14)')
 
-      // embers
-      if (embers.length < 48 && t % 6 === 0) embers.push(spawnEmber())
+      // Bubbles rise from beneath the footer, react to pointer/touch, then drift out above it.
+      if (bubbles.length < 20 && t % 16 === 0) bubbles.push(spawnBubble())
       ctx.globalCompositeOperation = 'lighter'
-      for (let i = embers.length - 1; i >= 0; i--) {
-        const e = embers[i]
-        e.life += 1
-        e.y -= e.vy
-        e.x += Math.sin((e.life + e.y) * 0.02) * 0.3
-        const k = 1 - e.life / e.max
-        if (k <= 0 || e.y < -10) { embers.splice(i, 1); continue }
-        const g = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.r * 3)
-        g.addColorStop(0, `rgba(220,190,120,${0.6 * k})`)
-        g.addColorStop(1, 'rgba(220,190,120,0)')
+      for (let i = bubbles.length - 1; i >= 0; i--) {
+        const bubble = bubbles[i]
+        bubble.life += 1
+        bubble.vx += Math.sin((bubble.life + bubble.y) * 0.025) * 0.008
+        if (pointer.active) {
+          const dx = bubble.x - pointer.x
+          const dy = bubble.y - pointer.y
+          const distance = Math.hypot(dx, dy) || 1
+          const reach = bubble.r + 116
+          if (distance < reach) {
+            const force = ((reach - distance) / reach) * 0.7
+            bubble.vx += (dx / distance) * force
+            bubble.vy += (dy / distance) * force
+          }
+        }
+        bubble.vx *= 0.986
+        bubble.vy = Math.min(-0.15, bubble.vy * 0.994)
+        bubble.x += bubble.vx
+        bubble.y += bubble.vy
+        const k = Math.min(1, bubble.life / 40, (bubble.max - bubble.life) / 100)
+        if (k <= 0 || bubble.y < -bubble.r * 2) { bubbles.splice(i, 1); continue }
+        if (bubble.x < -bubble.r || bubble.x > w + bubble.r) bubble.vx *= -0.8
+        const g = ctx.createRadialGradient(
+          bubble.x - bubble.r * 0.3, bubble.y - bubble.r * 0.35, bubble.r * 0.1,
+          bubble.x, bubble.y, bubble.r
+        )
+        g.addColorStop(0, `hsla(${bubble.hue}, 100%, 92%, ${0.38 * k})`)
+        g.addColorStop(0.28, `hsla(${bubble.hue}, 88%, 68%, ${0.18 * k})`)
+        g.addColorStop(0.72, `hsla(${bubble.hue}, 90%, 58%, ${0.06 * k})`)
+        g.addColorStop(1, `hsla(${bubble.hue}, 90%, 58%, 0)`)
         ctx.fillStyle = g
         ctx.beginPath()
-        ctx.arc(e.x, e.y, e.r * 3, 0, Math.PI * 2)
+        ctx.arc(bubble.x, bubble.y, bubble.r, 0, Math.PI * 2)
         ctx.fill()
+        ctx.strokeStyle = `hsla(${bubble.hue}, 100%, 82%, ${0.34 * k})`
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.arc(bubble.x, bubble.y, bubble.r * 0.82, 0, Math.PI * 2)
+        ctx.stroke()
       }
       ctx.globalCompositeOperation = 'source-over'
 
@@ -117,11 +147,20 @@ export default function FooterAura() {
     }
 
     const kick = () => { if (!raf && running && onScreen) raf = requestAnimationFrame(draw) }
-    const onPointerDown = (e: PointerEvent) => {
+    const updatePointer = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect()
-      bursts.push({ x: e.clientX - r.left, y: e.clientY - r.top, life: 1, r: 0 })
+      pointer.x = e.clientX - r.left
+      pointer.y = e.clientY - r.top
+      pointer.active = pointer.x >= 0 && pointer.x <= r.width && pointer.y >= 0 && pointer.y <= r.height
+    }
+    const onPointerDown = (e: PointerEvent) => {
+      updatePointer(e)
+      if (!pointer.active) return
+      bursts.push({ x: pointer.x, y: pointer.y, life: 1, r: 0 })
       kick()
     }
+    const onPointerMove = (e: PointerEvent) => { updatePointer(e); kick() }
+    const onPointerLeave = (e: PointerEvent) => { updatePointer(e) }
 
     const io = new IntersectionObserver(
       (entries) => { onScreen = entries[0]?.isIntersecting ?? false; kick() },
@@ -132,6 +171,8 @@ export default function FooterAura() {
     const onVis = () => { running = !document.hidden; if (running) kick(); else { cancelAnimationFrame(raf); raf = 0 } }
     document.addEventListener('visibilitychange', onVis)
     window.addEventListener('pointerdown', onPointerDown, { passive: true })
+    window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('pointerout', onPointerLeave, { passive: true })
 
     if (reduce) { onScreen = true; draw(); cancelAnimationFrame(raf); raf = 0; running = false }
     else kick()
@@ -142,6 +183,8 @@ export default function FooterAura() {
       io.disconnect()
       document.removeEventListener('visibilitychange', onVis)
       window.removeEventListener('pointerdown', onPointerDown)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerout', onPointerLeave)
     }
   }, [])
 

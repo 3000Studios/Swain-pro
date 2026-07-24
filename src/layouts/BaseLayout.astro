@@ -452,7 +452,7 @@ const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-58009774
               entries.forEach((entry) => {
                 if (!entry.isIntersecting) return
                 showReveal(entry.target)
-                revealObs.unobserve(entry.target)
+                revealObs?.unobserve(entry.target)
               })
             }, revealOptions)
           : null
