@@ -60,7 +60,7 @@ export default function NeuralCanvas() {
       return { r, g, b }
     }
 
-    const animate = (time: number) => {
+    const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particles.forEach((p) => {

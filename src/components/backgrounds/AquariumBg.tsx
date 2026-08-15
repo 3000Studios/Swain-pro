@@ -95,8 +95,6 @@ export default function AquariumBg() {
       ctx.restore()
     }
 
-    let raf2 = 0
-
     let onScreen = true
     const draw = () => {
       if (!onScreen) { raf = 0; return }

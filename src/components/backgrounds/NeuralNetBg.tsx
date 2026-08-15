@@ -99,7 +99,6 @@ export default function NeuralNetBg({ light = false }: { light?: boolean }) {
       }
       // nodes
       for (const n of nodes) {
-        const g = light ? 30 - n.pulse * 6 : 50 + n.pulse * 45
         ctx.beginPath(); ctx.arc(n.x, n.y, n.r + n.pulse * 2.5, 0, Math.PI * 2)
         ctx.fillStyle = light
           ? `rgba(100, 116, 139, ${0.4 + n.pulse * 0.45})`

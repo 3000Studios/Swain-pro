@@ -51,7 +51,7 @@ const articleSchema = {
   publishDate={post.date}
   tags={post.tags}
 >
-  <script type="application/ld+json" slot="head" set:html={JSON.stringify(articleSchema)} />
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(articleSchema)} />
 
   <section class="section-dark relative overflow-hidden">
     <NeuralNetBg client:only="react" />
