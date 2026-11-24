@@ -30,6 +30,7 @@ export const domains: Domain[] = [
     category: 'Commerce',
     status: 'live',
     icon: '🛒',
+    screenshot: '/images/sites/3000studios.shop.webp',
   },
   {
     name: '3000studios.site',
