@@ -1,8 +1,10 @@
 ---
-// Animated "fleet" cards for every live site: holo border, pointer tilt + glare,
-// scan sweep and Ken Burns on hover (auto-activates when centered on touch screens),
-// staggered flip-in entrance and grouped category filters. Works without JS
-// (all cards visible, links work) and respects prefers-reduced-motion.
+// "Fleet" HUD cards for every live site. No fake browser windows: each card is an
+// angular holo panel with a spinning neon edge, target-lock brackets, a tracking
+// reticle, scan sweep, glitch title, 3D tilt + glare on hover (auto-activates when
+// centered on touch screens), and a click/tap that fires a shockwave and flips the
+// card to a radar "site intel" back. Category filters animate cards in and out.
+// Works without JS (front faces only, links work) and respects prefers-reduced-motion.
 import type { Domain } from '../data/domains'
 
 interface Props {
@@ -46,56 +48,94 @@ const groups = GROUPS.map((g) => ({
       </button>
     ))}
     <p class="fleet__status" aria-live="polite" data-fleet-status>Showing all {sites.length} live sites</p>
+    <p class="fleet__hint">Hover to lock on. Click or tap a card to flip it.</p>
   </div>
 
   <ul class="fleet__grid" id={`${id}-grid`} role="list">
     {sites.map((site, i) => {
       const g = groupOf(site.category)
       const host = hostOf(site.url)
+      const idx = String(i + 1).padStart(2, '0')
+      const backId = `${id}-intel-${i}`
       return (
         <li class="fleet-card" data-fleet-card data-group={g.key} style={`--hue:${g.hue}`}>
           <div class="fleet-card__frame" data-fleet-frame>
-            <div class="fleet-card__chrome">
-              <span class="fleet-card__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="fleet-card__url">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z" /></svg>
-                {host}
-              </span>
-              <span class="fleet-card__live"><span class="fleet-card__pulse" aria-hidden="true"></span>Live</span>
-            </div>
+            <span class="fleet-card__aura" aria-hidden="true"></span>
+            <span class="fleet-card__lock" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
 
-            <a class="fleet-card__shot" href={site.url} target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
-              {site.screenshot ? (
-                <img
-                  src={site.screenshot}
-                  alt=""
-                  width="1200"
-                  height="750"
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span class="fleet-card__mono">{host}</span>
-              )}
-              <span class="fleet-card__lines" aria-hidden="true"></span>
-              <span class="fleet-card__scan" aria-hidden="true"></span>
-              <span class="fleet-card__glare" aria-hidden="true"></span>
-            </a>
+            <div class="fleet-card__flip">
+              <div class="fleet-card__face fleet-card__face--front" data-face="front">
+                <div class="fleet-card__panel">
+                  <div class="fleet-card__shot" data-shot>
+                    {site.screenshot ? (
+                      <img src={site.screenshot} alt="" width="1200" height="750" loading="lazy" decoding="async" />
+                    ) : (
+                      <span class="fleet-card__mono">{host}</span>
+                    )}
+                    <span class="fleet-card__lines" aria-hidden="true"></span>
+                    <span class="fleet-card__scan" aria-hidden="true"></span>
+                    <span class="fleet-card__glare" aria-hidden="true"></span>
+                    <span class="fleet-card__reticle" aria-hidden="true"></span>
+                    <span class="fleet-card__hud fleet-card__hud--live"><span class="fleet-card__pulse" aria-hidden="true"></span>Live</span>
+                    <span class="fleet-card__hud fleet-card__hud--host">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z" /></svg>
+                      <span class="fleet-card__hud-text">{host}</span>
+                    </span>
+                  </div>
 
-            <div class="fleet-card__body">
-              <div class="fleet-card__meta">
-                <span class="fleet-card__idx">{String(i + 1).padStart(2, '0')}</span>
-                <span class="fleet-card__cat">{site.category}</span>
+                  <div class="fleet-card__body">
+                    <div class="fleet-card__meta">
+                      <span class="fleet-card__idx">{idx}</span>
+                      <span class="fleet-card__cat">{site.category}</span>
+                    </div>
+                    <h3 class="fleet-card__name">{site.name}</h3>
+                    <p class="fleet-card__desc">{site.description}</p>
+                    <div class="fleet-card__actions">
+                      <a class="fleet-card__go" href={site.url} target="_blank" rel="noopener noreferrer">
+                        Launch site
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8" /></svg>
+                        <span class="sr-only"> {site.name} (opens in a new tab)</span>
+                      </a>
+                      <button type="button" class="fleet-card__flipbtn" data-flip aria-expanded="false" aria-controls={backId}>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7" /></svg>
+                        Intel<span class="sr-only"> on {site.name}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h3 class="fleet-card__name">{site.name}</h3>
-              <p class="fleet-card__desc">{site.description}</p>
-              <a class="fleet-card__go" href={site.url} target="_blank" rel="noopener noreferrer">
-                Launch site
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8" /></svg>
-                <span class="sr-only"> {site.name} (opens in a new tab)</span>
-              </a>
+
+              <div class="fleet-card__face fleet-card__face--back" data-face="back" id={backId} inert>
+                <div class="fleet-card__panel fleet-card__panel--back">
+                  <span class="fleet-card__ghost" data-ghost aria-hidden="true"></span>
+                  <span class="fleet-card__radar" aria-hidden="true"></span>
+                  <div class="fleet-card__intel">
+                    <p class="fleet-card__intel-tag" style="--i:0">Site intel // {idx}</p>
+                    <p class="fleet-card__intel-name" style="--i:1">{site.name}</p>
+                    <dl class="fleet-card__stats" style="--i:2">
+                      <div><dt>Host</dt><dd>{host}</dd></div>
+                      <div><dt>Sector</dt><dd>{g.label}</dd></div>
+                      <div><dt>Type</dt><dd>{site.category}</dd></div>
+                      <div><dt>Status</dt><dd class="fleet-card__online"><span class="fleet-card__pulse" aria-hidden="true"></span>Online</dd></div>
+                    </dl>
+                    <p class="fleet-card__intel-desc" style="--i:3">{site.description}</p>
+                    <div class="fleet-card__actions" style="--i:4">
+                      <a class="fleet-card__go" href={site.url} target="_blank" rel="noopener noreferrer">
+                        Launch site
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8" /></svg>
+                        <span class="sr-only"> {site.name} (opens in a new tab)</span>
+                      </a>
+                      <button type="button" class="fleet-card__flipbtn" data-flip>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 6 4 12l6 6M4 12h16" /></svg>
+                        Back<span class="sr-only"> to the {site.name} card</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          <span class="fleet-card__fx" data-fx aria-hidden="true"></span>
         </li>
       )
     })}
@@ -170,8 +210,8 @@ const groups = GROUPS.map((g) => ({
   .fleet__chip[aria-pressed='false'] .fleet__chip-count {
     background: rgba(255, 255, 255, 0.07);
   }
-  .fleet__status {
-    flex-basis: 100%;
+  .fleet__status,
+  .fleet__hint {
     margin-top: 0.35rem;
     font-family: var(--font-mono);
     font-size: 0.68rem;
@@ -179,12 +219,21 @@ const groups = GROUPS.map((g) => ({
     text-transform: uppercase;
     color: var(--color-muted);
   }
+  .fleet__status {
+    flex: 1 1 auto;
+  }
+  .fleet__hint {
+    color: #82f7ff;
+  }
+  .fleet:not([data-js]) .fleet__hint {
+    display: none;
+  }
 
   /* ── Grid ── */
   .fleet__grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.6rem;
+    gap: 1.9rem;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -193,7 +242,7 @@ const groups = GROUPS.map((g) => ({
     .fleet__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (min-width: 1100px) {
-    .fleet__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.8rem; }
+    .fleet__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.1rem; }
   }
   .fleet__note {
     margin-top: 2.4rem;
@@ -204,14 +253,18 @@ const groups = GROUPS.map((g) => ({
     text-align: center;
   }
 
-  /* ── Card ── */
+  /* ── Card shell ── */
   .fleet-card {
     --hue: #82f7ff;
     --rx: 0deg;
     --ry: 0deg;
     --mx: 50%;
-    --my: 0%;
-    perspective: 1200px;
+    --my: 50%;
+    --sx: 0px;
+    --sy: 0px;
+    --cut: 18px;
+    position: relative;
+    perspective: 1300px;
     transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .fleet-card[hidden] {
@@ -220,6 +273,15 @@ const groups = GROUPS.map((g) => ({
   .fleet-card.is-out {
     opacity: 0;
     transform: scale(0.9) translateY(14px);
+  }
+  .fleet-card.is-pop {
+    animation: fc-pop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes fc-pop {
+    0% { transform: scale(1); }
+    28% { transform: scale(0.94); }
+    62% { transform: scale(1.03); }
+    100% { transform: scale(1); }
   }
   /* Entrance only when JS is running, so no-JS visitors always see the cards. */
   .fleet[data-js] .fleet-card:not(.is-in) .fleet-card__frame {
@@ -230,142 +292,174 @@ const groups = GROUPS.map((g) => ({
   .fleet-card__frame {
     position: relative;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    border-radius: 18px;
-    border: 1.5px solid transparent;
-    background:
-      linear-gradient(165deg, #0d1222 0%, #080b16 55%, #06070d 100%) padding-box,
-      conic-gradient(
-          from var(--fc-angle),
-          color-mix(in srgb, var(--hue) 85%, transparent),
-          rgba(255, 255, 255, 0.06) 22%,
-          rgba(111, 124, 255, 0.7) 45%,
-          rgba(255, 255, 255, 0.06) 68%,
-          color-mix(in srgb, var(--hue) 85%, transparent)
-        )
-        border-box;
-    box-shadow:
-      0 18px 50px -24px rgba(0, 0, 0, 0.8),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
     transform-style: preserve-3d;
     transform: rotateX(var(--rx)) rotateY(var(--ry));
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 0.7s ease,
-      box-shadow 0.45s ease;
-    transition-delay: var(--d, 0ms), var(--d, 0ms), 0ms;
-    animation: fc-spin 3.6s linear infinite paused;
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.7s ease;
+    transition-delay: var(--d, 0ms), var(--d, 0ms);
     will-change: transform;
-  }
-  .fleet-card:hover .fleet-card__frame,
-  .fleet-card:focus-within .fleet-card__frame,
-  .fleet-card.is-active .fleet-card__frame {
-    animation-play-state: running;
-    box-shadow:
-      0 30px 80px -28px color-mix(in srgb, var(--hue) 70%, transparent),
-      0 0 0 1px color-mix(in srgb, var(--hue) 25%, transparent),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
   .fleet-card:hover .fleet-card__frame {
     transition-delay: 0ms;
+  }
+
+  /* Soft colored glow that floats behind the card. */
+  .fleet-card__aura {
+    position: absolute;
+    inset: -7% -5%;
+    pointer-events: none;
+    background: radial-gradient(58% 52% at 50% 58%, color-mix(in srgb, var(--hue) 42%, transparent), transparent 72%);
+    opacity: 0;
+    transform: translateZ(-60px);
+    transition: opacity 0.5s ease;
+  }
+
+  /* Target-lock brackets that snap onto the corners. */
+  .fleet-card__lock {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transform: translateZ(40px);
+    z-index: 4;
+  }
+  .fleet-card__lock i {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 2px solid color-mix(in srgb, var(--hue) 85%, #ffffff);
+    filter: drop-shadow(0 0 6px var(--hue));
+    opacity: 0;
+    transition:
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.3s ease;
+  }
+  .fleet-card__lock i:nth-child(1) { top: -8px; left: -8px; border-right: 0; border-bottom: 0; transform: translate(-14px, -14px); }
+  .fleet-card__lock i:nth-child(2) { top: -8px; right: -8px; border-left: 0; border-bottom: 0; transform: translate(14px, -14px); }
+  .fleet-card__lock i:nth-child(3) { bottom: -8px; left: -8px; border-right: 0; border-top: 0; transform: translate(-14px, 14px); }
+  .fleet-card__lock i:nth-child(4) { bottom: -8px; right: -8px; border-left: 0; border-top: 0; transform: translate(14px, 14px); }
+
+  /* ── Flip + faces ── */
+  .fleet-card__flip {
+    position: relative;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.3, 1.4, 0.45, 1);
+  }
+  .fleet-card.is-flipped .fleet-card__flip {
+    transform: rotateY(180deg);
+  }
+  .fleet-card__face {
+    height: 100%;
+    padding: 1.5px;
+    cursor: pointer;
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+    background: conic-gradient(
+      from var(--fc-angle),
+      color-mix(in srgb, var(--hue) 90%, transparent),
+      rgba(255, 255, 255, 0.07) 22%,
+      rgba(111, 124, 255, 0.75) 45%,
+      rgba(255, 255, 255, 0.07) 68%,
+      color-mix(in srgb, var(--hue) 90%, transparent)
+    );
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    animation: fc-spin 3.4s linear infinite paused;
+  }
+  .fleet-card__face--back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+  }
+  .fleet:not([data-js]) .fleet-card__face--back {
+    display: none;
   }
   @keyframes fc-spin {
     to { --fc-angle: 360deg; }
   }
 
-  /* Browser chrome */
-  .fleet-card__chrome {
+  .fleet-card__panel {
+    position: relative;
+    height: 100%;
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01));
-    border-radius: 16px 16px 0 0;
-  }
-  .fleet-card__dots {
-    display: inline-flex;
-    gap: 0.32rem;
-  }
-  .fleet-card__dots i {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background: #ff5f6d;
-  }
-  .fleet-card__dots i:nth-child(2) { background: #ffc24b; }
-  .fleet-card__dots i:nth-child(3) { background: #3ddc84; }
-  .fleet-card__url {
-    flex: 1;
-    min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.28rem 0.65rem;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-dim);
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    white-space: nowrap;
+    flex-direction: column;
     overflow: hidden;
-    text-overflow: ellipsis;
+    clip-path: polygon(
+      calc(var(--cut) - 0.6px) 0,
+      100% 0,
+      100% calc(100% - var(--cut) + 0.6px),
+      calc(100% - var(--cut) + 0.6px) 100%,
+      0 100%,
+      0 calc(var(--cut) - 0.6px)
+    );
+    background:
+      linear-gradient(165deg, #0d1222 0%, #080b16 55%, #06070d 100%);
   }
-  .fleet-card__url svg {
-    width: 0.7rem;
-    height: 0.7rem;
-    flex: none;
-    color: #3ddc84;
-  }
-  .fleet-card__live {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #7cff5b;
-  }
-  .fleet-card__pulse {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: #7cff5b;
-    animation: fc-pulse 2s ease-out infinite;
-  }
-  @keyframes fc-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(124, 255, 91, 0.65); }
-    70%, 100% { box-shadow: 0 0 0 9px rgba(124, 255, 91, 0); }
+  /* Pointer spotlight across the whole panel. */
+  .fleet-card__panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--hue) 16%, transparent), transparent 46%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
   }
 
-  /* Screenshot */
+  /* ── Hover / focus / centered-on-touch states ── */
+  .fleet-card:hover .fleet-card__face,
+  .fleet-card:focus-within .fleet-card__face,
+  .fleet-card.is-active .fleet-card__face,
+  .fleet-card.is-flipped .fleet-card__face {
+    animation-play-state: running;
+  }
+  .fleet-card:hover .fleet-card__aura,
+  .fleet-card:focus-within .fleet-card__aura,
+  .fleet-card.is-active .fleet-card__aura,
+  .fleet-card.is-flipped .fleet-card__aura {
+    opacity: 1;
+  }
+  .fleet-card:hover .fleet-card__lock i,
+  .fleet-card:focus-within .fleet-card__lock i,
+  .fleet-card.is-active .fleet-card__lock i {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  .fleet-card:hover .fleet-card__panel::after,
+  .fleet-card.is-active .fleet-card__panel::after {
+    opacity: 1;
+  }
+
+  /* ── Screenshot ── */
   .fleet-card__shot {
     position: relative;
     display: block;
     aspect-ratio: 16 / 10;
     overflow: hidden;
+    border-bottom: 1px solid color-mix(in srgb, var(--hue) 28%, transparent);
     background:
       radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--hue) 25%, transparent), transparent 60%),
       #05060a;
-    transform: translateZ(22px);
   }
   .fleet-card__shot img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    transform: scale(1.015);
+    transform: scale(1.02);
     transform-origin: 50% 0%;
-    transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+    translate: 0 0;
     filter: saturate(1.02) contrast(1.02);
+    transition:
+      transform 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+      translate 0.35s ease-out,
+      filter 0.6s ease;
   }
   .fleet-card:hover .fleet-card__shot img,
   .fleet-card.is-active .fleet-card__shot img {
-    transform: scale(1.12) translateY(-2.5%);
-    filter: saturate(1.15) contrast(1.06);
+    transform: scale(1.13);
+    translate: calc((50% - var(--mx)) * 0.05) calc((50% - var(--my)) * 0.04);
+    filter: saturate(1.18) contrast(1.06);
   }
   .fleet-card__mono {
     position: absolute;
@@ -387,7 +481,7 @@ const groups = GROUPS.map((g) => ({
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
@@ -414,7 +508,7 @@ const groups = GROUPS.map((g) => ({
     inset: 0;
     pointer-events: none;
     background:
-      radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.32), transparent 42%),
+      radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.3), transparent 42%),
       linear-gradient(115deg, transparent 30%, color-mix(in srgb, var(--hue) 18%, transparent) 48%, transparent 66%);
     mix-blend-mode: overlay;
     opacity: 0;
@@ -436,13 +530,139 @@ const groups = GROUPS.map((g) => ({
     100% { transform: translateY(290%); }
   }
 
-  /* Body */
+  /* Tracking reticle that follows the pointer over the screenshot. */
+  .fleet-card__reticle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    width: 76px;
+    height: 76px;
+    margin: -38px 0 0 -38px;
+    pointer-events: none;
+    border-radius: 50%;
+    border: 1.5px solid color-mix(in srgb, var(--hue) 80%, #ffffff);
+    box-shadow:
+      0 0 18px color-mix(in srgb, var(--hue) 55%, transparent),
+      inset 0 0 14px color-mix(in srgb, var(--hue) 35%, transparent);
+    opacity: 0;
+    translate: var(--sx) var(--sy);
+    transform: scale(1.9) rotate(-120deg);
+    transition:
+      opacity 0.35s ease,
+      transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1),
+      translate 0.18s ease-out;
+  }
+  .fleet-card__reticle::before,
+  .fleet-card__reticle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+  }
+  .fleet-card__reticle::before {
+    width: 1.5px;
+    height: 112px;
+    margin: -56px 0 0 -0.75px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 0 16px,
+      transparent 16px 50px,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 50px 62px,
+      transparent 62px 96px,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 96px
+    );
+  }
+  .fleet-card__reticle::after {
+    width: 112px;
+    height: 1.5px;
+    margin: -0.75px 0 0 -56px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 0 16px,
+      transparent 16px 50px,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 50px 62px,
+      transparent 62px 96px,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 96px
+    );
+  }
+  .fleet-card:hover .fleet-card__reticle,
+  .fleet-card.is-active .fleet-card__reticle {
+    opacity: 0.9;
+    transform: scale(1) rotate(0deg);
+  }
+
+  /* HUD chips on the screenshot */
+  .fleet-card__hud {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.32rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    color: #e9fbff;
+    background: rgba(5, 6, 10, 0.8);
+    border: 1px solid color-mix(in srgb, var(--hue) 35%, transparent);
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+    transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+  }
+  .fleet-card__hud--host {
+    left: 0.7rem;
+    bottom: 0.7rem;
+    max-width: calc(100% - 1.4rem);
+  }
+  .fleet-card__hud--host svg {
+    flex: none;
+    width: 0.72rem;
+    height: 0.72rem;
+    color: #7cff5b;
+  }
+  .fleet-card__hud-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fleet-card__hud--live {
+    top: 0.7rem;
+    right: 0.7rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #7cff5b;
+  }
+  .fleet-card:hover .fleet-card__hud--host,
+  .fleet-card.is-active .fleet-card__hud--host {
+    color: #05060a;
+    background: color-mix(in srgb, var(--hue) 88%, #ffffff);
+    border-color: transparent;
+  }
+  .fleet-card:hover .fleet-card__hud--host svg,
+  .fleet-card.is-active .fleet-card__hud--host svg {
+    color: #05060a;
+  }
+  .fleet-card__pulse {
+    flex: none;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #7cff5b;
+    animation: fc-pulse 2s ease-out infinite;
+  }
+  @keyframes fc-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(124, 255, 91, 0.65); }
+    70%, 100% { box-shadow: 0 0 0 9px rgba(124, 255, 91, 0); }
+  }
+
+  /* ── Front body ── */
   .fleet-card__body {
     display: flex;
     flex-direction: column;
     flex: 1;
     padding: 1.05rem 1.2rem 1.25rem;
-    transform: translateZ(14px);
   }
   .fleet-card__meta {
     display: flex;
@@ -467,10 +687,10 @@ const groups = GROUPS.map((g) => ({
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--hue);
-    padding: 0.2rem 0.55rem;
-    border-radius: 999px;
+    padding: 0.22rem 0.6rem;
     border: 1px solid color-mix(in srgb, var(--hue) 40%, transparent);
     background: color-mix(in srgb, var(--hue) 9%, transparent);
+    clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
   }
   .fleet-card__name {
     font-size: 1.2rem;
@@ -480,56 +700,79 @@ const groups = GROUPS.map((g) => ({
     margin-bottom: 0.4rem;
     overflow-wrap: anywhere;
   }
+  .fleet-card:hover .fleet-card__name,
+  .fleet-card.is-active .fleet-card__name {
+    animation: fc-glitch 0.55s steps(1, end) 1;
+  }
+  @keyframes fc-glitch {
+    0% { text-shadow: 2px 0 #ff2bd6, -2px 0 #2bf0ff; transform: translate(1px, 0); }
+    14% { text-shadow: -3px 0 #ff2bd6, 3px 0 #2bf0ff; transform: translate(-2px, 1px); }
+    28% { text-shadow: 1px 0 #ff2bd6, -1px 0 #2bf0ff; transform: translate(2px, -1px); }
+    42% { text-shadow: -2px 0 #ff2bd6, 2px 0 #2bf0ff; transform: translate(-1px, 0); }
+    58% { text-shadow: 0 0 18px color-mix(in srgb, var(--hue) 70%, transparent); transform: none; }
+    100% { text-shadow: none; transform: none; }
+  }
   .fleet-card__desc {
     flex: 1;
     font-size: 0.9rem;
     line-height: 1.55;
     color: var(--color-dim);
-    opacity: 0.82;
+    opacity: 0.85;
     margin-bottom: 1rem;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .fleet-card__go {
+
+  .fleet-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .fleet-card__go,
+  .fleet-card__flipbtn {
     position: relative;
-    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
+    min-height: 40px;
     padding: 0.55rem 1rem;
-    border-radius: 10px;
+    overflow: hidden;
+    clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+    transition: transform 0.25s ease, filter 0.25s ease, background 0.25s ease, color 0.25s ease;
+  }
+  .fleet-card__go {
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     color: #05060a;
     background: linear-gradient(120deg, var(--hue), color-mix(in srgb, var(--hue) 45%, #ffffff));
-    box-shadow: 0 8px 26px -10px color-mix(in srgb, var(--hue) 80%, transparent);
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .fleet-card__go svg {
+  .fleet-card__go svg,
+  .fleet-card__flipbtn svg {
     width: 0.95rem;
     height: 0.95rem;
-    transition: transform 0.3s ease;
+    flex: none;
+    transition: transform 0.35s ease;
   }
   .fleet-card__go::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.6) 50%, transparent 70%);
     transform: translateX(-120%);
     transition: transform 0.7s ease;
   }
   .fleet-card__go:hover,
   .fleet-card__go:focus-visible {
     transform: translateY(-2px);
-    box-shadow: 0 12px 34px -10px color-mix(in srgb, var(--hue) 95%, transparent);
+    filter: brightness(1.08);
   }
   .fleet-card__go:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
+    outline: 2px solid #05060a;
+    outline-offset: -5px;
   }
   .fleet-card__go:hover svg,
   .fleet-card__go:focus-visible svg {
@@ -539,18 +782,229 @@ const groups = GROUPS.map((g) => ({
   .fleet-card.is-active .fleet-card__go::after {
     transform: translateX(120%);
   }
+  .fleet-card__flipbtn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--hue) 80%, #ffffff);
+    background: color-mix(in srgb, var(--hue) 10%, rgba(5, 6, 10, 0.6));
+    border: 1px solid color-mix(in srgb, var(--hue) 45%, transparent);
+    cursor: pointer;
+  }
+  .fleet-card__flipbtn:hover,
+  .fleet-card__flipbtn:focus-visible {
+    color: #05060a;
+    background: color-mix(in srgb, var(--hue) 85%, #ffffff);
+    transform: translateY(-2px);
+  }
+  .fleet-card__flipbtn:hover svg,
+  .fleet-card__flipbtn:focus-visible svg {
+    transform: rotate(180deg);
+  }
+  .fleet-card__flipbtn:focus-visible {
+    outline: 2px solid #05060a;
+    outline-offset: -5px;
+  }
+  .fleet:not([data-js]) .fleet-card__flipbtn {
+    display: none;
+  }
+
+  /* ── Back face: radar "site intel" ── */
+  .fleet-card__panel--back {
+    background:
+      radial-gradient(90% 70% at 85% 0%, color-mix(in srgb, var(--hue) 20%, transparent), transparent 65%),
+      linear-gradient(160deg, #0b1020 0%, #070912 60%, #05060a 100%);
+  }
+  .fleet-card__panel--back::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--hue) 10%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--hue) 10%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(circle at 50% 45%, #000 20%, transparent 78%);
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 20%, transparent 78%);
+  }
+  .fleet-card__ghost {
+    position: absolute;
+    inset: -24px;
+    pointer-events: none;
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(16px) saturate(1.3);
+    opacity: 0.2;
+  }
+  .fleet-card__radar {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 170%;
+    aspect-ratio: 1;
+    margin-left: -85%;
+    translate: 0 -50%;
+    pointer-events: none;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg 290deg,
+      color-mix(in srgb, var(--hue) 14%, transparent) 330deg,
+      color-mix(in srgb, var(--hue) 38%, transparent) 360deg
+    );
+    opacity: 0.7;
+    animation: fc-radar 3.4s linear infinite paused;
+  }
+  .fleet-card.is-flipped .fleet-card__radar {
+    animation-play-state: running;
+  }
+  @keyframes fc-radar {
+    to { transform: rotate(360deg); }
+  }
+  .fleet-card__intel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    padding: 1.35rem 1.3rem 1.25rem;
+    overflow-y: auto;
+  }
+  .fleet-card__intel-tag {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--hue) 85%, #ffffff);
+  }
+  .fleet-card__intel-name {
+    font-size: clamp(1.35rem, 2.6vw, 1.7rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #fff;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 26px color-mix(in srgb, var(--hue) 45%, transparent);
+  }
+  .fleet-card__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+  }
+  .fleet-card__stats div {
+    min-width: 0;
+    padding: 0.5rem 0.65rem;
+    background: rgba(5, 6, 10, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 2px solid var(--hue);
+  }
+  .fleet-card__stats dt {
+    font-family: var(--font-mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .fleet-card__stats dd {
+    margin: 0.15rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: #fff;
+    overflow-wrap: anywhere;
+  }
+  .fleet-card__stats dd.fleet-card__online {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #7cff5b;
+  }
+  .fleet-card__intel-desc {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-dim);
+  }
+  .fleet-card.is-flipped .fleet-card__intel > * {
+    animation: fc-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(0.28s + var(--i, 0) * 70ms);
+  }
+  @keyframes fc-rise {
+    from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+
+  /* ── Click / tap shockwave + sparks (created by the script) ── */
+  .fleet-card__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .fleet-card__fx :global(.fleet-card__ring),
+  .fleet-card__fx :global(.fleet-card__spark) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+  .fleet-card__fx :global(.fleet-card__ring) {
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--hue) 85%, #ffffff);
+    box-shadow:
+      0 0 22px var(--hue),
+      inset 0 0 14px color-mix(in srgb, var(--hue) 60%, transparent);
+    animation: fc-ring 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .fleet-card__fx :global(.fleet-card__ring--late) {
+    border-width: 1px;
+    opacity: 0;
+    animation-delay: 0.09s;
+    animation-fill-mode: both;
+  }
+  @keyframes fc-ring {
+    0% { transform: translate(var(--x), var(--y)) scale(0.2); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(9); opacity: 0; }
+  }
+  .fleet-card__fx :global(.fleet-card__spark) {
+    width: 16px;
+    height: 2px;
+    margin: -1px 0 0 0;
+    border-radius: 2px;
+    transform-origin: 0 50%;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--hue) 40%, #ffffff), var(--hue));
+    box-shadow: 0 0 10px var(--hue);
+    animation: fc-spark 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes fc-spark {
+    0% { transform: translate(var(--x), var(--y)) rotate(var(--a)) translateX(4px) scaleX(1.4); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotate(var(--a)) translateX(var(--dist)) scaleX(0.25); opacity: 0; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .fleet-card,
     .fleet-card__frame,
+    .fleet-card__flip,
     .fleet-card__shot img,
+    .fleet-card__lock i,
     .fleet-card__go,
-    .fleet-card__go::after {
+    .fleet-card__go::after,
+    .fleet-card__flipbtn {
       transition: none !important;
     }
-    .fleet-card__frame,
+    .fleet-card.is-pop,
+    .fleet-card__face,
     .fleet-card__scan,
-    .fleet-card__pulse {
+    .fleet-card__pulse,
+    .fleet-card__radar,
+    .fleet-card__name,
+    .fleet-card.is-flipped .fleet-card__intel > * {
       animation: none !important;
     }
     .fleet[data-js] .fleet-card:not(.is-in) .fleet-card__frame {
@@ -559,7 +1013,25 @@ const groups = GROUPS.map((g) => ({
     }
     .fleet-card:hover .fleet-card__shot img,
     .fleet-card.is-active .fleet-card__shot img {
-      transform: scale(1.015);
+      transform: scale(1.02);
+      translate: 0 0;
+    }
+    .fleet-card__reticle {
+      display: none;
+    }
+    /* Swap faces in place instead of spinning the card. */
+    .fleet-card.is-flipped .fleet-card__flip {
+      transform: none;
+    }
+    .fleet-card__face--back {
+      transform: none;
+      visibility: hidden;
+    }
+    .fleet-card.is-flipped .fleet-card__face--back {
+      visibility: visible;
+    }
+    .fleet-card.is-flipped .fleet-card__face--front {
+      visibility: hidden;
     }
   }
 </style>
@@ -567,11 +1039,13 @@ const groups = GROUPS.map((g) => ({
 <script>
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi)
 
   function initFleet(root: HTMLElement) {
     if (root.dataset.js) return
     root.dataset.js = 'on'
 
+    const grid = root.querySelector<HTMLElement>('.fleet__grid')
     const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-fleet-card]'))
     const status = root.querySelector<HTMLElement>('[data-fleet-status]')
     const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'))
@@ -606,10 +1080,11 @@ const groups = GROUPS.map((g) => ({
       cards.forEach((c) => center.observe(c))
     }
 
-    // Mouse: 3D tilt + glare that follows the pointer.
+    // Mouse: 3D tilt, glare, spotlight and a reticle that tracks the pointer.
     if (finePointer && !reduceMotion) {
       cards.forEach((card) => {
         const frame = card.querySelector<HTMLElement>('[data-fleet-frame]')
+        const shot = card.querySelector<HTMLElement>('[data-shot]')
         if (!frame) return
         let raf = 0
         card.addEventListener('pointermove', (ev) => {
@@ -617,21 +1092,112 @@ const groups = GROUPS.map((g) => ({
           raf = window.requestAnimationFrame(() => {
             raf = 0
             const r = frame.getBoundingClientRect()
-            const x = Math.min(Math.max((ev.clientX - r.left) / r.width, 0), 1)
-            const y = Math.min(Math.max((ev.clientY - r.top) / r.height, 0), 1)
+            const x = clamp((ev.clientX - r.left) / r.width, 0, 1)
+            const y = clamp((ev.clientY - r.top) / r.height, 0, 1)
             card.style.setProperty('--ry', `${(x - 0.5) * 14}deg`)
             card.style.setProperty('--rx', `${(0.5 - y) * 11}deg`)
             card.style.setProperty('--mx', `${x * 100}%`)
             card.style.setProperty('--my', `${y * 100}%`)
+            if (shot) {
+              const s = shot.getBoundingClientRect()
+              const hw = Math.max(s.width / 2 - 44, 0)
+              const hh = Math.max(s.height / 2 - 44, 0)
+              card.style.setProperty('--sx', `${clamp(ev.clientX - (s.left + s.width / 2), -hw, hw)}px`)
+              card.style.setProperty('--sy', `${clamp(ev.clientY - (s.top + s.height / 2), -hh, hh)}px`)
+            }
           })
         })
         card.addEventListener('pointerleave', () => {
           if (raf) window.cancelAnimationFrame(raf)
           raf = 0
-          ;['--rx', '--ry', '--mx', '--my'].forEach((p) => card.style.removeProperty(p))
+          ;['--rx', '--ry', '--mx', '--my', '--sx', '--sy'].forEach((p) => card.style.removeProperty(p))
         })
       })
     }
+
+    // Click / tap: shockwave + sparks from the exact spot.
+    const burst = (card: HTMLElement, ev: MouseEvent) => {
+      if (reduceMotion) return
+      const fx = card.querySelector<HTMLElement>('[data-fx]')
+      if (!fx) return
+      const r = card.getBoundingClientRect()
+      const fromKeyboard = ev.detail === 0
+      const x = fromKeyboard ? r.width / 2 : clamp(ev.clientX - r.left, 0, r.width)
+      const y = fromKeyboard ? r.height / 2 : clamp(ev.clientY - r.top, 0, r.height)
+      const made: HTMLElement[] = []
+      const add = (cls: string, vars: Record<string, string>) => {
+        const el = document.createElement('span')
+        el.className = cls
+        Object.entries(vars).forEach(([k, v]) => el.style.setProperty(k, v))
+        fx.append(el)
+        made.push(el)
+      }
+      const pos = { '--x': `${x}px`, '--y': `${y}px` }
+      add('fleet-card__ring', pos)
+      add('fleet-card__ring fleet-card__ring--late', pos)
+      const n = 14
+      for (let k = 0; k < n; k++) {
+        const a = (360 / n) * k + Math.random() * 18
+        add('fleet-card__spark', { ...pos, '--a': `${a}deg`, '--dist': `${70 + Math.random() * 80}px` })
+      }
+      window.setTimeout(() => made.forEach((el) => el.remove()), 950)
+    }
+
+    const faceOf = (card: HTMLElement, side: 'front' | 'back') => card.querySelector<HTMLElement>(`[data-face="${side}"]`)
+
+    const setFlipped = (card: HTMLElement, on: boolean) => {
+      if (card.classList.contains('is-flipped') === on) return
+      const front = faceOf(card, 'front')
+      const back = faceOf(card, 'back')
+      if (!front || !back) return
+      const hiding = on ? front : back
+      const showing = on ? back : front
+      const hadFocus = hiding.contains(document.activeElement)
+
+      card.classList.toggle('is-flipped', on)
+      showing.inert = false
+      hiding.inert = true
+      front.querySelector('[data-flip]')?.setAttribute('aria-expanded', String(on))
+
+      // Blurred screenshot behind the intel panel, loaded only on the first flip.
+      if (on) {
+        const ghost = back.querySelector<HTMLElement>('[data-ghost]')
+        const img = front.querySelector<HTMLImageElement>('img')
+        if (ghost && img && !ghost.style.backgroundImage) {
+          ghost.style.backgroundImage = `url("${img.currentSrc || img.src}")`
+        }
+      }
+
+      if (!reduceMotion) {
+        card.classList.remove('is-pop')
+        void card.offsetWidth
+        card.classList.add('is-pop')
+      }
+      if (hadFocus) showing.querySelector<HTMLElement>('[data-flip]')?.focus({ preventScroll: true })
+    }
+
+    cards.forEach((card) =>
+      card.addEventListener('animationend', (e) => {
+        if (e.target === card) card.classList.remove('is-pop')
+      }),
+    )
+
+    grid?.addEventListener('click', (ev) => {
+      const target = ev.target as Element | null
+      const card = target?.closest<HTMLElement>('[data-fleet-card]')
+      if (!target || !card) return
+      if (target.closest('a')) return // Launch links just open the site.
+      const isButton = !!target.closest('[data-flip]')
+      if (!isButton && window.getSelection()?.toString()) return // let people select text
+      setFlipped(card, !card.classList.contains('is-flipped'))
+      burst(card, ev)
+    })
+
+    root.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Escape') return
+      const card = (ev.target as Element | null)?.closest<HTMLElement>('[data-fleet-card].is-flipped')
+      if (card) setFlipped(card, false)
+    })
 
     // Category filters with animated show/hide.
     const timers = new WeakMap<HTMLElement, number>()
@@ -646,11 +1212,14 @@ const groups = GROUPS.map((g) => ({
           card.hidden = false
           card.classList.add('is-in')
           window.requestAnimationFrame(() => card.classList.remove('is-out'))
-        } else if (reduceMotion) {
-          card.hidden = true
         } else {
-          card.classList.add('is-out')
-          timers.set(card, window.setTimeout(() => (card.hidden = true), 320))
+          setFlipped(card, false)
+          if (reduceMotion) {
+            card.hidden = true
+          } else {
+            card.classList.add('is-out')
+            timers.set(card, window.setTimeout(() => (card.hidden = true), 320))
+          }
         }
       })
       if (status) {

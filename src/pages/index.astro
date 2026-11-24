@@ -313,12 +313,10 @@ const recentPosts = blogPosts.slice(0, 3)
                 </div>
                 <div class="lg:col-span-5 flex flex-col justify-center">
                   {project.screenshot && (
-                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup">
-                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
-                        <span class="ml-2 font-mono text-[10px] text-[var(--color-muted)] truncate max-w-[150px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                    <div class="hud-shot relative overflow-hidden shadow-2xl bg-black/40 group/mockup">
+                      <div class="hud-bar">
+                        <span class={`hud-bar__state${project.status === 'live' ? '' : ' hud-bar__state--dev'}`}><span class="hud-bar__dot" aria-hidden="true"></span>{project.status}</span>
+                        <span class="hud-bar__host truncate max-w-[220px]">{project.url ? project.url.replace('https://', '').replace(/\/$/, '') : 'in development'}</span>
                       </div>
                       <div class="aspect-video w-full overflow-hidden bg-black/20">
                         <img
@@ -367,12 +365,10 @@ const recentPosts = blogPosts.slice(0, 3)
                     </div>
                   </div>
                   {project.screenshot && (
-                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup mb-5">
-                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
-                        <span class="w-2 h-2 rounded-full bg-[#ff5f56]"></span>
-                        <span class="w-2 h-2 rounded-full bg-[#ffbd2e]"></span>
-                        <span class="w-2 h-2 rounded-full bg-[#27c93f]"></span>
-                        <span class="ml-2 font-mono text-[9px] text-[var(--color-muted)] truncate max-w-[120px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                    <div class="hud-shot relative overflow-hidden shadow-2xl bg-black/40 group/mockup mb-5">
+                      <div class="hud-bar">
+                        <span class={`hud-bar__state${project.status === 'live' ? '' : ' hud-bar__state--dev'}`}><span class="hud-bar__dot" aria-hidden="true"></span>{project.status}</span>
+                        <span class="hud-bar__host truncate max-w-[180px]">{project.url ? project.url.replace('https://', '').replace(/\/$/, '') : 'in development'}</span>
                       </div>
                       <div class="aspect-video w-full overflow-hidden bg-black/20">
                         <img

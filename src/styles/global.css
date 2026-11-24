@@ -1854,3 +1854,17 @@ h3 {
   box-shadow: 0 30px 80px -40px rgba(130, 247, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
 }
+
+/* Featured project screenshot frames: angular HUD panel with a status bar
+   and a scan sweep on hover (replaces the old fake browser-window dots). */
+.hud-shot { position: relative; border: 1px solid transparent; background: linear-gradient(#070912, #070912) padding-box, linear-gradient(135deg, rgba(130,247,255,0.75), rgba(255,255,255,0.06) 40%, rgba(111,124,255,0.7) 75%, rgba(255,210,122,0.6)) border-box; clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px); }
+.hud-shot::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 35%; pointer-events: none; background: linear-gradient(180deg, transparent, rgba(130,247,255,0.16) 70%, rgba(200,255,255,0.7) 98%, transparent); mix-blend-mode: screen; opacity: 0; transform: translateY(-110%); }
+.hud-shot:hover::after { opacity: 1; animation: hud-scan 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+@keyframes hud-scan { from { transform: translateY(-110%); } to { transform: translateY(300%); } }
+.hud-bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.9rem 0.55rem 1.25rem; font: 700 10px/1.2 var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-muted); background: linear-gradient(90deg, rgba(130,247,255,0.09), transparent 70%); border-bottom: 1px solid rgba(130,247,255,0.16); }
+.hud-bar__state { display: inline-flex; align-items: center; gap: 0.4rem; color: #7cff5b; }
+.hud-bar__state--dev { color: var(--color-amber); }
+.hud-bar__dot { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; animation: hud-ping 2s ease-out infinite; }
+@keyframes hud-ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+.hud-bar__host { margin-left: auto; font-weight: 400; text-transform: none; letter-spacing: 0.04em; }
+@media (prefers-reduced-motion: reduce) { .hud-shot::after { display: none; } .hud-bar__dot { animation: none; } }
