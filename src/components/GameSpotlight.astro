@@ -32,8 +32,10 @@ const stack = ['Android', 'Kotlin', 'Firebase', 'Cloudflare Workers', 'Google Pl
           Now live on Google Play
         </p>
 
-        <h2 id="game-spot-title" class="game-spot__title" data-text="Aeropocalypse">
+        <h2 id="game-spot-title" class="game-spot__title">
           Aeropocalypse
+          <span class="game-spot__glitch game-spot__glitch--a" aria-hidden="true">Aeropocalypse</span>
+          <span class="game-spot__glitch game-spot__glitch--b" aria-hidden="true">Aeropocalypse</span>
           <span class="game-spot__title-sub">Online</span>
         </h2>
 
@@ -246,23 +248,24 @@ const stack = ['Android', 'Kotlin', 'Firebase', 'Cloudflare Workers', 'Google Pl
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
-  .game-spot__title::before,
-  .game-spot__title::after {
-    content: attr(data-text);
+  /* Glitch layers are real spans marked aria-hidden, so screen readers and
+     the section's accessible name read "Aeropocalypse Online" once. */
+  .game-spot__glitch {
     position: absolute;
     left: 0;
     top: 0;
     pointer-events: none;
+    user-select: none;
     opacity: 0;
     -webkit-text-fill-color: currentColor;
   }
-  .game-spot__title::before { color: var(--gs-cyan); }
-  .game-spot__title::after { color: #ff3a7a; }
-  .game-spot__title:hover::before {
+  .game-spot__glitch--a { color: var(--gs-cyan); }
+  .game-spot__glitch--b { color: #ff3a7a; }
+  .game-spot__title:hover .game-spot__glitch--a {
     opacity: 0.7;
     animation: gs-glitch 0.9s steps(2) infinite;
   }
-  .game-spot__title:hover::after {
+  .game-spot__title:hover .game-spot__glitch--b {
     opacity: 0.6;
     animation: gs-glitch 0.7s steps(2) infinite reverse;
   }
@@ -556,6 +559,9 @@ const stack = ['Android', 'Kotlin', 'Firebase', 'Cloudflare Workers', 'Google Pl
     .game-spot__badge,
     .game-spot__pulse {
       animation: none !important;
+    }
+    .game-spot__glitch {
+      display: none;
     }
   }
 </style>
