@@ -1809,3 +1809,48 @@ h3 {
   .case-study-card { transition: none; }
   .case-study-card:hover, .case-study-card:focus-within { transform: none; }
 }
+
+/* ── Fleet section backdrop (home + /domains) ── */
+.fleet-section {
+  border-top: 1px solid rgba(130, 247, 255, 0.12);
+}
+.fleet-section__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 15% 0%, rgba(130, 247, 255, 0.12), transparent 70%),
+    radial-gradient(55% 40% at 90% 30%, rgba(183, 156, 255, 0.13), transparent 70%),
+    radial-gradient(50% 40% at 40% 100%, rgba(124, 255, 91, 0.08), transparent 70%),
+    linear-gradient(180deg, #05060a 0%, #070914 50%, #05060a 100%);
+}
+.fleet-section__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(130, 247, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(130, 247, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%);
+  animation: fleet-grid-drift 18s linear infinite;
+}
+@keyframes fleet-grid-drift {
+  to {
+    background-position: 64px 64px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fleet-section__bg::before {
+    animation: none;
+  }
+}
+.fleet-stats {
+  border: 1px solid rgba(130, 247, 255, 0.18);
+  background:
+    linear-gradient(160deg, rgba(130, 247, 255, 0.07), rgba(183, 156, 255, 0.05) 60%, rgba(124, 255, 91, 0.04)),
+    rgba(8, 11, 22, 0.8);
+  box-shadow: 0 30px 80px -40px rgba(130, 247, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+}

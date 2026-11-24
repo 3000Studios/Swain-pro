@@ -9,9 +9,10 @@ export interface Domain {
   screenshot?: string
 }
 
-// Reconciled 2026-11-16 against the fresh domain inventory (34 live sites, verified 2026-11-16).
-// Screenshots are fresh captures from 2026-11-16, optimized to WebP. 3000studios.shop is live
-// (Shopify /password by design) but has no screenshot — headless capture timed out; no image is faked.
+// Re-checked 2026-11-24: every site below was opened live in a browser and re-screenshotted
+// (1200x750 WebP in /public/images/sites). Sites that no longer load are removed, not faked.
+export const FLEET_CAPTURED = 'November 24, 2026'
+
 export const domains: Domain[] = [
   {
     name: 'Swain.pro',

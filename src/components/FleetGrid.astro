@@ -1,0 +1,670 @@
+---
+// Animated "fleet" cards for every live site: holo border, pointer tilt + glare,
+// scan sweep and Ken Burns on hover (auto-activates when centered on touch screens),
+// staggered flip-in entrance and grouped category filters. Works without JS
+// (all cards visible, links work) and respects prefers-reduced-motion.
+import type { Domain } from '../data/domains'
+
+interface Props {
+  sites: Domain[]
+  /** Human date the screenshots were captured, e.g. "November 24, 2026". */
+  capturedLabel: string
+  /** Unique id for this grid instance (used for aria wiring). */
+  id?: string
+}
+
+const { sites, capturedLabel, id = 'fleet' } = Astro.props
+
+const GROUPS = [
+  { key: 'studio', label: 'Studio & Games', cats: ['Studio', 'Gaming', 'Music'], hue: '#7cff5b' },
+  { key: 'ai', label: 'AI & SaaS', cats: ['AI SaaS', 'AI Tools', 'Growth Tools'], hue: '#82f7ff' },
+  { key: 'commerce', label: 'Commerce & Money', cats: ['Commerce', 'FinTech'], hue: '#ffd27a' },
+  { key: 'local', label: 'Local & Services', cats: ['Local Business', 'Services', 'Civic Tech'], hue: '#46f2c2' },
+  { key: 'content', label: 'Content & Fun', cats: ['Content', 'Community', 'Novelty'], hue: '#ff6f91' },
+  { key: 'personal', label: 'Personal & Family', cats: ['Portfolio', 'Family'], hue: '#b79cff' },
+] as const
+
+type Group = (typeof GROUPS)[number]
+const groupOf = (category: string): Group => GROUPS.find((g) => (g.cats as readonly string[]).includes(category)) ?? GROUPS[1]
+const hostOf = (url: string) => new URL(url).host.replace(/^www\./, '')
+
+const groups = GROUPS.map((g) => ({
+  ...g,
+  count: sites.filter((s) => groupOf(s.category).key === g.key).length,
+})).filter((g) => g.count > 0)
+---
+
+<div class="fleet" data-fleet id={id}>
+  <div class="fleet__bar" role="toolbar" aria-label="Filter sites by type" aria-controls={`${id}-grid`}>
+    <button type="button" class="fleet__chip" data-filter="all" data-label="All" aria-pressed="true" style="--hue:#e9fbff">
+      All <span class="fleet__chip-count">{sites.length}</span>
+    </button>
+    {groups.map((g) => (
+      <button type="button" class="fleet__chip" data-filter={g.key} data-label={g.label} aria-pressed="false" style={`--hue:${g.hue}`}>
+        <span class="fleet__chip-dot" aria-hidden="true"></span>
+        {g.label} <span class="fleet__chip-count">{g.count}</span>
+      </button>
+    ))}
+    <p class="fleet__status" aria-live="polite" data-fleet-status>Showing all {sites.length} live sites</p>
+  </div>
+
+  <ul class="fleet__grid" id={`${id}-grid`} role="list">
+    {sites.map((site, i) => {
+      const g = groupOf(site.category)
+      const host = hostOf(site.url)
+      return (
+        <li class="fleet-card" data-fleet-card data-group={g.key} style={`--hue:${g.hue}`}>
+          <div class="fleet-card__frame" data-fleet-frame>
+            <div class="fleet-card__chrome">
+              <span class="fleet-card__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="fleet-card__url">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z" /></svg>
+                {host}
+              </span>
+              <span class="fleet-card__live"><span class="fleet-card__pulse" aria-hidden="true"></span>Live</span>
+            </div>
+
+            <a class="fleet-card__shot" href={site.url} target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              {site.screenshot ? (
+                <img
+                  src={site.screenshot}
+                  alt=""
+                  width="1200"
+                  height="750"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span class="fleet-card__mono">{host}</span>
+              )}
+              <span class="fleet-card__lines" aria-hidden="true"></span>
+              <span class="fleet-card__scan" aria-hidden="true"></span>
+              <span class="fleet-card__glare" aria-hidden="true"></span>
+            </a>
+
+            <div class="fleet-card__body">
+              <div class="fleet-card__meta">
+                <span class="fleet-card__idx">{String(i + 1).padStart(2, '0')}</span>
+                <span class="fleet-card__cat">{site.category}</span>
+              </div>
+              <h3 class="fleet-card__name">{site.name}</h3>
+              <p class="fleet-card__desc">{site.description}</p>
+              <a class="fleet-card__go" href={site.url} target="_blank" rel="noopener noreferrer">
+                Launch site
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8" /></svg>
+                <span class="sr-only"> {site.name} (opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+        </li>
+      )
+    })}
+  </ul>
+
+  <p class="fleet__note">Every site above was opened and screenshotted live on {capturedLabel}.</p>
+</div>
+
+<style>
+  @property --fc-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  /* ── Filter bar ── */
+  .fleet__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 2.25rem;
+  }
+  .fleet__chip {
+    --hue: #82f7ff;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-dim);
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: color 0.25s, background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  }
+  .fleet__chip:hover {
+    color: #fff;
+    border-color: color-mix(in srgb, var(--hue) 55%, transparent);
+    transform: translateY(-1px);
+  }
+  .fleet__chip:focus-visible {
+    outline: 2px solid var(--hue);
+    outline-offset: 2px;
+  }
+  .fleet__chip[aria-pressed='true'] {
+    color: #05060a;
+    background: linear-gradient(120deg, var(--hue), color-mix(in srgb, var(--hue) 55%, #ffffff));
+    border-color: transparent;
+    box-shadow: 0 0 24px color-mix(in srgb, var(--hue) 45%, transparent);
+  }
+  .fleet__chip-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--hue);
+    box-shadow: 0 0 10px var(--hue);
+  }
+  .fleet__chip[aria-pressed='true'] .fleet__chip-dot {
+    background: #05060a;
+    box-shadow: none;
+  }
+  .fleet__chip-count {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.28);
+  }
+  .fleet__chip[aria-pressed='false'] .fleet__chip-count {
+    background: rgba(255, 255, 255, 0.07);
+  }
+  .fleet__status {
+    flex-basis: 100%;
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* ── Grid ── */
+  .fleet__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .fleet__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1100px) {
+    .fleet__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.8rem; }
+  }
+  .fleet__note {
+    margin-top: 2.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  /* ── Card ── */
+  .fleet-card {
+    --hue: #82f7ff;
+    --rx: 0deg;
+    --ry: 0deg;
+    --mx: 50%;
+    --my: 0%;
+    perspective: 1200px;
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fleet-card[hidden] {
+    display: none !important;
+  }
+  .fleet-card.is-out {
+    opacity: 0;
+    transform: scale(0.9) translateY(14px);
+  }
+  /* Entrance only when JS is running, so no-JS visitors always see the cards. */
+  .fleet[data-js] .fleet-card:not(.is-in) .fleet-card__frame {
+    opacity: 0;
+    transform: translateY(46px) rotateX(18deg) scale(0.96);
+  }
+
+  .fleet-card__frame {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 18px;
+    border: 1.5px solid transparent;
+    background:
+      linear-gradient(165deg, #0d1222 0%, #080b16 55%, #06070d 100%) padding-box,
+      conic-gradient(
+          from var(--fc-angle),
+          color-mix(in srgb, var(--hue) 85%, transparent),
+          rgba(255, 255, 255, 0.06) 22%,
+          rgba(111, 124, 255, 0.7) 45%,
+          rgba(255, 255, 255, 0.06) 68%,
+          color-mix(in srgb, var(--hue) 85%, transparent)
+        )
+        border-box;
+    box-shadow:
+      0 18px 50px -24px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.7s ease,
+      box-shadow 0.45s ease;
+    transition-delay: var(--d, 0ms), var(--d, 0ms), 0ms;
+    animation: fc-spin 3.6s linear infinite paused;
+    will-change: transform;
+  }
+  .fleet-card:hover .fleet-card__frame,
+  .fleet-card:focus-within .fleet-card__frame,
+  .fleet-card.is-active .fleet-card__frame {
+    animation-play-state: running;
+    box-shadow:
+      0 30px 80px -28px color-mix(in srgb, var(--hue) 70%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--hue) 25%, transparent),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .fleet-card:hover .fleet-card__frame {
+    transition-delay: 0ms;
+  }
+  @keyframes fc-spin {
+    to { --fc-angle: 360deg; }
+  }
+
+  /* Browser chrome */
+  .fleet-card__chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01));
+    border-radius: 16px 16px 0 0;
+  }
+  .fleet-card__dots {
+    display: inline-flex;
+    gap: 0.32rem;
+  }
+  .fleet-card__dots i {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #ff5f6d;
+  }
+  .fleet-card__dots i:nth-child(2) { background: #ffc24b; }
+  .fleet-card__dots i:nth-child(3) { background: #3ddc84; }
+  .fleet-card__url {
+    flex: 1;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.65rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-dim);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fleet-card__url svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    flex: none;
+    color: #3ddc84;
+  }
+  .fleet-card__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #7cff5b;
+  }
+  .fleet-card__pulse {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #7cff5b;
+    animation: fc-pulse 2s ease-out infinite;
+  }
+  @keyframes fc-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(124, 255, 91, 0.65); }
+    70%, 100% { box-shadow: 0 0 0 9px rgba(124, 255, 91, 0); }
+  }
+
+  /* Screenshot */
+  .fleet-card__shot {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--hue) 25%, transparent), transparent 60%),
+      #05060a;
+    transform: translateZ(22px);
+  }
+  .fleet-card__shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transform: scale(1.015);
+    transform-origin: 50% 0%;
+    transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+    filter: saturate(1.02) contrast(1.02);
+  }
+  .fleet-card:hover .fleet-card__shot img,
+  .fleet-card.is-active .fleet-card__shot img {
+    transform: scale(1.12) translateY(-2.5%);
+    filter: saturate(1.15) contrast(1.06);
+  }
+  .fleet-card__mono {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(1rem, 3.2vw, 1.35rem);
+    color: #fff;
+    text-shadow: 0 0 22px var(--hue);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .fleet-card__lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .fleet-card__scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 38%;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--hue) 22%, transparent) 70%,
+      color-mix(in srgb, var(--hue) 85%, #ffffff) 98%,
+      transparent 100%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform: translateY(-110%);
+  }
+  .fleet-card__glare {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.32), transparent 42%),
+      linear-gradient(115deg, transparent 30%, color-mix(in srgb, var(--hue) 18%, transparent) 48%, transparent 66%);
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .fleet-card:hover .fleet-card__lines,
+  .fleet-card.is-active .fleet-card__lines,
+  .fleet-card:hover .fleet-card__glare,
+  .fleet-card.is-active .fleet-card__glare {
+    opacity: 1;
+  }
+  .fleet-card:hover .fleet-card__scan,
+  .fleet-card.is-active .fleet-card__scan {
+    opacity: 1;
+    animation: fc-scan 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  @keyframes fc-scan {
+    0% { transform: translateY(-110%); }
+    100% { transform: translateY(290%); }
+  }
+
+  /* Body */
+  .fleet-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.05rem 1.2rem 1.25rem;
+    transform: translateZ(14px);
+  }
+  .fleet-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+  .fleet-card__idx {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    background: linear-gradient(120deg, #ffffff, var(--hue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .fleet-card__cat {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--hue);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--hue) 40%, transparent);
+    background: color-mix(in srgb, var(--hue) 9%, transparent);
+  }
+  .fleet-card__name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    overflow-wrap: anywhere;
+  }
+  .fleet-card__desc {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--color-dim);
+    opacity: 0.82;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .fleet-card__go {
+    position: relative;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #05060a;
+    background: linear-gradient(120deg, var(--hue), color-mix(in srgb, var(--hue) 45%, #ffffff));
+    box-shadow: 0 8px 26px -10px color-mix(in srgb, var(--hue) 80%, transparent);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .fleet-card__go svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    transition: transform 0.3s ease;
+  }
+  .fleet-card__go::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+  }
+  .fleet-card__go:hover,
+  .fleet-card__go:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px -10px color-mix(in srgb, var(--hue) 95%, transparent);
+  }
+  .fleet-card__go:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  .fleet-card__go:hover svg,
+  .fleet-card__go:focus-visible svg {
+    transform: translate(2px, -2px);
+  }
+  .fleet-card:hover .fleet-card__go::after,
+  .fleet-card.is-active .fleet-card__go::after {
+    transform: translateX(120%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fleet-card,
+    .fleet-card__frame,
+    .fleet-card__shot img,
+    .fleet-card__go,
+    .fleet-card__go::after {
+      transition: none !important;
+    }
+    .fleet-card__frame,
+    .fleet-card__scan,
+    .fleet-card__pulse {
+      animation: none !important;
+    }
+    .fleet[data-js] .fleet-card:not(.is-in) .fleet-card__frame {
+      opacity: 1;
+      transform: none;
+    }
+    .fleet-card:hover .fleet-card__shot img,
+    .fleet-card.is-active .fleet-card__shot img {
+      transform: scale(1.015);
+    }
+  }
+</style>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+
+  function initFleet(root: HTMLElement) {
+    if (root.dataset.js) return
+    root.dataset.js = 'on'
+
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-fleet-card]'))
+    const status = root.querySelector<HTMLElement>('[data-fleet-status]')
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'))
+
+    // Staggered flip-in as each batch of cards scrolls into view.
+    if ('IntersectionObserver' in window && !reduceMotion) {
+      const enter = new IntersectionObserver(
+        (entries) => {
+          entries
+            .filter((e) => e.isIntersecting)
+            .forEach((e, n) => {
+              const el = e.target as HTMLElement
+              el.style.setProperty('--d', `${n * 85}ms`)
+              el.classList.add('is-in')
+              enter.unobserve(el)
+              window.setTimeout(() => el.style.removeProperty('--d'), 900 + n * 85)
+            })
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+      )
+      cards.forEach((c) => enter.observe(c))
+    } else {
+      cards.forEach((c) => c.classList.add('is-in'))
+    }
+
+    // Touch screens: light up the card that sits in the middle of the screen.
+    if (!finePointer && 'IntersectionObserver' in window) {
+      const center = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.target.classList.toggle('is-active', e.isIntersecting)),
+        { rootMargin: '-40% 0px -40% 0px', threshold: 0 },
+      )
+      cards.forEach((c) => center.observe(c))
+    }
+
+    // Mouse: 3D tilt + glare that follows the pointer.
+    if (finePointer && !reduceMotion) {
+      cards.forEach((card) => {
+        const frame = card.querySelector<HTMLElement>('[data-fleet-frame]')
+        if (!frame) return
+        let raf = 0
+        card.addEventListener('pointermove', (ev) => {
+          if (raf) return
+          raf = window.requestAnimationFrame(() => {
+            raf = 0
+            const r = frame.getBoundingClientRect()
+            const x = Math.min(Math.max((ev.clientX - r.left) / r.width, 0), 1)
+            const y = Math.min(Math.max((ev.clientY - r.top) / r.height, 0), 1)
+            card.style.setProperty('--ry', `${(x - 0.5) * 14}deg`)
+            card.style.setProperty('--rx', `${(0.5 - y) * 11}deg`)
+            card.style.setProperty('--mx', `${x * 100}%`)
+            card.style.setProperty('--my', `${y * 100}%`)
+          })
+        })
+        card.addEventListener('pointerleave', () => {
+          if (raf) window.cancelAnimationFrame(raf)
+          raf = 0
+          ;['--rx', '--ry', '--mx', '--my'].forEach((p) => card.style.removeProperty(p))
+        })
+      })
+    }
+
+    // Category filters with animated show/hide.
+    const timers = new WeakMap<HTMLElement, number>()
+    const applyFilter = (key: string, label: string) => {
+      let shown = 0
+      cards.forEach((card) => {
+        const match = key === 'all' || card.dataset.group === key
+        const pending = timers.get(card)
+        if (pending) window.clearTimeout(pending)
+        if (match) {
+          shown++
+          card.hidden = false
+          card.classList.add('is-in')
+          window.requestAnimationFrame(() => card.classList.remove('is-out'))
+        } else if (reduceMotion) {
+          card.hidden = true
+        } else {
+          card.classList.add('is-out')
+          timers.set(card, window.setTimeout(() => (card.hidden = true), 320))
+        }
+      })
+      if (status) {
+        status.textContent = key === 'all' ? `Showing all ${shown} live sites` : `Showing ${shown} of ${cards.length}: ${label}`
+      }
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)))
+        applyFilter(chip.dataset.filter ?? 'all', chip.dataset.label ?? '')
+      })
+    })
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-fleet]').forEach(initFleet)
+</script>
