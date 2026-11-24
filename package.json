@@ -13,7 +13,7 @@
     "deploy": "npm run build && wrangler pages deploy dist --project-name swain-pro --branch=main --commit-dirty=true"
   },
   "dependencies": {
-    "@astrojs/react": "^4.2.0",
+    "@astrojs/react": "^7.1.9",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.0",
     "@types/three": "^0.184.1",
