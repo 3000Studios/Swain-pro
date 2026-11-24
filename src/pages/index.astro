@@ -8,9 +8,12 @@ import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
 import SectionVideoBg from '../components/backgrounds/SectionVideoBg.astro'
 import HeroCanvas3D from '../components/HeroCanvas3D'
 import SectionDivider from '../components/SectionDivider.astro'
+import GameSpotlight from '../components/GameSpotlight.astro'
+import BookShelf from '../components/BookShelf.astro'
+import FleetGrid from '../components/FleetGrid.astro'
 import { featuredProjects } from '../data/projects'
 import { blogPosts } from '../data/blog'
-import { domains } from '../data/domains'
+import { domains, FLEET_CAPTURED } from '../data/domains'
 
 const recentPosts = blogPosts.slice(0, 3)
 ---
@@ -85,8 +88,8 @@ const recentPosts = blogPosts.slice(0, 3)
           <div class="hero-stats grid grid-cols-3 gap-3 sm:gap-4 max-w-xl">
             {[
               { value: '7+', label: 'Years Exp.' },
-              { value: '34', label: 'Live Projects' },
-              { value: '34', label: 'Live Domains' },
+              { value: String(domains.length), label: 'Live Sites' },
+              { value: '1', label: 'Game on Google Play' },
             ].map((stat) => (
               <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
                 <div class="text-3xl sm:text-4xl font-black gradient-text-animated tabular-nums">{stat.value}</div>
@@ -138,6 +141,16 @@ const recentPosts = blogPosts.slice(0, 3)
       </svg>
     </div>
   </section>
+
+  <!-- ════════════════════════════════════════
+       SECTION 1B · AEROPOCALYPSE: ONLINE — LIVE ON GOOGLE PLAY  (DARK)
+  ════════════════════════════════════════ -->
+  <GameSpotlight />
+
+  <!-- ════════════════════════════════════════
+       SECTION 1C · 3000 STUDIOS PRESS — EVERY BOOK, SCROLLING  (DARK)
+  ════════════════════════════════════════ -->
+  <BookShelf />
 
 
   <SectionDivider variant="wave" />
@@ -300,12 +313,10 @@ const recentPosts = blogPosts.slice(0, 3)
                 </div>
                 <div class="lg:col-span-5 flex flex-col justify-center">
                   {project.screenshot && (
-                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup">
-                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
-                        <span class="ml-2 font-mono text-[10px] text-[var(--color-muted)] truncate max-w-[150px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                    <div class="hud-shot relative overflow-hidden shadow-2xl bg-black/40 group/mockup">
+                      <div class="hud-bar">
+                        <span class={`hud-bar__state${project.status === 'live' ? '' : ' hud-bar__state--dev'}`}><span class="hud-bar__dot" aria-hidden="true"></span>{project.status}</span>
+                        <span class="hud-bar__host truncate max-w-[220px]">{project.url ? project.url.replace('https://', '').replace(/\/$/, '') : 'in development'}</span>
                       </div>
                       <div class="aspect-video w-full overflow-hidden bg-black/20">
                         <img
@@ -354,12 +365,10 @@ const recentPosts = blogPosts.slice(0, 3)
                     </div>
                   </div>
                   {project.screenshot && (
-                    <div class="relative rounded-lg overflow-hidden border border-white/10 shadow-2xl bg-black/40 group/mockup mb-5">
-                      <div class="flex items-center gap-1.5 px-3.5 py-2.5 bg-white/[0.03] border-b border-white/5">
-                        <span class="w-2 h-2 rounded-full bg-[#ff5f56]"></span>
-                        <span class="w-2 h-2 rounded-full bg-[#ffbd2e]"></span>
-                        <span class="w-2 h-2 rounded-full bg-[#27c93f]"></span>
-                        <span class="ml-2 font-mono text-[9px] text-[var(--color-muted)] truncate max-w-[120px]">{project.url ? project.url.replace('https://', '') : 'localhost'}</span>
+                    <div class="hud-shot relative overflow-hidden shadow-2xl bg-black/40 group/mockup mb-5">
+                      <div class="hud-bar">
+                        <span class={`hud-bar__state${project.status === 'live' ? '' : ' hud-bar__state--dev'}`}><span class="hud-bar__dot" aria-hidden="true"></span>{project.status}</span>
+                        <span class="hud-bar__host truncate max-w-[180px]">{project.url ? project.url.replace('https://', '').replace(/\/$/, '') : 'in development'}</span>
                       </div>
                       <div class="aspect-video w-full overflow-hidden bg-black/20">
                         <img
@@ -401,53 +410,26 @@ const recentPosts = blogPosts.slice(0, 3)
   </section>
 
   <!-- ════════════════════════════════════════
-       SECTION 3B · EVERY SITE IN THE FLEET  (LIGHT)
-       All 34 live websites — fresh screenshots & links, verified 2026-11-16.
+       SECTION 3B · EVERY SITE IN THE FLEET  (DARK)
+       Every live site, re-checked and re-shot (see FLEET_CAPTURED in data/domains.ts).
   ════════════════════════════════════════ -->
-  <section id="all-sites" class="section-light relative overflow-hidden" aria-label="Every site in the fleet">
-    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-28">
-      <div class="reveal-up mb-14">
-        <p class="section-label">Fleet</p>
-        <h2 class="text-4xl sm:text-5xl font-black text-[var(--color-onyx)]">
-          Every Site in the <span class="gradient-text">Fleet</span>
-        </h2>
-        <p class="text-[var(--color-onyx)]/60 text-lg leading-relaxed mt-4 max-w-2xl">
-          All 34 live websites, with fresh screenshots and links — verified live on November 16, 2026.
-        </p>
+  <section id="all-sites" class="fleet-section section-dark relative overflow-hidden" aria-labelledby="all-sites-title">
+    <div class="fleet-section__bg" aria-hidden="true"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-28">
+      <div class="reveal-up mb-10 sm:mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div>
+          <p class="section-label">The Fleet</p>
+          <h2 id="all-sites-title" class="text-4xl sm:text-5xl font-black text-[var(--color-text)]">
+            Every Site in the <span class="gradient-text-animated">Fleet</span>
+          </h2>
+          <p class="text-[var(--color-dim)] text-lg leading-relaxed mt-4 max-w-2xl">
+            {domains.length} live websites built and run by Mr. Swain. Each one was opened and re-shot on {FLEET_CAPTURED}.
+          </p>
+        </div>
+        <a href="/domains" class="btn-outline text-sm self-start lg:self-auto">Domains &amp; Ventures</a>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {domains.map((site) => (
-          <article class="card-light rounded-[var(--radius-card)] overflow-hidden flex flex-col">
-            {site.screenshot && (
-              <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.name}`}>
-                <img
-                  src={site.screenshot}
-                  alt={`${site.name} — screenshot captured November 16, 2026`}
-                  loading="lazy"
-                  class="w-full aspect-video object-cover object-top"
-                />
-              </a>
-            )}
-            <div class="p-6 flex flex-col flex-1">
-              <div class="flex items-start justify-between gap-3 mb-2">
-                <h3 class="font-bold text-[var(--color-onyx)] text-lg leading-tight">{site.name}</h3>
-                <span class="badge badge-emerald shrink-0">● Live</span>
-              </div>
-              <p class="text-sm text-[var(--color-onyx)]/60 leading-relaxed mb-4 flex-1">{site.description}</p>
-              <a
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-primary text-xs w-full justify-center py-2.5"
-                aria-label={`Visit ${site.name}`}
-              >
-                Visit Site
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
+      <FleetGrid sites={domains} capturedLabel={FLEET_CAPTURED} id="home-fleet" />
     </div>
   </section>
 

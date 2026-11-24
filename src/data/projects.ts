@@ -4,7 +4,7 @@ export interface Project {
   description: string
   longDescription: string
   tech: string[]
-  category: 'ai' | 'automation' | 'web' | 'python' | 'business' | 'tools'
+  category: 'games' | 'ai' | 'automation' | 'web' | 'python' | 'business' | 'tools'
   status: 'live' | 'active' | 'in-dev' | 'archived'
   url?: string
   github?: string
@@ -19,6 +19,43 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    slug: 'aeropocalypse-online',
+    name: 'Aeropocalypse: Online',
+    screenshot: '/images/projects/aeropocalypse.webp',
+    promoVideo: '/videos/projects/aeropocalypse-trailer.mp4',
+    description: 'A vertical arcade shooter from 3000 Studios, live on Google Play. Twenty-five stages, twenty-five original songs, boss battles, party co-op, 1v1 duels and Google sign-in, with a customizable fighter hangar and in-game purchases. Built end to end by Mr. Swain: game, backend, store listing, trailer and launch.',
+    longDescription: 'Android aerial combat game shipped to Google Play under 3000 Studios. Campaign of 25 stages with boss battles and an original soundtrack, online party co-op and 1v1 duels backed by a Cloudflare Workers multiplayer service, Firebase and Google sign-in for accounts, and Google Play Billing for in-game purchases.',
+    tech: ['Android', 'Kotlin', 'Firebase', 'Cloudflare Workers', 'Google Play Billing'],
+    category: 'games',
+    status: 'live',
+    url: 'https://play.google.com/store/apps/details?id=com.studios3000.thunderdome',
+    featured: true,
+    year: '2026',
+    highlights: [
+      'Live on Google Play, rated Everyone 10+',
+      '25 stages and 25 original songs with boss battles',
+      'Online party co-op and 1v1 duels on Cloudflare Workers',
+      'Google sign-in, hangar customization and in-game purchases',
+    ],
+  },
+  {
+    slug: 'muse-agent-fleet',
+    name: 'Muse Agent Fleet',
+    description: 'Muse is the orchestrator that runs 3000 Studios day to day: it hands build, deploy and publishing work to a team of AI coding agents, keeps one shared knowledge base every agent reads and writes, and runs across a private multi-cloud server fleet. It is how one person ships and operates dozens of live products.',
+    longDescription: 'Multi-agent orchestration system that coordinates AI coding agents (Claude, Codex, Gemini) on build, deploy and publishing work for every 3000 Studios property, with a shared persistent knowledge base, an agent message bridge on Cloudflare Workers and a private multi-cloud fleet of servers.',
+    tech: ['Cloudflare Workers', 'Tailscale', 'Claude', 'Codex', 'Gemini'],
+    category: 'ai',
+    status: 'active',
+    featured: true,
+    year: '2026',
+    highlights: [
+      'Dispatches work to multiple AI coding agents in parallel',
+      'Shared knowledge base acts as long-term memory for every agent',
+      'Agent message bridge built on Cloudflare Workers',
+      'Runs on a private multi-cloud server fleet',
+    ],
+  },
   {
     slug: 'voicetowebsite',
     name: 'VoiceToWebsite',
@@ -298,4 +335,4 @@ export const projects: Project[] = [
 ]
 
 export const featuredProjects = projects.filter(p => p.featured)
-export const categories = ['all', 'ai', 'automation', 'web', 'python', 'business', 'tools'] as const
+export const categories = ['all', 'games', 'ai', 'automation', 'web', 'python', 'business', 'tools'] as const

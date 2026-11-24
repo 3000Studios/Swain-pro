@@ -4,6 +4,7 @@ import type { Project } from '../data/projects'
 
 const CATEGORY_LABELS: Record<string, string> = {
   all: 'All projects',
+  games: 'Games',
   ai: 'AI & LLM',
   automation: 'Automation',
   web: 'Web / Edge',
@@ -20,6 +21,7 @@ const STATUS_META: Record<Project['status'], { label: string; color: string }> =
 }
 
 const CATEGORY_COLORS: Record<Project['category'], string> = {
+  games: '#7cff5b',
   ai: '#b79cff',
   automation: '#ffd27a',
   web: '#46f2c2',

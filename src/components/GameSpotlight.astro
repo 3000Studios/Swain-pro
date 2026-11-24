@@ -1,0 +1,621 @@
+---
+// Aeropocalypse: Online — live game deployment spotlight.
+// Facts come from the public Google Play listing (read 2026-11-24):
+// released app, "Updated on Nov 20, 2026", rated Everyone 10+, contains ads + in-app purchases,
+// tagline "25 stages · 25 original songs · party co-op · 1v1 duels · Google sign-in".
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.studios3000.thunderdome'
+const SITE_URL = 'https://aeropocalypse.online'
+
+const features = [
+  { value: '25', label: 'Stages' },
+  { value: '25', label: 'Original songs' },
+  { value: 'Co-op', label: 'Party play' },
+  { value: '1v1', label: 'Online duels' },
+]
+
+const chips = ['Boss battles', 'Missiles · shields · warp', 'Fighter hangar', 'Google sign-in', 'Rated E 10+']
+const stack = ['Android', 'Kotlin', 'Firebase', 'Cloudflare Workers', 'Google Play Billing']
+---
+
+<section id="aeropocalypse" class="game-spot section-dark relative overflow-hidden" aria-labelledby="game-spot-title">
+  <div class="game-spot__backdrop" aria-hidden="true">
+    <img src="/images/projects/aeropocalypse.webp" alt="" loading="lazy" decoding="async" />
+  </div>
+  <div class="game-spot__warp" aria-hidden="true"></div>
+  <div class="game-spot__grid" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+    <div class="game-spot__layout">
+      <div class="game-spot__copy reveal-left">
+        <p class="game-spot__kicker">
+          <span class="game-spot__pulse" aria-hidden="true"></span>
+          Now live on Google Play
+        </p>
+
+        <h2 id="game-spot-title" class="game-spot__title">
+          Aeropocalypse
+          <span class="game-spot__glitch game-spot__glitch--a" aria-hidden="true">Aeropocalypse</span>
+          <span class="game-spot__glitch game-spot__glitch--b" aria-hidden="true">Aeropocalypse</span>
+          <span class="game-spot__title-sub">Online</span>
+        </h2>
+
+        <p class="game-spot__lede">
+          A vertical arcade shooter from 3000 Studios. Mr. Swain built it end to end, from the game and its
+          multiplayer backend to the store listing, trailer and launch, and shipped it to Google Play.
+        </p>
+
+        <dl class="game-spot__stats">
+          {features.map((f, i) => (
+            <div class="game-spot__stat" style={`--i:${i}`}>
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <ul class="game-spot__chips" aria-label="Game features">
+          {chips.map((c, i) => <li style={`--i:${i}`}>{c}</li>)}
+        </ul>
+
+        <div class="game-spot__cta">
+          <a href={PLAY_URL} target="_blank" rel="noopener noreferrer" class="game-spot__play" data-track="aeropocalypse_play">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="w-6 h-6">
+              <path fill="#00d7fe" d="M3.6 1.8 13.8 12 3.6 22.2c-.4-.2-.6-.7-.6-1.2V3c0-.5.2-1 .6-1.2Z" />
+              <path fill="#ffce00" d="m17.2 8.6-3.4 3.4 3.4 3.4 3.8-2.2c.9-.5.9-1.9 0-2.4l-3.8-2.2Z" />
+              <path fill="#ff3a44" d="M13.8 12 3.6 22.2c.4.2.9.2 1.4-.1l12.2-6.7-3.4-3.4Z" />
+              <path fill="#00f076" d="M3.6 1.8c.4-.3 1-.3 1.4-.1l12.2 6.9-3.4 3.4L3.6 1.8Z" />
+            </svg>
+            <span>
+              <small>Get it on</small>
+              Google Play
+            </span>
+          </a>
+          <a href={SITE_URL} target="_blank" rel="noopener noreferrer" class="game-spot__site">
+            aeropocalypse.online <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <p class="game-spot__stack" aria-label="Built with">
+          {stack.map((t) => <span>{t}</span>)}
+        </p>
+        <p class="game-spot__note">Listing updated Nov 20, 2026 · Contains ads · In-app purchases</p>
+      </div>
+
+      <div class="game-spot__device-wrap reveal-right">
+        <div class="game-spot__orbit" aria-hidden="true"></div>
+        <div class="game-spot__device" data-game-device>
+          <div class="game-spot__notch" aria-hidden="true"></div>
+          <video
+            class="game-spot__video"
+            src="/videos/projects/aeropocalypse-trailer.mp4"
+            poster="/images/projects/aeropocalypse-poster.webp"
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-label="Aeropocalypse: Online gameplay trailer"
+            data-game-video
+          ></video>
+          <div class="game-spot__scan" aria-hidden="true"></div>
+          <button type="button" class="game-spot__sound" data-game-sound aria-pressed="false" aria-label="Turn trailer sound on">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true">
+              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+              <path data-wave d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" />
+              <path data-mute d="m22 9-6 6m0-6 6 6" />
+            </svg>
+            <span data-sound-label>Sound off</span>
+          </button>
+        </div>
+        <span class="game-spot__badge game-spot__badge--a" aria-hidden="true">LIVE</span>
+        <span class="game-spot__badge game-spot__badge--b" aria-hidden="true">E 10+</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .game-spot {
+    --gs-green: #7cff5b;
+    --gs-cyan: #3ee8ff;
+    --gs-violet: #a46bff;
+    isolation: isolate;
+    background:
+      radial-gradient(120% 80% at 80% 10%, rgba(164, 107, 255, 0.22), transparent 60%),
+      radial-gradient(90% 70% at 10% 90%, rgba(124, 255, 91, 0.14), transparent 60%),
+      linear-gradient(180deg, #04050b 0%, #070a18 55%, #04050b 100%);
+  }
+  .game-spot__backdrop {
+    position: absolute;
+    inset: -6%;
+    z-index: 0;
+    opacity: 0.22;
+    filter: blur(28px) saturate(1.4);
+    transform: scale(1.08);
+  }
+  .game-spot__backdrop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .game-spot__warp {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 46px, rgba(62, 232, 255, 0.07) 46px 47px, transparent 47px 140px),
+      repeating-linear-gradient(90deg, transparent 0 90px, rgba(124, 255, 91, 0.06) 90px 91px, transparent 91px 230px);
+    background-size: 100% 220%;
+    mask-image: linear-gradient(180deg, transparent, #000 25%, #000 75%, transparent);
+    animation: gs-warp 1.6s linear infinite;
+  }
+  .game-spot__grid {
+    position: absolute;
+    left: -20%;
+    right: -20%;
+    bottom: -10%;
+    height: 55%;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(62, 232, 255, 0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62, 232, 255, 0.18) 1px, transparent 1px);
+    background-size: 56px 56px;
+    transform: perspective(520px) rotateX(62deg);
+    transform-origin: bottom;
+    mask-image: linear-gradient(0deg, #000 10%, transparent 85%);
+    animation: gs-grid 2.4s linear infinite;
+  }
+  @keyframes gs-warp {
+    to { background-position: 0 -220px; }
+  }
+  @keyframes gs-grid {
+    to { background-position: 0 56px; }
+  }
+
+  .game-spot__layout {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .game-spot__layout {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 4.5rem;
+    }
+  }
+
+  .game-spot__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gs-green);
+    background: rgba(124, 255, 91, 0.08);
+    border: 1px solid rgba(124, 255, 91, 0.35);
+    box-shadow: 0 0 24px rgba(124, 255, 91, 0.18);
+    margin-bottom: 1.4rem;
+  }
+  .game-spot__pulse {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--gs-green);
+    box-shadow: 0 0 0 0 rgba(124, 255, 91, 0.7);
+    animation: gs-pulse 1.8s ease-out infinite;
+  }
+  @keyframes gs-pulse {
+    70% { box-shadow: 0 0 0 12px rgba(124, 255, 91, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(124, 255, 91, 0); }
+  }
+
+  .game-spot__title {
+    position: relative;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 9vw, 5.6rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    font-style: italic;
+    margin-bottom: 1.4rem;
+    background: linear-gradient(100deg, #e9fbff 0%, #8ef0ff 22%, #ffffff 38%, #6f7cff 52%, #e9fbff 64%, #7cff5b 82%, #e9fbff 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 22px rgba(62, 232, 255, 0.35));
+    animation: gs-chrome 6s ease-in-out infinite;
+  }
+  .game-spot__title-sub {
+    display: block;
+    width: fit-content;
+    margin-top: 0.5rem;
+    padding: 0.15em 0.6em;
+    font-size: 0.34em;
+    letter-spacing: 0.5em;
+    font-style: normal;
+    color: #e9fbff;
+    -webkit-text-fill-color: #e9fbff;
+    border: 1px solid rgba(62, 232, 255, 0.6);
+    border-radius: 6px;
+    background: linear-gradient(90deg, rgba(62, 232, 255, 0.18), rgba(164, 107, 255, 0.18));
+    box-shadow: 0 0 22px rgba(62, 232, 255, 0.35), inset 0 0 14px rgba(62, 232, 255, 0.25);
+  }
+  @keyframes gs-chrome {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  /* Glitch layers are real spans marked aria-hidden, so screen readers and
+     the section's accessible name read "Aeropocalypse Online" once. */
+  .game-spot__glitch {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0;
+    -webkit-text-fill-color: currentColor;
+  }
+  .game-spot__glitch--a { color: var(--gs-cyan); }
+  .game-spot__glitch--b { color: #ff3a7a; }
+  .game-spot__title:hover .game-spot__glitch--a {
+    opacity: 0.7;
+    animation: gs-glitch 0.9s steps(2) infinite;
+  }
+  .game-spot__title:hover .game-spot__glitch--b {
+    opacity: 0.6;
+    animation: gs-glitch 0.7s steps(2) infinite reverse;
+  }
+  @keyframes gs-glitch {
+    0% { clip-path: inset(10% 0 70% 0); transform: translate(-4px, 0); }
+    25% { clip-path: inset(60% 0 15% 0); transform: translate(4px, 0); }
+    50% { clip-path: inset(35% 0 40% 0); transform: translate(-3px, 0); }
+    75% { clip-path: inset(80% 0 4% 0); transform: translate(3px, 0); }
+    100% { clip-path: inset(20% 0 60% 0); transform: translate(0, 0); }
+  }
+
+  .game-spot__lede {
+    color: var(--color-dim);
+    font-size: clamp(1rem, 2.6vw, 1.18rem);
+    line-height: 1.65;
+    max-width: 36rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .game-spot__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.4rem;
+    max-width: 34rem;
+  }
+  @media (min-width: 640px) {
+    .game-spot__stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  .game-spot__stat {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.25rem;
+    padding: 0.9rem 0.95rem;
+    border-radius: 14px;
+    background: linear-gradient(160deg, rgba(62, 232, 255, 0.1), rgba(164, 107, 255, 0.06));
+    border: 1px solid rgba(62, 232, 255, 0.22);
+    overflow: hidden;
+  }
+  .game-spot__stat::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
+    transform: translateX(-120%);
+    animation: gs-sheen 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.35s);
+  }
+  @keyframes gs-sheen {
+    0%, 60% { transform: translateX(-120%); }
+    85%, 100% { transform: translateX(120%); }
+  }
+  .game-spot__stat dt {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .game-spot__stat dd {
+    font-weight: 900;
+    font-size: 1.7rem;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 18px rgba(62, 232, 255, 0.55);
+  }
+
+  .game-spot__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .game-spot__chips li {
+    padding: 0.38rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: #dff9ff;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .game-spot__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.9rem 1.2rem;
+    margin-bottom: 1.6rem;
+  }
+  .game-spot__play {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.4rem 0.8rem 1.1rem;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.15rem;
+    line-height: 1.05;
+    background: #05060a;
+    border: 1px solid transparent;
+    background-image: linear-gradient(#05060a, #05060a), conic-gradient(from var(--gs-angle, 0deg), var(--gs-green), var(--gs-cyan), var(--gs-violet), #ff3a7a, var(--gs-green));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 30px rgba(62, 232, 255, 0.28), 0 14px 40px rgba(0, 0, 0, 0.45);
+    animation: gs-spin 4s linear infinite;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .game-spot__play small {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .game-spot__play:hover,
+  .game-spot__play:focus-visible {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 46px rgba(124, 255, 91, 0.45), 0 18px 50px rgba(0, 0, 0, 0.5);
+  }
+  .game-spot__site {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--gs-cyan);
+    border-bottom: 1px dashed rgba(62, 232, 255, 0.5);
+    padding-bottom: 2px;
+  }
+  .game-spot__site:hover { color: #fff; }
+
+  .game-spot__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.7rem;
+  }
+  .game-spot__stack span {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--color-muted);
+    padding: 0.18rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
+  }
+  .game-spot__note {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+
+  /* ── Device ── */
+  .game-spot__device-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem 0;
+  }
+  .game-spot__orbit {
+    position: absolute;
+    width: min(92vw, 30rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(from var(--gs-angle, 0deg), transparent 0 60%, rgba(62, 232, 255, 0.55), rgba(124, 255, 91, 0.6), transparent 85%);
+    mask: radial-gradient(closest-side, transparent 92%, #000 93%, #000 100%);
+    filter: drop-shadow(0 0 12px rgba(62, 232, 255, 0.6));
+    animation: gs-spin 6s linear infinite;
+  }
+  .game-spot__device {
+    position: relative;
+    width: min(68vw, 17.5rem);
+    aspect-ratio: 9 / 19.5;
+    border-radius: 2.4rem;
+    padding: 0.6rem;
+    background:
+      linear-gradient(#0b0f18, #0b0f18) padding-box,
+      linear-gradient(145deg, #dfe7f5, #6c7a92 30%, #f4f8ff 52%, #4b5568 75%, #c8d2e4) border-box;
+    border: 3px solid transparent;
+    box-shadow:
+      0 40px 120px rgba(0, 0, 0, 0.6),
+      0 0 60px rgba(62, 232, 255, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    transform: perspective(1100px) rotateY(calc(var(--gs-ry, -10deg))) rotateX(calc(var(--gs-rx, 4deg)));
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: gs-float 6s ease-in-out infinite;
+  }
+  @keyframes gs-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -12px; }
+  }
+  .game-spot__notch {
+    position: absolute;
+    top: 1.05rem;
+    left: 50%;
+    width: 4.8rem;
+    height: 1.1rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #000;
+    z-index: 3;
+  }
+  .game-spot__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1.9rem;
+    background: #000;
+    display: block;
+  }
+  .game-spot__scan {
+    position: absolute;
+    inset: 0.6rem;
+    border-radius: 1.9rem;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px),
+      linear-gradient(180deg, rgba(62, 232, 255, 0.12), transparent 25%, transparent 75%, rgba(164, 107, 255, 0.14));
+    mix-blend-mode: screen;
+  }
+  .game-spot__sound {
+    position: absolute;
+    left: 50%;
+    bottom: 1.4rem;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(5, 6, 10, 0.72);
+    border: 1px solid rgba(62, 232, 255, 0.45);
+    backdrop-filter: blur(8px);
+  }
+  .game-spot__sound [data-wave] { display: none; }
+  .game-spot__sound[aria-pressed='true'] [data-wave] { display: inline; }
+  .game-spot__sound[aria-pressed='true'] [data-mute] { display: none; }
+
+  .game-spot__badge {
+    position: absolute;
+    z-index: 5;
+    padding: 0.4rem 0.75rem;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: #05060a;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    animation: gs-float 5s ease-in-out infinite;
+  }
+  .game-spot__badge--a {
+    top: 12%;
+    right: max(4%, calc(50% - 12.5rem));
+    background: var(--gs-green);
+    box-shadow: 0 0 26px rgba(124, 255, 91, 0.6);
+  }
+  .game-spot__badge--b {
+    bottom: 16%;
+    left: max(4%, calc(50% - 12.5rem));
+    background: var(--gs-cyan);
+    animation-delay: -2.5s;
+    box-shadow: 0 0 26px rgba(62, 232, 255, 0.6);
+  }
+
+  @property --gs-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes gs-spin {
+    to { --gs-angle: 360deg; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-spot__warp,
+    .game-spot__grid,
+    .game-spot__title,
+    .game-spot__stat::after,
+    .game-spot__play,
+    .game-spot__orbit,
+    .game-spot__device,
+    .game-spot__badge,
+    .game-spot__pulse {
+      animation: none !important;
+    }
+    .game-spot__glitch {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initGameSpot() {
+    const device = document.querySelector<HTMLElement>('[data-game-device]')
+    const video = document.querySelector<HTMLVideoElement>('[data-game-video]')
+    const sound = document.querySelector<HTMLButtonElement>('[data-game-sound]')
+    if (!device || !video) return
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // Play only while on screen; saves data on phones.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (video.preload !== 'auto') video.preload = 'auto'
+              if (!reduce) video.play().catch(() => {})
+            } else {
+              video.pause()
+            }
+          })
+        },
+        { threshold: 0.35 },
+      )
+      io.observe(device)
+    }
+
+    sound?.addEventListener('click', () => {
+      const on = video.muted
+      video.muted = !on
+      if (on) video.play().catch(() => {})
+      sound.setAttribute('aria-pressed', String(on))
+      sound.setAttribute('aria-label', on ? 'Turn trailer sound off' : 'Turn trailer sound on')
+      const label = sound.querySelector('[data-sound-label]')
+      if (label) label.textContent = on ? 'Sound on' : 'Sound off'
+    })
+
+    if (reduce) return
+    const wrap = device.parentElement
+    wrap?.addEventListener('pointermove', (e) => {
+      const r = wrap.getBoundingClientRect()
+      const x = (e.clientX - r.left) / r.width - 0.5
+      const y = (e.clientY - r.top) / r.height - 0.5
+      device.style.setProperty('--gs-ry', `${x * 22}deg`)
+      device.style.setProperty('--gs-rx', `${-y * 16}deg`)
+    })
+    wrap?.addEventListener('pointerleave', () => {
+      device.style.removeProperty('--gs-ry')
+      device.style.removeProperty('--gs-rx')
+    })
+  }
+  initGameSpot()
+</script>

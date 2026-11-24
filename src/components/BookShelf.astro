@@ -1,0 +1,271 @@
+---
+// Every 3000 Studios Press title in two endless rows of 3D covers, the same
+// shelf as 3000studios.vip. Rows pause on hover/focus and with the Pause
+// button; with reduced motion they become swipeable rails instead.
+import { STORE_BOOKS, STORE_PRICE, SHELVES, coverUrl, type StoreBook } from '../data/books'
+
+const ROW_A = STORE_BOOKS.filter((_, i) => i % 2 === 0)
+const ROW_B = STORE_BOOKS.filter((_, i) => i % 2 === 1)
+const rows: { books: StoreBook[]; dur: number; reverse: boolean }[] = [
+  { books: ROW_A, dur: 150, reverse: false },
+  { books: ROW_B, dur: 170, reverse: true },
+]
+const shelfCount = new Set(STORE_BOOKS.map((b) => b.cat)).size
+const SHELF_URL = 'https://3000studios.vip/books'
+---
+
+<section id="books" class="book-shelf section-dark relative overflow-hidden" aria-labelledby="books-title" data-shelf>
+  <div class="book-shelf__glow" aria-hidden="true"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-20 sm:pt-24">
+    <div class="reveal-up flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-6">
+      <div>
+        <p class="section-label">3000 Studios Press</p>
+        <h2 id="books-title" class="text-4xl sm:text-5xl font-black text-[var(--color-text)]">
+          {STORE_BOOKS.length} books. <span class="gradient-text-animated">One shelf.</span>
+        </h2>
+        <p class="text-[var(--color-dim)] text-lg leading-relaxed mt-4 max-w-2xl">
+          Published by 3000 Studios Press, Mr. Swain's studio, across {shelfCount} shelves: {SHELVES.slice(0, 4).map((s) => s.label).join(', ')} and more.
+          Every title is {STORE_PRICE} on Payhip.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button" class="book-shelf__pause" data-shelf-toggle aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" data-icon-pause><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true" data-icon-play><path fill="currentColor" d="M8 5v14l11-7z" /></svg>
+          <span data-shelf-label>Pause</span>
+        </button>
+        <a href={SHELF_URL} target="_blank" rel="noopener noreferrer" class="btn-primary text-sm">See every book</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-shelf__rows pb-20 sm:pb-24">
+    {rows.map((row, r) => (
+      <div class={`book-row${row.reverse ? ' book-row--rev' : ''}`} style={`--dur:${row.dur}s`}>
+        <ul class="book-row__track" role="list">
+          {row.books.map((b, i) => (
+            <li>
+              <a class="book" href={b.url} target="_blank" rel="noopener noreferrer" aria-label={`${b.title}, ${STORE_PRICE} on Payhip (opens in a new tab)`}>
+                <span class="book__cover">
+                  <img src={coverUrl(b, 320)} alt="" width="320" height="480" loading={r === 0 && i < 8 ? 'eager' : 'lazy'} decoding="async" />
+                </span>
+                <span class="book__meta">
+                  <b>{b.title}</b>
+                  <span>{STORE_PRICE} · Buy</span>
+                </span>
+              </a>
+            </li>
+          ))}
+          {row.books.map((b) => (
+            <li aria-hidden="true" class="book-row__dup">
+              <a class="book" href={b.url} target="_blank" rel="noopener noreferrer" tabindex="-1">
+                <span class="book__cover">
+                  <img src={coverUrl(b, 320)} alt="" width="320" height="480" loading="lazy" decoding="async" />
+                </span>
+                <span class="book__meta">
+                  <b>{b.title}</b>
+                  <span>{STORE_PRICE} · Buy</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .book-shelf {
+    border-top: 1px solid rgba(255, 210, 122, 0.14);
+    background:
+      radial-gradient(70% 60% at 10% 10%, rgba(255, 210, 122, 0.1), transparent 70%),
+      radial-gradient(60% 55% at 90% 80%, rgba(183, 156, 255, 0.14), transparent 70%),
+      linear-gradient(180deg, #05060a 0%, #0a0812 55%, #05060a 100%);
+  }
+  .book-shelf__glow {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    top: 58%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 210, 122, 0.55), rgba(130, 247, 255, 0.55), transparent);
+    filter: blur(1px);
+    box-shadow: 0 0 40px 6px rgba(255, 210, 122, 0.18);
+    opacity: 0.6;
+  }
+
+  .book-shelf__pause {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-dim);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 210, 122, 0.3);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .book-shelf__pause:hover,
+  .book-shelf__pause:focus-visible {
+    color: #fff;
+    border-color: rgba(255, 210, 122, 0.7);
+    box-shadow: 0 0 20px rgba(255, 210, 122, 0.25);
+  }
+  .book-shelf__pause svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+  .book-shelf__pause [data-icon-play] {
+    display: none;
+  }
+  .book-shelf__pause[aria-pressed='true'] [data-icon-play] {
+    display: inline;
+  }
+  .book-shelf__pause[aria-pressed='true'] [data-icon-pause] {
+    display: none;
+  }
+
+  .book-row {
+    position: relative;
+    overflow: hidden;
+    padding: 18px 0 10px;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .book-row__track {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+    margin: 0;
+    padding: 0 9px;
+    list-style: none;
+    animation: book-marq var(--dur, 150s) linear infinite;
+  }
+  .book-row--rev .book-row__track {
+    animation-direction: reverse;
+  }
+  .book-row:hover .book-row__track,
+  .book-row:focus-within .book-row__track,
+  .book-shelf.is-paused .book-row__track {
+    animation-play-state: paused;
+  }
+  @keyframes book-marq {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .book {
+    display: block;
+    width: clamp(108px, 18vw, 150px);
+    color: var(--color-text);
+    text-decoration: none;
+    perspective: 900px;
+  }
+  .book__cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 2 / 3;
+    border-radius: 4px 10px 10px 4px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1b1626, #0a0810);
+    transform: rotateY(-14deg) rotateX(2deg);
+    transform-origin: 0 50%;
+    box-shadow:
+      -1px 0 0 rgba(255, 255, 255, 0.15) inset,
+      10px 14px 26px rgba(0, 0, 0, 0.6),
+      2px 2px 0 #241c0d;
+    transition:
+      transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.6s ease;
+  }
+  .book__cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0, rgba(255, 255, 255, 0.18) 3%, rgba(0, 0, 0, 0.1) 7%, transparent 12%),
+      linear-gradient(120deg, transparent 40%, rgba(255, 255, 255, 0.16) 52%, transparent 60%);
+  }
+  .book__cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .book:hover .book__cover,
+  .book:focus-visible .book__cover {
+    transform: rotateY(0) rotateX(0) translateY(-8px) scale(1.04);
+    box-shadow:
+      0 26px 46px rgba(0, 0, 0, 0.65),
+      0 0 34px rgba(255, 210, 122, 0.3);
+  }
+  .book:focus-visible {
+    outline: none;
+  }
+  .book:focus-visible .book__cover {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 4px;
+  }
+  .book__meta {
+    display: block;
+    padding: 12px 2px 0;
+  }
+  .book__meta b {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .book__meta span {
+    display: inline-flex;
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-amber);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .book-row {
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+    }
+    .book-row__track {
+      animation: none;
+    }
+    .book-row__dup {
+      display: none;
+    }
+    .book__cover {
+      transition: none;
+    }
+    .book-shelf__pause {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-shelf]').forEach((shelf) => {
+    const btn = shelf.querySelector<HTMLButtonElement>('[data-shelf-toggle]')
+    const label = shelf.querySelector<HTMLElement>('[data-shelf-label]')
+    btn?.addEventListener('click', () => {
+      const paused = shelf.classList.toggle('is-paused')
+      btn.setAttribute('aria-pressed', String(paused))
+      if (label) label.textContent = paused ? 'Play' : 'Pause'
+    })
+  })
+</script>

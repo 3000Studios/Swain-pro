@@ -4,6 +4,10 @@ import SpiderWebBg from '../components/backgrounds/SpiderWebBg'
 import PlasmaBg from '../components/backgrounds/PlasmaBg'
 import HeroVideo from '../components/HeroVideo.astro'
 import { skillCategories, coreCompetencies } from '../data/skills'
+import { domains } from '../data/domains'
+import { STORE_BOOKS } from '../data/books'
+
+const liveSites = domains.length
 ---
 
 <BaseLayout
@@ -100,7 +104,8 @@ import { skillCategories, coreCompetencies } from '../data/skills'
             private AI development, and full-stack product build. Designs and deploys scalable LLM integrations,
             Python automation pipelines, multi-agent workflows, and business intelligence systems. Strong
             technical background combined with business analysis expertise — translates business requirements
-            into working, production-grade AI systems. Built and deployed 9+ live domains on Cloudflare.
+            into working, production-grade AI systems. Founder of 3000 Studios: shipped Aeropocalypse: Online
+            to Google Play and builds and runs a fleet of {liveSites} live websites.
             Available for AI development contracts, automation consulting, and full-time roles.
           </p>
         </section>
@@ -124,6 +129,19 @@ import { skillCategories, coreCompetencies } from '../data/skills'
           <h2 class="text-xs font-black text-[var(--color-muted)] uppercase tracking-wider mb-6">Experience</h2>
           <div class="space-y-8">
             {[
+              {
+                role: 'Founder & Lead Developer',
+                company: '3000 Studios',
+                location: 'Atlanta, GA',
+                period: '2025 – Present',
+                highlights: [
+                  'Shipped Aeropocalypse: Online to Google Play: a vertical arcade shooter with 25 stages, party co-op and 1v1 duels, built on Android, Firebase, Cloudflare Workers and Google Play Billing.',
+                  `Builds and runs ${liveSites} live websites across AI SaaS, commerce, local business, gaming and content, deployed on Cloudflare Pages and Workers.`,
+                  'Built a private multi-agent build and deploy system that hands coding, testing and release work to AI agents (Claude, Codex, Gemini) across a Tailscale-linked machine fleet.',
+                  `Publishes ${STORE_BOOKS.length} titles under 3000 Studios Press on Payhip, from fantasy and mystery to exam-prep guides.`,
+                  'Produces store listings, trailers and launch assets in-house, from first build to live release.',
+                ],
+              },
               {
                 role: 'Webmaster & AI Developer',
                 company: 'Empire Tours & Productions',
@@ -226,6 +244,7 @@ import { skillCategories, coreCompetencies } from '../data/skills'
           <h2 class="text-xs font-black text-[var(--color-muted)] uppercase tracking-wider mb-4">Selected Projects</h2>
           <div class="space-y-3">
             {[
+              { name: 'Aeropocalypse: Online', url: 'Google Play · aeropocalypse.online', desc: 'Vertical arcade shooter live on Google Play: 25 stages, 25 original songs, party co-op, 1v1 duels. Android, Firebase, Cloudflare Workers, Play Billing.' },
               { name: 'VoiceToWebsite', url: 'voicetowebsite.com', desc: 'Voice-activated AI website generator. Built on TypeScript, React, GPT-4, Cloudflare Workers.' },
               { name: 'MyAppAI', url: 'myappai.net', desc: 'AI-powered SaaS for rapid app scaffolding. TypeScript, React, Firebase, OpenAI, Cloudflare Pages.' },
               { name: 'PlayStoreWizard Pro', url: 'playstorewizard.pro', desc: 'AI-driven ASO platform for Google Play. Automated keyword research, listing generation, rank tracking.' },
