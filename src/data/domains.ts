@@ -7,7 +7,13 @@ export interface Domain {
   tech?: string[]
   icon: string
   screenshot?: string
+  /** Google Play listing: the card shows a Get it on Google Play badge. */
+  play?: string
+  /** The domain forwards to the Play listing, so the card links there instead of the site. */
+  playOnly?: boolean
 }
+
+export const AEROPOCALYPSE_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.studios3000.thunderdome'
 
 // Re-checked 2026-11-24: every site below was opened live in a browser and re-screenshotted
 // (1200x750 WebP in /public/images/sites). Sites that no longer load are removed, not faked.
@@ -62,11 +68,12 @@ export const domains: Domain[] = [
   {
     name: 'Aeropocalypse.online',
     url: 'https://aeropocalypse.online',
-    description: 'Aeropocalypse: Online — game site (3000 Studios).',
+    description: 'Aeropocalypse: Online — the official game site. Free on Google Play.',
     category: 'Gaming',
     status: 'live',
     icon: '🎮',
     screenshot: '/images/sites/aeropocalypse.online.webp',
+    play: AEROPOCALYPSE_PLAY_URL,
   },
   {
     name: 'BoughtItOnline.com',
@@ -269,29 +276,35 @@ export const domains: Domain[] = [
   {
     name: 'Thunderdome.store',
     url: 'https://thunderdome.store',
-    description: 'THUNDERDOME — official site (3000 Studios).',
+    description: 'Thunderdome is now Aeropocalypse: Online. Free on Google Play with 25 stages, party co-op and 1v1 duels.',
     category: 'Gaming',
     status: 'live',
     icon: '🎮',
     screenshot: '/images/sites/thunderdome.store.webp',
+    play: AEROPOCALYPSE_PLAY_URL,
+    playOnly: true,
   },
   {
     name: 'Thunderdome.team',
     url: 'https://thunderdome.team',
-    description: 'Thunderdome: AeroStrike — 3000 Studios game app.',
+    description: 'Thunderdome is now Aeropocalypse: Online. Download it free on Google Play.',
     category: 'Gaming',
     status: 'live',
     icon: '🎮',
     screenshot: '/images/sites/thunderdome.team.webp',
+    play: AEROPOCALYPSE_PLAY_URL,
+    playOnly: true,
   },
   {
     name: 'Thunderdome.zone',
     url: 'https://thunderdome.zone',
-    description: 'Thunderdome: AeroStrike — 3000 Studios game app.',
+    description: 'Thunderdome is now Aeropocalypse: Online. Download it free on Google Play.',
     category: 'Gaming',
     status: 'live',
     icon: '🎮',
     screenshot: '/images/sites/thunderdome.zone.webp',
+    play: AEROPOCALYPSE_PLAY_URL,
+    playOnly: true,
   },
   {
     name: 'TMACK48.com',
