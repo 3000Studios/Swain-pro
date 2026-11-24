@@ -9,6 +9,7 @@ import SectionVideoBg from '../components/backgrounds/SectionVideoBg.astro'
 import HeroCanvas3D from '../components/HeroCanvas3D'
 import SectionDivider from '../components/SectionDivider.astro'
 import GameSpotlight from '../components/GameSpotlight.astro'
+import BookShelf from '../components/BookShelf.astro'
 import FleetGrid from '../components/FleetGrid.astro'
 import { featuredProjects } from '../data/projects'
 import { blogPosts } from '../data/blog'
@@ -145,6 +146,11 @@ const recentPosts = blogPosts.slice(0, 3)
        SECTION 1B · AEROPOCALYPSE: ONLINE — LIVE ON GOOGLE PLAY  (DARK)
   ════════════════════════════════════════ -->
   <GameSpotlight />
+
+  <!-- ════════════════════════════════════════
+       SECTION 1C · 3000 STUDIOS PRESS — EVERY BOOK, SCROLLING  (DARK)
+  ════════════════════════════════════════ -->
+  <BookShelf />
 
 
   <SectionDivider variant="wave" />
